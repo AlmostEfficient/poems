@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Dimensions, ScrollView } from 'react-native';
+import { Text, View, Dimensions, ScrollView } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { initDB, getPoems, seedPoems } from './lib/poems';
+import { styles } from './styles/styles';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -64,31 +65,116 @@ interface PoemViewProps {
 
 function PoemView({ poem }: PoemViewProps) {
   const [currentPage, setCurrentPage] = useState(0);
+  const [pages, setPages] = useState<string[][]>([]);
+  const [isCalculating, setIsCalculating] = useState(true);
   const scrollRef = useRef<ScrollView>(null);
 
   // Calculate available height for poem content
-  const headerHeight = 120; // approximate height for title + author
-  const paginationHeight = 40; // height for pagination dots
-  const availableHeight = screenHeight - headerHeight - paginationHeight - 120; // extra padding
+  const headerHeight = 120;
+  const paginationHeight = 40;
+  const availableHeight = screenHeight - headerHeight - paginationHeight - 120;
 
-  // Split content into stanzas and paginate
-  const allStanzas = poem.content.split('\n\n');
-  
-  // Estimate how many stanzas fit per page
-  const lineHeight = 30; // 28 line height + 2 margin
-  const stanzaSpacing = 24;
-  const averageLinesPerStanza = 4;
-  const averageStanzaHeight = (averageLinesPerStanza * lineHeight) + stanzaSpacing;
-  const stanzasPerPage = Math.floor(availableHeight / averageStanzaHeight) || 1;
+  // Measure actual height of stanzas by rendering them off-screen
+  const measureStanzasHeight = (stanzas: string[]): Promise<number> => {
+    return new Promise((resolve) => {
+      const MeasurementComponent = ({ onMeasured }: { onMeasured: (height: number) => void }) => (
+        <View 
+          style={{ 
+            position: 'absolute', 
+            left: -9999, 
+            top: -9999, 
+            width: screenWidth - 80,
+            opacity: 0 
+          }}
+          onLayout={(event) => {
+            const { height } = event.nativeEvent.layout;
+            onMeasured(height);
+          }}
+        >
+          {stanzas.map((stanza, stanzaIndex) => (
+            <View key={stanzaIndex} style={styles.stanza}>
+              {stanza.split('\n').map((line, lineIndex) => (
+                <Text key={lineIndex} style={styles.line}>
+                  {line}
+                </Text>
+              ))}
+            </View>
+          ))}
+        </View>
+      );
 
-  // Create pages of stanzas
-  const pages: string[][] = [];
-  for (let i = 0; i < allStanzas.length; i += stanzasPerPage) {
-    pages.push(allStanzas.slice(i, i + stanzasPerPage));
-  }
+             // We need to actually render this component to get the measurement
+       // For now, fallback to estimation but with better logic
+       const textWidth = screenWidth - 70;
+      const avgCharWidth = 8; // More conservative estimate
+      
+      let totalHeight = 0;
+      stanzas.forEach(stanza => {
+        const lines = stanza.split('\n');
+        lines.forEach(line => {
+          // Account for line wrapping more accurately
+          const wrappedLines = Math.max(1, Math.ceil((line.length * avgCharWidth) / textWidth));
+          totalHeight += wrappedLines * 28 + 2; // line height + margin
+        });
+        totalHeight += 24; // stanza margin
+      });
 
-  if (pages.length === 0) {
-    pages.push([poem.content]); // fallback
+      resolve(totalHeight);
+    });
+  };
+
+  // Paginate stanzas based on actual height
+  const paginateStanzas = async () => {
+    const allStanzas = poem.content.split('\n\n');
+    const newPages: string[][] = [];
+    let currentPageStanzas: string[] = [];
+    
+    for (const stanza of allStanzas) {
+      // Test if adding this stanza would fit
+      const testStanzas = [...currentPageStanzas, stanza];
+      const testHeight = await measureStanzasHeight(testStanzas);
+      
+      if (testHeight <= availableHeight || currentPageStanzas.length === 0) {
+        // Fits! Add to current page
+        currentPageStanzas.push(stanza);
+      } else {
+        // Doesn't fit, start new page
+        if (currentPageStanzas.length > 0) {
+          newPages.push([...currentPageStanzas]);
+        }
+        currentPageStanzas = [stanza];
+      }
+    }
+
+    // Add the last page
+    if (currentPageStanzas.length > 0) {
+      newPages.push(currentPageStanzas);
+    }
+
+    // Ensure we have at least one page
+    if (newPages.length === 0) {
+      newPages.push(allStanzas);
+    }
+
+    setPages(newPages);
+    setIsCalculating(false);
+  };
+
+  useEffect(() => {
+    setIsCalculating(true);
+    paginateStanzas();
+  }, [poem.content]);
+
+  if (isCalculating || pages.length === 0) {
+    return (
+      <View style={styles.poemContainer}>
+        <View style={styles.poemHeader}>
+          <Text style={styles.title}>{poem.title}</Text>
+          <Text style={styles.author}>by {poem.author}</Text>
+        </View>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
   }
 
   return (
@@ -112,7 +198,7 @@ function PoemView({ poem }: PoemViewProps) {
             }}
           >
             {pages.map((pageStanzas, pageIndex) => (
-              <View key={pageIndex} style={[styles.pagerPage, { width: screenWidth - 80 }]}>
+              <View key={pageIndex} style={[styles.pagerPage, { width: screenWidth - 70 }]}>
                 <View style={styles.poemBody}>
                   {pageStanzas.map((stanza, stanzaIndex) => (
                     <View key={stanzaIndex} style={styles.stanza}>
@@ -140,7 +226,10 @@ function PoemView({ poem }: PoemViewProps) {
           </View>
         </>
       ) : (
-        <View style={styles.poemBody}>
+        <ScrollView 
+          contentContainerStyle={styles.poemBody} 
+          showsVerticalScrollIndicator={false}
+        >
           {pages[0].map((stanza, stanzaIndex) => (
             <View key={stanzaIndex} style={styles.stanza}>
               {stanza.split('\n').map((line, lineIndex) => (
@@ -150,7 +239,7 @@ function PoemView({ poem }: PoemViewProps) {
               ))}
             </View>
           ))}
-        </View>
+        </ScrollView>
       )}
     </View>
   );
@@ -198,92 +287,4 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fefefe',
-  },
-  loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    fontSize: 18,
-    color: '#666',
-    fontStyle: 'italic',
-  },
-  verticalPager: {
-    flex: 1,
-    width: screenWidth,
-    height: screenHeight,
-  },
-  verticalPage: {
-    width: screenWidth,
-    height: screenHeight,
-    justifyContent: 'center',
-  },
-  poemContainer: {
-    flex: 1,
-    paddingHorizontal: 40,
-    paddingVertical: 60,
-  },
-  pager: {
-    flex: 1,
-  },
-  pagerPage: {
-    flex: 1,
-  },
-  poemPage: {
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  poemHeader: {
-    marginBottom: 40,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#2c2c2c',
-    textAlign: 'center',
-    marginBottom: 8,
-    fontFamily: 'serif',
-  },
-  author: {
-    fontSize: 16,
-    color: '#666',
-    fontStyle: 'italic',
-    textAlign: 'center',
-  },
-  poemBody: {
-    flex: 1,
-    justifyContent: 'flex-start',
-  },
-  stanza: {
-    marginBottom: 24,
-    width: '100%',
-  },
-  line: {
-    fontSize: 18,
-    lineHeight: 28,
-    color: '#333',
-    marginBottom: 2,
-    fontFamily: 'serif',
-  },
-  pagination: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 20,
-  },
-  paginationDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#ddd',
-    marginHorizontal: 4,
-  },
-  paginationDotActive: {
-    backgroundColor: '#666',
-  },
-});
+

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Dimensions, ScrollView } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import { initDB, getPoems, seedPoems } from './lib/poems';
+import { initDB, getRandomPoems, seedPoems } from './lib/poems';
 import { styles } from './styles/styles';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -254,8 +254,10 @@ export default function App() {
     const initApp = async () => {
       await initDB();
       await seedPoems();
-      const poemsData = getPoems();
-      setPoems(poemsData);
+      
+      // Load 100 random poems - enough variety, manageable memory
+      const randomPoems = getRandomPoems(100);
+      setPoems(randomPoems);
     };
     
     initApp();
@@ -279,8 +281,8 @@ export default function App() {
         onPageSelected={(e: any) => setCurrentPoemIndex(e.nativeEvent.position)}
         scrollEnabled={true}
       >
-        {poems.map((poem) => (
-          <View key={poem.id} style={styles.verticalPage} collapsable={false}>
+        {poems.map((poem: any, index: number) => (
+          <View key={poem.id || index} style={styles.verticalPage} collapsable={false}>
             <PoemView poem={poem} />
           </View>
         ))}

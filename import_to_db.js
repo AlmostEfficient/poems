@@ -1,70 +1,115 @@
 const fs = require('fs');
 const Database = require('better-sqlite3');
+const csv = require('csv-parser');
 
 function importToDatabase() {
-  console.log('Importing Poetry Foundation data directly to SQLite...');
-  
-  // Open/create database in assets folder
-  const db = new Database('assets/poems.db');
-  
-  // Create table
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS poems (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT NOT NULL,
-      author TEXT NOT NULL,
-      content TEXT NOT NULL
-    );
-  `);
-  
-  // Clear existing data (optional)
-  const clearExisting = process.argv.includes('--clear');
-  if (clearExisting) {
-    db.exec('DELETE FROM poems;');
-    console.log('Cleared existing poems');
-  }
-  
-  // Prepare insert statement
-  const insert = db.prepare('INSERT OR IGNORE INTO poems (title, author, content) VALUES (?, ?, ?)');
-  
-  // Read and process CSV
-  const csvData = fs.readFileSync('PoetryFoundationData.csv', 'utf8');
-  const lines = csvData.split('\n');
-  
-  let imported = 0;
-  const transaction = db.transaction((lines) => {
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (!line) continue;
-      
-      // Handle CSV with format: ,Title,Poem,Poet,Tags
-      const parts = line.split(',"');
-      if (parts.length < 4) continue;
-      
-      const title = parts[1]?.replace(/"/g, '').trim();
-      const content = parts[2]?.replace(/"/g, '').trim(); 
-      const author = parts[3]?.replace(/"/g, '').split(',')[0].trim(); // Remove any tags
-      
-      if (title && author && content && content.length > 100) {
-        insert.run(title, author, content);
-        imported++;
-      }
+  return new Promise((resolve, reject) => {
+    console.log('Importing Poetry Foundation data directly to SQLite...');
+    
+    // Test if CSV file exists
+    if (!fs.existsSync('PoetryFoundationData.csv')) {
+      console.error('CSV file not found!');
+      reject(new Error('CSV file not found'));
+      return;
     }
+    
+    // Open/create database in assets folder
+    const db = new Database('assets/poems.db');
+    
+    // Create table
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS poems (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        author TEXT NOT NULL,
+        content TEXT NOT NULL
+      );
+    `);
+    
+    // Clear existing data (optional)
+    const clearExisting = process.argv.includes('--clear');
+    if (clearExisting) {
+      db.exec('DELETE FROM poems;');
+      console.log('Cleared existing poems');
+    }
+    
+    // Parse CSV records properly
+    const insert = db.prepare('INSERT OR IGNORE INTO poems (title, author, content) VALUES (?, ?, ?)');
+    
+    let imported = 0;
+    let finished = false;
+    
+    function finishImport() {
+      if (finished) return;
+      finished = true;
+      
+      // Show stats
+      const count = db.prepare('SELECT COUNT(*) as count FROM poems').get();
+      console.log(`Total poems in database: ${count.count}`);
+      
+      // Show sample titles
+      const samples = db.prepare('SELECT title, author FROM poems LIMIT 5').all();
+      console.log('\nSample poems:');
+      samples.forEach((poem, i) => {
+        console.log(`  ${i + 1}. "${poem.title}" by ${poem.author}`);
+      });
+      
+      db.close();
+      resolve(imported);
+    }
+    
+    const stream = fs.createReadStream('PoetryFoundationData.csv')
+      .pipe(csv())
+      .on('data', (row) => {
+        // Stop processing if we've hit our limit
+        if (imported >= 50) {
+          stream.destroy();
+          return;
+        }
+        
+        // CSV columns: (empty), Title, Poem, Poet, Tags
+        const title = row.Title?.trim();
+        const content = row.Poem?.trim();
+        const author = row.Poet?.trim();
+        
+        // Debug first few records
+        if (imported < 3) {
+          console.log(`\nRecord ${imported + 1}:`);
+          console.log(`  Title: "${title?.substring(0, 50)}${title?.length > 50 ? '...' : ''}"`);
+          console.log(`  Author: "${author?.substring(0, 30)}${author?.length > 30 ? '...' : ''}"`);
+          console.log(`  Content length: ${content?.length || 0}`);
+          console.log(`  Content preview: "${content?.substring(0, 100)}${content?.length > 100 ? '...' : ''}"`);
+        }
+        
+        // Filter valid poems
+        if (title && author && content && content.length > 50) {
+          try {
+            insert.run(title, author, content);
+            imported++;
+            console.log(`Imported ${imported}/50: "${title}"`);
+          } catch (e) {
+            console.log(`Error inserting poem "${title}": ${e.message}`);
+          }
+        }
+      })
+      .on('end', () => {
+        console.log(`\n✅ CSV parsing complete. Imported ${imported} poems to database`);
+        finishImport();
+      })
+      .on('close', () => {
+        console.log(`\n✅ Stream closed. Imported ${imported} poems to database`);
+        finishImport();
+      })
+      .on('error', (error) => {
+        console.error('Error parsing CSV:', error);
+        db.close();
+        reject(error);
+      });
   });
-  
-  transaction(lines);
-  
-  console.log(`✅ Imported ${imported} poems to database`);
-  
-  // Show stats
-  const count = db.prepare('SELECT COUNT(*) as count FROM poems').get();
-  console.log(`Total poems in database: ${count.count}`);
-  
-  db.close();
 }
 
 if (require.main === module) {
-  importToDatabase();
+  importToDatabase().catch(console.error);
 }
 
 module.exports = { importToDatabase }; 

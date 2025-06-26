@@ -6,9 +6,11 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "import": "node import_to_db.js --clear"
   },
   "dependencies": {
+    "csv-parser": "^3.2.0",
     "expo": "^53.0.11",
     "expo-sqlite": "^15.2.12",
     "expo-status-bar": "~2.2.3",

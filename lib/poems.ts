@@ -39,6 +39,21 @@ export function getPoems(): any[] {
   return result;
 }
 
+export function getPoemsPage(offset: number = 0, limit: number = 20): any[] {
+  const result = db.getAllSync('SELECT * FROM poems LIMIT ? OFFSET ?;', [limit, offset]);
+  return result;
+}
+
+export function getTotalPoemsCount(): number {
+  const result = db.getFirstSync('SELECT COUNT(*) as count FROM poems;') as { count: number };
+  return result.count;
+}
+
+export function getRandomPoems(limit: number = 20): any[] {
+  const result = db.getAllSync('SELECT * FROM poems ORDER BY RANDOM() LIMIT ?;', [limit]);
+  return result;
+}
+
 export function addPoem(title: string, author: string, content: string): void {
   // Check if poem already exists
   const existing = db.getFirstSync(

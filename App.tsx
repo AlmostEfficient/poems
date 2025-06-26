@@ -251,11 +251,14 @@ export default function App() {
   const verticalPagerRef = useRef<PagerView>(null);
 
   useEffect(() => {
-    initDB();
-    seedPoems().then(() => {
+    const initApp = async () => {
+      await initDB();
+      await seedPoems();
       const poemsData = getPoems();
       setPoems(poemsData);
-    });
+    };
+    
+    initApp();
   }, []);
 
   if (poems.length === 0) {

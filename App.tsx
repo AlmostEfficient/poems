@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Dimensions, ScrollView } from 'react-native';
 import PagerView from 'react-native-pager-view';
-import { initDB, getRandomPoems, seedPoems } from './lib/poems';
+import { initDB, getRandomPoems, seedPoems, getTotalPoemsCount } from './lib/poems';
 import { styles } from './styles/styles';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -12,6 +12,12 @@ interface Poem {
   title: string;
   author: string;
   content: string;
+}
+
+// Virtual slot that can contain a poem or be empty
+interface VirtualSlot {
+  poem: Poem | null;
+  isLoading: boolean;
 }
 
 interface PoemPageProps {
@@ -77,35 +83,7 @@ function PoemView({ poem }: PoemViewProps) {
   // Measure actual height of stanzas by rendering them off-screen
   const measureStanzasHeight = (stanzas: string[]): Promise<number> => {
     return new Promise((resolve) => {
-      const MeasurementComponent = ({ onMeasured }: { onMeasured: (height: number) => void }) => (
-        <View 
-          style={{ 
-            position: 'absolute', 
-            left: -9999, 
-            top: -9999, 
-            width: screenWidth - 80,
-            opacity: 0 
-          }}
-          onLayout={(event) => {
-            const { height } = event.nativeEvent.layout;
-            onMeasured(height);
-          }}
-        >
-          {stanzas.map((stanza, stanzaIndex) => (
-            <View key={stanzaIndex} style={styles.stanza}>
-              {stanza.split('\n').map((line, lineIndex) => (
-                <Text key={lineIndex} style={styles.line}>
-                  {line}
-                </Text>
-              ))}
-            </View>
-          ))}
-        </View>
-      );
-
-             // We need to actually render this component to get the measurement
-       // For now, fallback to estimation but with better logic
-       const textWidth = screenWidth - 70;
+      const textWidth = screenWidth - 70;
       const avgCharWidth = 8; // More conservative estimate
       
       let totalHeight = 0;
@@ -245,25 +223,226 @@ function PoemView({ poem }: PoemViewProps) {
   );
 }
 
+// Loading placeholder component
+function LoadingPoemView() {
+  return (
+    <View style={styles.poemContainer}>
+      <View style={styles.poemHeader}>
+        <Text style={styles.loadingText}>Loading poem...</Text>
+      </View>
+    </View>
+  );
+}
+
 export default function App() {
-  const [poems, setPoems] = useState<Poem[]>([]);
-  const [currentPoemIndex, setCurrentPoemIndex] = useState(0);
+  // Virtual scrolling constants
+  const VIRTUAL_SIZE = 2000; // Large virtual array size
+  const LOAD_AHEAD = 5; // Load 5 poems ahead
+  const LOAD_BEHIND = 3; // Keep 3 poems behind
+  const CLEANUP_DISTANCE = 20; // Clean up poems > 20 positions away
+  
+  // State for virtual infinite scrolling
+  const [virtualSlots, setVirtualSlots] = useState<VirtualSlot[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [usedPoemIds, setUsedPoemIds] = useState<Set<number>>(new Set());
+  const [availablePoems, setAvailablePoems] = useState<Poem[]>([]);
+  const [totalPoemsCount, setTotalPoemsCount] = useState(0);
+  const [isInitialized, setIsInitialized] = useState(false);
+  
   const verticalPagerRef = useRef<PagerView>(null);
 
+  // Initialize virtual slots array
+  useEffect(() => {
+    const initVirtualSlots = () => {
+      const slots: VirtualSlot[] = Array(VIRTUAL_SIZE).fill(null).map(() => ({
+        poem: null,
+        isLoading: false
+      }));
+      setVirtualSlots(slots);
+    };
+
+    initVirtualSlots();
+  }, []);
+
+  // Initialize database and load initial poems
   useEffect(() => {
     const initApp = async () => {
-      await initDB();
-      await seedPoems();
-      
-      // Load 100 random poems - enough variety, manageable memory
-      const randomPoems = getRandomPoems(100);
-      setPoems(randomPoems);
+      try {
+        await initDB();
+        await seedPoems();
+        
+        const count = getTotalPoemsCount();
+        setTotalPoemsCount(count);
+        
+        // Load initial batch of random poems
+        const initialPoems = getRandomPoems(100);
+        setAvailablePoems(initialPoems);
+        
+        // Load first few poems into virtual slots with unique poems
+        const firstPoems = initialPoems.slice(0, 5);
+        const initialSlots: VirtualSlot[] = Array(VIRTUAL_SIZE).fill(null).map((_, index) => {
+          if (index < 5 && firstPoems[index]) {
+            return { poem: firstPoems[index], isLoading: false };
+          }
+          return { poem: null, isLoading: false };
+        });
+        
+        setVirtualSlots(initialSlots);
+        setUsedPoemIds(new Set(firstPoems.map(p => p.id)));
+        setIsInitialized(true);
+      } catch (error) {
+        console.error('Failed to initialize app:', error);
+      }
     };
     
     initApp();
   }, []);
 
-  if (poems.length === 0) {
+  // Load poems into specific virtual slots
+  const loadPoemsIntoSlots = async (slotIndices: number[]) => {
+    if (!isInitialized) return;
+    
+    // Get current state
+    const currentSlots = virtualSlots;
+    const currentPoems = availablePoems;
+    const currentUsedIds = usedPoemIds;
+    
+    const updates: { [key: number]: VirtualSlot } = {};
+    let newUsedIds = new Set(currentUsedIds);
+    let poemsToAdd: Poem[] = [];
+    
+    for (const slotIndex of slotIndices) {
+      // Skip if already loaded or loading
+      if (currentSlots[slotIndex]?.poem || currentSlots[slotIndex]?.isLoading) {
+        continue;
+      }
+      
+      // Find an unused poem
+      const availablePoem = currentPoems.find(poem => 
+        poem && !newUsedIds.has(poem.id)
+      );
+      
+      if (availablePoem) {
+        // Mark poem as used
+        newUsedIds.add(availablePoem.id);
+        updates[slotIndex] = { poem: availablePoem, isLoading: false };
+      } else {
+        // Need to load more poems
+        const newPoems = getRandomPoems(50);
+        poemsToAdd = [...poemsToAdd, ...newPoems];
+        
+        const freshPoem = newPoems.find(poem => 
+          poem && !newUsedIds.has(poem.id)
+        );
+        if (freshPoem) {
+          newUsedIds.add(freshPoem.id);
+          updates[slotIndex] = { poem: freshPoem, isLoading: false };
+        } else {
+          updates[slotIndex] = { poem: null, isLoading: false };
+        }
+      }
+    }
+    
+    // Update available poems if we added new ones
+    if (poemsToAdd.length > 0) {
+      setAvailablePoems(prev => [...prev, ...poemsToAdd]);
+    }
+    
+    // Update used IDs
+    setUsedPoemIds(newUsedIds);
+    
+    // Apply slot updates
+    if (Object.keys(updates).length > 0) {
+      setVirtualSlots(prev => {
+        const newSlots = [...prev];
+        Object.entries(updates).forEach(([index, slot]) => {
+          newSlots[parseInt(index)] = slot;
+        });
+        return newSlots;
+      });
+    }
+  };
+
+  // Clean up distant poems to manage memory
+  const cleanupDistantSlots = (currentPos: number) => {
+    setVirtualSlots(prev => {
+      const newSlots = [...prev];
+      const idsToRemove: number[] = [];
+      
+      for (let i = 0; i < newSlots.length; i++) {
+        const distance = Math.abs(i - currentPos);
+        if (distance > CLEANUP_DISTANCE && newSlots[i].poem) {
+          // Collect IDs to remove from used set
+          if (newSlots[i].poem?.id) {
+            idsToRemove.push(newSlots[i].poem!.id);
+          }
+          newSlots[i] = { poem: null, isLoading: false };
+        }
+      }
+      
+      // Remove from used set
+      if (idsToRemove.length > 0) {
+        setUsedPoemIds(prevUsed => {
+          const newUsed = new Set(prevUsed);
+          idsToRemove.forEach(id => newUsed.delete(id));
+          return newUsed;
+        });
+      }
+      
+      return newSlots;
+    });
+  };
+
+  // Handle page changes and preload content
+  const handlePageSelected = (e: any) => {
+    if (!isInitialized) return;
+    
+    const newIndex = e.nativeEvent.position;
+    setCurrentIndex(newIndex);
+    
+    // Calculate which slots need to be loaded
+    const slotsToLoad: number[] = [];
+    
+    // Load current if not loaded
+    if (!virtualSlots[newIndex]?.poem && !virtualSlots[newIndex]?.isLoading) {
+      slotsToLoad.push(newIndex);
+    }
+    
+    // Load ahead
+    for (let i = 1; i <= LOAD_AHEAD; i++) {
+      const ahead = newIndex + i;
+      if (ahead < VIRTUAL_SIZE && !virtualSlots[ahead]?.poem && !virtualSlots[ahead]?.isLoading) {
+        slotsToLoad.push(ahead);
+      }
+    }
+    
+    // Load behind
+    for (let i = 1; i <= LOAD_BEHIND; i++) {
+      const behind = newIndex - i;
+      if (behind >= 0 && !virtualSlots[behind]?.poem && !virtualSlots[behind]?.isLoading) {
+        slotsToLoad.push(behind);
+      }
+    }
+    
+    // Load the slots
+    if (slotsToLoad.length > 0) {
+      loadPoemsIntoSlots(slotsToLoad);
+    }
+    
+    // Clean up distant poems periodically
+    if (newIndex % 10 === 0) {
+      cleanupDistantSlots(newIndex);
+    }
+    
+    // Refresh poem pool when getting low on unused poems
+    const unusedCount = availablePoems.length - usedPoemIds.size;
+    if (unusedCount < 20) {
+      const newPoems = getRandomPoems(100);
+      setAvailablePoems(prev => [...prev, ...newPoems]);
+    }
+  };
+
+  if (!isInitialized || virtualSlots.length === 0) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
         <Text style={styles.loadingText}>Loading poems...</Text>
@@ -278,12 +457,16 @@ export default function App() {
         style={styles.verticalPager}
         orientation="vertical"
         initialPage={0}
-        onPageSelected={(e: any) => setCurrentPoemIndex(e.nativeEvent.position)}
+        onPageSelected={handlePageSelected}
         scrollEnabled={true}
       >
-        {poems.map((poem: any, index: number) => (
-          <View key={poem.id || index} style={styles.verticalPage} collapsable={false}>
-            <PoemView poem={poem} />
+        {virtualSlots.map((slot, index) => (
+          <View key={index} style={styles.verticalPage} collapsable={false}>
+            {slot.poem ? (
+              <PoemView poem={slot.poem} />
+            ) : (
+              <LoadingPoemView />
+            )}
           </View>
         ))}
       </PagerView>

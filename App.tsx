@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Dimensions, ScrollView } from 'react-native';
+import { Text, View, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { initDB, getRandomPoems, seedPoems, getTotalPoemsCount } from './lib/poems';
+import { poetryAPI, createHybridSession, PoemSession } from './lib/poetry-api';
 import { styles } from './styles/styles';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -248,6 +249,8 @@ export default function App() {
   const [availablePoems, setAvailablePoems] = useState<Poem[]>([]);
   const [totalPoemsCount, setTotalPoemsCount] = useState(0);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
+  const [poemSource, setPoemSource] = useState<'local' | 'hybrid' | 'api'>('hybrid');
   
   const verticalPagerRef = useRef<PagerView>(null);
 
@@ -274,8 +277,34 @@ export default function App() {
         const count = getTotalPoemsCount();
         setTotalPoemsCount(count);
         
-        // Load initial batch of random poems
-        const initialPoems = getRandomPoems(100);
+        // Try to load initial poems from hybrid source (API + local)
+        let initialPoems: any[] = [];
+        
+        try {
+          if (poemSource === 'hybrid') {
+            initialPoems = await poetryAPI.getHybridRandomPoems(100);
+            setIsOnline(true);
+          } else if (poemSource === 'api') {
+            const apiResult = await poetryAPI.getRandomPoems(50);
+            initialPoems = apiResult.poems.map(poem => poetryAPI.convertToLocalFormat(poem));
+            setIsOnline(true);
+          } else {
+            // Local only
+            initialPoems = getRandomPoems(100);
+          }
+        } catch (error) {
+          console.warn('API failed, using local poems:', error);
+          initialPoems = getRandomPoems(100);
+          setIsOnline(false);
+          setPoemSource('local');
+        }
+        
+        // Add IDs to API poems if they don't have them
+        initialPoems = initialPoems.map((poem, index) => ({
+          ...poem,
+          id: poem.id || `api_${index}_${Date.now()}`
+        }));
+        
         setAvailablePoems(initialPoems);
         
         // Load first few poems into virtual slots with unique poems
@@ -296,9 +325,9 @@ export default function App() {
     };
     
     initApp();
-  }, []);
+  }, [poemSource]);
 
-  // Load poems into specific virtual slots
+  // Enhanced poem loading with API integration
   const loadPoemsIntoSlots = async (slotIndices: number[]) => {
     if (!isInitialized) return;
     
@@ -328,17 +357,50 @@ export default function App() {
         updates[slotIndex] = { poem: availablePoem, isLoading: false };
       } else {
         // Need to load more poems
-        const newPoems = getRandomPoems(50);
-        poemsToAdd = [...poemsToAdd, ...newPoems];
-        
-        const freshPoem = newPoems.find(poem => 
-          poem && !newUsedIds.has(poem.id)
-        );
-        if (freshPoem) {
-          newUsedIds.add(freshPoem.id);
-          updates[slotIndex] = { poem: freshPoem, isLoading: false };
-        } else {
-          updates[slotIndex] = { poem: null, isLoading: false };
+        try {
+          let newPoems: any[] = [];
+          
+          if (poemSource === 'hybrid' && isOnline) {
+            newPoems = await poetryAPI.getHybridRandomPoems(50);
+          } else if (poemSource === 'api' && isOnline) {
+            const apiResult = await poetryAPI.getRandomPoems(25);
+            newPoems = apiResult.poems.map(poem => poetryAPI.convertToLocalFormat(poem));
+          } else {
+            newPoems = getRandomPoems(50);
+          }
+          
+          // Add IDs to API poems if they don't have them
+          newPoems = newPoems.map((poem, index) => ({
+            ...poem,
+            id: poem.id || `api_${slotIndex}_${index}_${Date.now()}`
+          }));
+          
+          poemsToAdd = [...poemsToAdd, ...newPoems];
+          
+          const freshPoem = newPoems.find(poem => 
+            poem && !newUsedIds.has(poem.id)
+          );
+          if (freshPoem) {
+            newUsedIds.add(freshPoem.id);
+            updates[slotIndex] = { poem: freshPoem, isLoading: false };
+          } else {
+            updates[slotIndex] = { poem: null, isLoading: false };
+          }
+        } catch (error) {
+          console.warn('Failed to load more poems:', error);
+          // Fallback to local poems
+          const localPoems = getRandomPoems(50);
+          poemsToAdd = [...poemsToAdd, ...localPoems];
+          
+          const freshPoem = localPoems.find(poem => 
+            poem && !newUsedIds.has(poem.id)
+          );
+          if (freshPoem) {
+            newUsedIds.add(freshPoem.id);
+            updates[slotIndex] = { poem: freshPoem, isLoading: false };
+          } else {
+            updates[slotIndex] = { poem: null, isLoading: false };
+          }
         }
       }
     }
@@ -367,7 +429,7 @@ export default function App() {
   const cleanupDistantSlots = (currentPos: number) => {
     setVirtualSlots(prev => {
       const newSlots = [...prev];
-      const idsToRemove: number[] = [];
+      const idsToRemove: any[] = [];
       
       for (let i = 0; i < newSlots.length; i++) {
         const distance = Math.abs(i - currentPos);
@@ -437,21 +499,65 @@ export default function App() {
     // Refresh poem pool when getting low on unused poems
     const unusedCount = availablePoems.length - usedPoemIds.size;
     if (unusedCount < 20) {
-      const newPoems = getRandomPoems(100);
-      setAvailablePoems(prev => [...prev, ...newPoems]);
+      // Load more poems in background
+      loadPoemsIntoSlots([]);
     }
+  };
+
+  // Source switching function
+  const switchPoemSource = async (newSource: 'local' | 'hybrid' | 'api') => {
+    if (newSource === poemSource) return;
+    
+    setPoemSource(newSource);
+    setIsInitialized(false);
+    
+    // Reset state
+    setVirtualSlots(Array(VIRTUAL_SIZE).fill(null).map(() => ({
+      poem: null,
+      isLoading: false
+    })));
+    setUsedPoemIds(new Set());
+    setAvailablePoems([]);
+    setCurrentIndex(0);
+    
+    // This will trigger the useEffect to reinitialize
   };
 
   if (!isInitialized || virtualSlots.length === 0) {
     return (
       <View style={[styles.container, styles.loadingContainer]}>
         <Text style={styles.loadingText}>Loading poems...</Text>
+        {!isOnline && (
+          <Text style={styles.author}>Offline mode - using local poems</Text>
+        )}
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
+      {/* Optional source indicator */}
+      <View style={{ position: 'absolute', top: 40, right: 20, zIndex: 1000 }}>
+        <TouchableOpacity 
+          onPress={() => {
+            const sources: ('local' | 'hybrid' | 'api')[] = ['local', 'hybrid', 'api'];
+            const currentIndex = sources.indexOf(poemSource);
+            const nextSource = sources[(currentIndex + 1) % sources.length];
+            switchPoemSource(nextSource);
+          }}
+          style={{ 
+            backgroundColor: 'rgba(0,0,0,0.7)', 
+            padding: 8, 
+            borderRadius: 4,
+            opacity: 0.8
+          }}
+        >
+          <Text style={{ color: 'white', fontSize: 12 }}>
+            {poemSource === 'hybrid' ? '🌐+💾' : poemSource === 'api' ? '🌐' : '💾'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      
       <PagerView
         ref={verticalPagerRef}
         style={styles.verticalPager}

@@ -69,8 +69,16 @@ function importToDatabase() {
         
         // CSV columns: (empty), Title, Poem, Poet, Tags
         const title = row.Title?.trim();
-        const content = row.Poem?.trim();
+        const rawContent = row.Poem?.trim();
         const author = row.Poet?.trim();
+        
+        // Normalize content: clean up excessive whitespace while preserving stanza breaks
+        const content = rawContent ? rawContent
+          .replace(/\r\n/g, '\n')           // Normalize line endings
+          .replace(/\n{3,}/g, '\n\n')       // Max 2 consecutive newlines (stanza break)
+          .replace(/[ \t]+/g, ' ')          // Multiple spaces/tabs → single space
+          .replace(/[ \t]*\n[ \t]*/g, '\n') // Remove spaces around newlines
+          .trim() : '';
         
         // Debug first few records
         if (imported < 3) {
@@ -82,7 +90,7 @@ function importToDatabase() {
         }
         
         // Filter valid poems
-        if (title && author && content && content.length > 50) {
+        if (title && author && content && content.length > 10) {
           try {
             insert.run(title, author, content);
             imported++;

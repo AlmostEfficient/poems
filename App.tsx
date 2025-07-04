@@ -249,76 +249,113 @@ export default function App() {
   const [availablePoems, setAvailablePoems] = useState<Poem[]>([]);
   const [totalPoemsCount, setTotalPoemsCount] = useState(0);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [isOnline, setIsOnline] = useState(true);
-  const [poemSource, setPoemSource] = useState<'local' | 'hybrid' | 'api'>('hybrid');
+  const [isOnline, setIsOnline] = useState(false);
+  const [poemSource, setPoemSource] = useState<'local' | 'hybrid' | 'api'>('local');
+  
+  // Embedded starter poems for instant first paint
+  const STARTER_POEMS: Poem[] = [
+    {
+      id: -1,
+      title: "The Road Not Taken",
+      author: "Robert Frost",
+      content: "Two roads diverged in a yellow wood,\nAnd sorry I could not travel both\nAnd be one traveler, long I stood\nAnd looked down one as far as I could\nTo where it bent in the undergrowth;\n\nThen took the other, as just as fair,\nAnd having perhaps the better claim,\nBecause it was grassy and wanted wear;\nThough as for that the passing there\nHad worn them really about the same,\n\nAnd both that morning equally lay\nIn leaves no step had trodden black.\nOh, I kept the first for another day!\nYet knowing how way leads on to way,\nI doubted if I should ever be back.\n\nI shall be telling this with a sigh\nSomewhere ages and ages hence:\nTwo roads diverged in a wood, and I—\nI took the one less traveled by,\nAnd that has made all the difference."
+    },
+    {
+      id: -2,
+      title: "Fire and Ice",
+      author: "Robert Frost",
+      content: "Some say the world will end in fire,\nSome say in ice.\nFrom what I've tasted of desire\nI hold with those who favor fire.\nBut if it had to perish twice,\nI think I know enough of hate\nTo say that for destruction ice\nIs also great\nAnd would suffice."
+    },
+    {
+      id: -3,
+      title: "Stopping by Woods on a Snowy Evening",
+      author: "Robert Frost",
+      content: "Whose woods these are I think I know.\nHis house is in the village though;\nHe will not see me stopping here\nTo watch his woods fill up with snow.\n\nMy little horse must think it queer\nTo stop without a farmhouse near\nBetween the woods and frozen lake\nThe darkest evening of the year.\n\nHe gives his harness bells a shake\nTo ask if there is some mistake.\nThe only other sound's the sweep\nOf easy wind and downy flake.\n\nThe woods are lovely, dark and deep,\nBut I have promises to keep,\nAnd miles to go before I sleep,\nAnd miles to go before I sleep."
+    },
+    {
+      id: -4,
+      title: "Nothing Gold Can Stay",
+      author: "Robert Frost",
+      content: "Nature's first green is gold,\nHer hardest hue to hold.\nHer early leaf's a flower;\nBut only so an hour.\nThen leaf subsides to leaf.\nSo Eden sank to grief,\nSo dawn goes down to day.\nNothing gold can stay."
+    },
+    {
+      id: -5,
+      title: "The Guest House",
+      author: "Rumi",
+      content: "This being human is a guest house.\nEvery morning a new arrival.\n\nA joy, a depression, a meanness,\nsome momentary awareness comes\nas an unexpected visitor.\n\nWelcome and entertain them all!\nEven if they're a crowd of sorrows,\nwho violently sweep your house\nempty of its furniture,\nstill, treat each guest honorably.\nHe may be clearing you out\nfor some new delight.\n\nThe dark thought, the shame, the malice,\nmeet them at the door laughing,\nand invite them in.\n\nBe grateful for whoever comes,\nbecause each has been sent\nas a guide from beyond."
+    }
+  ];
   
   const verticalPagerRef = useRef<PagerView>(null);
 
-  // Initialize virtual slots array
+  // Initialize virtual slots array with starter poems for instant first paint
   useEffect(() => {
     const initVirtualSlots = () => {
-      const slots: VirtualSlot[] = Array(VIRTUAL_SIZE).fill(null).map(() => ({
-        poem: null,
-        isLoading: false
-      }));
+      // Shuffle starter poems for variety on each app launch
+      const shuffled = [...STARTER_POEMS].sort(() => Math.random() - 0.5);
+      
+      const slots: VirtualSlot[] = Array(VIRTUAL_SIZE).fill(null).map((_, index) => {
+        if (index < shuffled.length) {
+          return { poem: shuffled[index], isLoading: false };
+        }
+        return { poem: null, isLoading: false };
+      });
       setVirtualSlots(slots);
+      setAvailablePoems(shuffled);
+      setUsedPoemIds(new Set(shuffled.map(p => p.id)));
+      setIsInitialized(true); // Ready to show content immediately
     };
 
     initVirtualSlots();
   }, []);
 
-  // Initialize database and load initial poems
+  // Background database initialization (doesn't block UI)
   useEffect(() => {
     const initApp = async () => {
       try {
+        // Initialize database (happens in background while starter poems show)
         await initDB();
         await seedPoems();
         
         const count = getTotalPoemsCount();
         setTotalPoemsCount(count);
         
-        // Try to load initial poems from hybrid source (API + local)
-        let initialPoems: any[] = [];
+        // Load poems from selected source
+        let newPoems: any[] = [];
         
         try {
           if (poemSource === 'hybrid') {
-            initialPoems = await poetryAPI.getHybridRandomPoems(100);
+            newPoems = await poetryAPI.getHybridRandomPoems(100);
             setIsOnline(true);
           } else if (poemSource === 'api') {
             const apiResult = await poetryAPI.getRandomPoems(50);
-            initialPoems = apiResult.poems.map(poem => poetryAPI.convertToLocalFormat(poem));
+            newPoems = apiResult.poems.map(poem => poetryAPI.convertToLocalFormat(poem));
             setIsOnline(true);
           } else {
             // Local only
-            initialPoems = getRandomPoems(100);
+            newPoems = getRandomPoems(100);
           }
         } catch (error) {
           console.warn('API failed, using local poems:', error);
-          initialPoems = getRandomPoems(100);
+          newPoems = getRandomPoems(100);
           setIsOnline(false);
           setPoemSource('local');
         }
         
         // Add IDs to API poems if they don't have them
-        initialPoems = initialPoems.map((poem, index) => ({
+        newPoems = newPoems.map((poem, index) => ({
           ...poem,
           id: poem.id || `api_${index}_${Date.now()}`
         }));
         
-        setAvailablePoems(initialPoems);
-        
-        // Load first few poems into virtual slots with unique poems
-        const firstPoems = initialPoems.slice(0, 5);
-        const initialSlots: VirtualSlot[] = Array(VIRTUAL_SIZE).fill(null).map((_, index) => {
-          if (index < 5 && firstPoems[index]) {
-            return { poem: firstPoems[index], isLoading: false };
-          }
-          return { poem: null, isLoading: false };
+        // Enhance available poems (keep starters + add new ones)
+        setAvailablePoems(prev => {
+          const starterIds = new Set(STARTER_POEMS.map(p => p.id));
+          const filteredNew = newPoems.filter(p => !starterIds.has(p.id));
+          return [...prev, ...filteredNew];
         });
         
-        setVirtualSlots(initialSlots);
-        setUsedPoemIds(new Set(firstPoems.map(p => p.id)));
-        setIsInitialized(true);
+        console.log(`Background loading complete: ${newPoems.length} new poems loaded`);
       } catch (error) {
         console.error('Failed to initialize app:', error);
       }
@@ -331,76 +368,81 @@ export default function App() {
   const loadPoemsIntoSlots = async (slotIndices: number[]) => {
     if (!isInitialized) return;
     
-    // Get current state
-    const currentSlots = virtualSlots;
-    const currentPoems = availablePoems;
-    const currentUsedIds = usedPoemIds;
+    console.log(`Loading poems into slots: ${slotIndices.join(', ')}`);
+    console.log(`Current available poems: ${availablePoems.length}, used: ${usedPoemIds.size}`);
     
     const updates: { [key: number]: VirtualSlot } = {};
-    let newUsedIds = new Set(currentUsedIds);
     let poemsToAdd: Poem[] = [];
+    
+    // Get current used IDs from actual slots to avoid stale state
+    const currentUsedIds = new Set<any>();
+    virtualSlots.forEach((slot, index) => {
+      if (slot && slot.poem && slot.poem.id) {
+        currentUsedIds.add(slot.poem.id);
+      }
+    });
     
     for (const slotIndex of slotIndices) {
       // Skip if already loaded or loading
-      if (currentSlots[slotIndex]?.poem || currentSlots[slotIndex]?.isLoading) {
+      if (virtualSlots[slotIndex]?.poem || virtualSlots[slotIndex]?.isLoading) {
         continue;
       }
       
-      // Find an unused poem
-      const availablePoem = currentPoems.find(poem => 
-        poem && !newUsedIds.has(poem.id)
+      // Find an unused poem that's not already assigned to any slot
+      const availablePoem = availablePoems.find(poem => 
+        poem && !currentUsedIds.has(poem.id) && !Object.values(updates).some(slot => slot.poem?.id === poem.id)
       );
       
+      if (!availablePoem) {
+        console.log(`DEBUG: No available poem found for slot ${slotIndex}`);
+        console.log(`- Available poems count: ${availablePoems.length}`);
+        console.log(`- Current used IDs count: ${currentUsedIds.size}`);
+        console.log(`- Updates in progress: ${Object.keys(updates).length}`);
+        console.log(`- Sample available poem IDs: ${availablePoems.slice(0, 5).map(p => p?.id)}`);
+        console.log(`- Current used IDs: ${Array.from(currentUsedIds).slice(0, 10)}`);
+      }
+      
       if (availablePoem) {
-        // Mark poem as used
-        newUsedIds.add(availablePoem.id);
+        // Mark poem as used in our local tracking
+        currentUsedIds.add(availablePoem.id);
         updates[slotIndex] = { poem: availablePoem, isLoading: false };
+        console.log(`Loaded poem "${availablePoem.title}" into slot ${slotIndex}`);
       } else {
+        console.log(`No available poem for slot ${slotIndex}, need to load more`);
         // Need to load more poems
         try {
           let newPoems: any[] = [];
           
           if (poemSource === 'hybrid' && isOnline) {
-            newPoems = await poetryAPI.getHybridRandomPoems(50);
+            newPoems = await poetryAPI.getHybridRandomPoems(20);
           } else if (poemSource === 'api' && isOnline) {
-            const apiResult = await poetryAPI.getRandomPoems(25);
+            const apiResult = await poetryAPI.getRandomPoems(20);
             newPoems = apiResult.poems.map(poem => poetryAPI.convertToLocalFormat(poem));
           } else {
-            newPoems = getRandomPoems(50);
+            newPoems = getRandomPoems(20);
           }
           
-          // Add IDs to API poems if they don't have them
+          // Add unique IDs to API poems
           newPoems = newPoems.map((poem, index) => ({
             ...poem,
-            id: poem.id || `api_${slotIndex}_${index}_${Date.now()}`
+            id: poem.id || `dynamic_${slotIndex}_${index}_${Date.now()}_${Math.random()}`
           }));
           
           poemsToAdd = [...poemsToAdd, ...newPoems];
           
           const freshPoem = newPoems.find(poem => 
-            poem && !newUsedIds.has(poem.id)
+            poem && !currentUsedIds.has(poem.id) && !Object.values(updates).some(slot => slot.poem?.id === poem.id)
           );
           if (freshPoem) {
-            newUsedIds.add(freshPoem.id);
+            currentUsedIds.add(freshPoem.id);
             updates[slotIndex] = { poem: freshPoem, isLoading: false };
+            console.log(`Loaded fresh poem "${freshPoem.title}" into slot ${slotIndex}`);
           } else {
             updates[slotIndex] = { poem: null, isLoading: false };
           }
         } catch (error) {
           console.warn('Failed to load more poems:', error);
-          // Fallback to local poems
-          const localPoems = getRandomPoems(50);
-          poemsToAdd = [...poemsToAdd, ...localPoems];
-          
-          const freshPoem = localPoems.find(poem => 
-            poem && !newUsedIds.has(poem.id)
-          );
-          if (freshPoem) {
-            newUsedIds.add(freshPoem.id);
-            updates[slotIndex] = { poem: freshPoem, isLoading: false };
-          } else {
-            updates[slotIndex] = { poem: null, isLoading: false };
-          }
+          updates[slotIndex] = { poem: null, isLoading: false };
         }
       }
     }
@@ -410,8 +452,8 @@ export default function App() {
       setAvailablePoems(prev => [...prev, ...poemsToAdd]);
     }
     
-    // Update used IDs
-    setUsedPoemIds(newUsedIds);
+    // Update used IDs based on current reality
+    setUsedPoemIds(currentUsedIds);
     
     // Apply slot updates
     if (Object.keys(updates).length > 0) {
@@ -429,29 +471,30 @@ export default function App() {
   const cleanupDistantSlots = (currentPos: number) => {
     setVirtualSlots(prev => {
       const newSlots = [...prev];
-      const idsToRemove: any[] = [];
       
       for (let i = 0; i < newSlots.length; i++) {
         const distance = Math.abs(i - currentPos);
         if (distance > CLEANUP_DISTANCE && newSlots[i].poem) {
-          // Collect IDs to remove from used set
-          if (newSlots[i].poem?.id) {
-            idsToRemove.push(newSlots[i].poem!.id);
-          }
+          console.log(`Cleaning up poem "${newSlots[i].poem?.title}" from slot ${i}`);
           newSlots[i] = { poem: null, isLoading: false };
         }
       }
       
-      // Remove from used set
-      if (idsToRemove.length > 0) {
-        setUsedPoemIds(prevUsed => {
-          const newUsed = new Set(prevUsed);
-          idsToRemove.forEach(id => newUsed.delete(id));
-          return newUsed;
-        });
-      }
-      
       return newSlots;
+    });
+    
+    // Update used IDs based on remaining poems in slots
+    setUsedPoemIds(prev => {
+      const currentUsedIds = new Set<any>();
+      virtualSlots.forEach(slot => {
+        if (slot.poem && slot.poem.id) {
+          const distance = Math.abs(virtualSlots.indexOf(slot) - currentPos);
+          if (distance <= CLEANUP_DISTANCE) {
+            currentUsedIds.add(slot.poem.id);
+          }
+        }
+      });
+      return currentUsedIds;
     });
   };
 
@@ -509,35 +552,29 @@ export default function App() {
     if (newSource === poemSource) return;
     
     setPoemSource(newSource);
-    setIsInitialized(false);
     
-    // Reset state
-    setVirtualSlots(Array(VIRTUAL_SIZE).fill(null).map(() => ({
-      poem: null,
-      isLoading: false
-    })));
-    setUsedPoemIds(new Set());
-    setAvailablePoems([]);
+    // Reset to starter poems immediately (no loading screen)
+    const shuffled = [...STARTER_POEMS].sort(() => Math.random() - 0.5);
+    const slots: VirtualSlot[] = Array(VIRTUAL_SIZE).fill(null).map((_, index) => {
+      if (index < shuffled.length) {
+        return { poem: shuffled[index], isLoading: false };
+      }
+      return { poem: null, isLoading: false };
+    });
+    setVirtualSlots(slots);
+    setAvailablePoems(shuffled);
+    setUsedPoemIds(new Set(shuffled.map(p => p.id)));
     setCurrentIndex(0);
     
-    // This will trigger the useEffect to reinitialize
+    // Background loading will happen automatically via useEffect
   };
 
-  if (!isInitialized || virtualSlots.length === 0) {
-    return (
-      <View style={[styles.container, styles.loadingContainer]}>
-        <Text style={styles.loadingText}>Loading poems...</Text>
-        {!isOnline && (
-          <Text style={styles.author}>Offline mode - using local poems</Text>
-        )}
-      </View>
-    );
-  }
+  // No loading screen needed - we start with embedded poems immediately
 
   return (
     <View style={styles.container}>
       {/* Optional source indicator */}
-      <View style={{ position: 'absolute', top: 40, right: 20, zIndex: 1000 }}>
+      <View style={{ position: 'absolute', bottom: 40, right: 20, zIndex: 1000 }}>
         <TouchableOpacity 
           onPress={() => {
             const sources: ('local' | 'hybrid' | 'api')[] = ['local', 'hybrid', 'api'];
@@ -546,7 +583,6 @@ export default function App() {
             switchPoemSource(nextSource);
           }}
           style={{ 
-            backgroundColor: 'rgba(0,0,0,0.7)', 
             padding: 8, 
             borderRadius: 4,
             opacity: 0.8
@@ -567,11 +603,11 @@ export default function App() {
         scrollEnabled={true}
       >
         {virtualSlots.map((slot, index) => (
-          <View key={index} style={styles.verticalPage} collapsable={false}>
+          <View key={`slot-${index}`} style={styles.verticalPage} collapsable={false}>
             {slot.poem ? (
-              <PoemView poem={slot.poem} />
+              <PoemView key={`poem-${slot.poem.id}`} poem={slot.poem} />
             ) : (
-              <LoadingPoemView />
+              <LoadingPoemView key={`loading-${index}`} />
             )}
           </View>
         ))}

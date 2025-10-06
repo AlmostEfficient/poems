@@ -7,7 +7,11 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "import": "node import_to_db.js --clear"
+    "import": "bun import_to_db.js --clear",
+    "generate": "bun scripts/generate_poems_db.js",
+    "build:app": "bun scripts/build.ts",
+    "version:bump": "bun scripts/version.ts bump",
+    "version:current": "bun scripts/version.ts current"
   },
   "dependencies": {
     "csv-parser": "^3.2.0",

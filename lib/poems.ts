@@ -2,84 +2,125 @@ import * as SQLite from 'expo-sqlite';
 import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
 
-let db: SQLite.SQLiteDatabase;
+const DB_DIRECTORY = `${FileSystem.documentDirectory}SQLite`;
+const DB_NAME = 'poems.db';
+const DB_PATH = `${DB_DIRECTORY}/${DB_NAME}`;
 
-async function initDatabase() {
-  // Always copy the latest database from assets to ensure we have the most recent version
-  const dbPath = `${FileSystem.documentDirectory}SQLite/poems.db`;
-  
-  // Copy prepopulated database from assets (overwrite if exists)
+let db: SQLite.SQLiteDatabase | null = null;
+let initPromise: Promise<SQLite.SQLiteDatabase> | null = null;
+
+async function ensureDatabaseFile(): Promise<void> {
+  await FileSystem.makeDirectoryAsync(DB_DIRECTORY, { intermediates: true });
+
+  const fileInfo = await FileSystem.getInfoAsync(DB_PATH);
+  if (fileInfo.exists) {
+    return;
+  }
+
   const asset = Asset.fromModule(require('../assets/poems.db'));
-  await asset.downloadAsync();
-  await FileSystem.makeDirectoryAsync(`${FileSystem.documentDirectory}SQLite`, { intermediates: true });
+  if (!asset.downloaded) {
+    await asset.downloadAsync();
+  }
+
+  if (!asset.localUri) {
+    throw new Error('Failed to resolve poems.db asset location');
+  }
+
   await FileSystem.copyAsync({
-    from: asset.localUri!,
-    to: dbPath,
+    from: asset.localUri,
+    to: DB_PATH,
   });
-  
-  db = SQLite.openDatabaseSync('poems.db');
+}
+
+function getDbInstance(): SQLite.SQLiteDatabase {
+  if (!db) {
+    throw new Error('Database not initialized. Call initDB() before using helpers.');
+  }
   return db;
 }
 
-export async function initDB() {
-  await initDatabase();
-  // Table already exists in prepopulated database, but create if needed
-  db.execSync(
-    `CREATE TABLE IF NOT EXISTS poems (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT NOT NULL,
-      author TEXT NOT NULL,
-      content TEXT NOT NULL
-    );`
-  );
+export async function initDB(): Promise<SQLite.SQLiteDatabase> {
+  if (db) {
+    return db;
+  }
+
+  if (!initPromise) {
+    initPromise = (async () => {
+      await ensureDatabaseFile();
+      const database = SQLite.openDatabaseSync(DB_NAME);
+      database.execSync(
+        `CREATE TABLE IF NOT EXISTS poems (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          title TEXT NOT NULL,
+          author TEXT NOT NULL,
+          content TEXT NOT NULL
+        );`
+      );
+      db = database;
+      return database;
+    })().catch((error) => {
+      initPromise = null;
+      throw error;
+    });
+  }
+
+  return initPromise;
 }
 
 export function getPoems(): any[] {
-  const result = db.getAllSync('SELECT * FROM poems;');
+  const database = getDbInstance();
+  const result = database.getAllSync('SELECT * FROM poems;');
   return result;
 }
 
 export function getPoemsPage(offset: number = 0, limit: number = 20): any[] {
-  const result = db.getAllSync('SELECT * FROM poems LIMIT ? OFFSET ?;', [limit, offset]);
+  const database = getDbInstance();
+  const result = database.getAllSync('SELECT * FROM poems LIMIT ? OFFSET ?;', [limit, offset]);
   return result;
 }
 
 export function getTotalPoemsCount(): number {
-  const result = db.getFirstSync('SELECT COUNT(*) as count FROM poems;') as { count: number };
+  const database = getDbInstance();
+  const result = database.getFirstSync('SELECT COUNT(*) as count FROM poems;') as { count: number };
   return result.count;
 }
 
 export function getRandomPoems(limit: number = 20): any[] {
-  const result = db.getAllSync('SELECT * FROM poems ORDER BY RANDOM() LIMIT ?;', [limit]);
+  const database = getDbInstance();
+  const result = database.getAllSync('SELECT * FROM poems ORDER BY RANDOM() LIMIT ?;', [limit]);
   return result;
 }
 
 export function searchLocalPoems(query: string, field: 'title' | 'author' | 'content' = 'title', limit: number = 10): any[] {
   const searchQuery = `%${query}%`;
   const sql = `SELECT * FROM poems WHERE ${field} LIKE ? LIMIT ?;`;
-  const result = db.getAllSync(sql, [searchQuery, limit]);
+  const database = getDbInstance();
+  const result = database.getAllSync(sql, [searchQuery, limit]);
   return result;
 }
 
 export function getPoemsByAuthor(author: string, limit: number = 20): any[] {
-  const result = db.getAllSync('SELECT * FROM poems WHERE author = ? LIMIT ?;', [author, limit]);
+  const database = getDbInstance();
+  const result = database.getAllSync('SELECT * FROM poems WHERE author = ? LIMIT ?;', [author, limit]);
   return result;
 }
 
 export function getLocalAuthors(): string[] {
-  const result = db.getAllSync('SELECT DISTINCT author FROM poems ORDER BY author;');
+  const database = getDbInstance();
+  const result = database.getAllSync('SELECT DISTINCT author FROM poems ORDER BY author;');
   return result.map((row: any) => row.author);
 }
 
 export function addPoem(title: string, author: string, content: string): void {
+  const database = getDbInstance();
   // Check if poem already exists
-  const existing = db.getFirstSync(
+  const existing = database.getFirstSync(
     'SELECT id FROM poems WHERE title = ? AND author = ?;',
     [title, author]
   );
   
   if (!existing) {
-    db.runSync(
+    database.runSync(
       'INSERT INTO poems (title, author, content) VALUES (?, ?, ?);',
       [title, author, content]
     );
@@ -95,7 +136,8 @@ export function addPoemsInBatch(poems: { title: string; author: string; content:
 
 // Get poem by exact title and author (useful for checking duplicates)
 export function getPoemByTitleAndAuthor(title: string, author: string): any | null {
-  const result = db.getFirstSync(
+  const database = getDbInstance();
+  const result = database.getFirstSync(
     'SELECT * FROM poems WHERE title = ? AND author = ? LIMIT 1;',
     [title, author]
   );

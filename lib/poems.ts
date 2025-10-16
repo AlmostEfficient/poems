@@ -25,8 +25,12 @@ export function getPoems(): Poem[] {
 
 export { getPoemsPage };
 
-export function getRandomPoems(limit = 20): Poem[] {
-  return repoGetRandomPoems(limit);
+export function getRandomPoems(options?: { limit?: number; language?: 'en' | 'ur' } | number): Poem[] {
+  // Support backward compatibility with bare number parameter
+  if (typeof options === 'number') {
+    return repoGetRandomPoems({ limit: options });
+  }
+  return repoGetRandomPoems(options);
 }
 
 export { getTotalPoemsCount, getPoemsByAuthor };
@@ -34,18 +38,25 @@ export { getTotalPoemsCount, getPoemsByAuthor };
 export function searchLocalPoems(
   query: string,
   field: 'title' | 'author' | 'content' = 'title',
-  limit = 10
+  limit = 10,
+  options?: { language?: 'en' | 'ur' }
 ): Poem[] {
-  return searchPoems(query, field, limit);
+  return searchPoems(query, field, limit, options);
 }
 
 export { getDistinctAuthors as getLocalAuthors };
 
-export function addPoem(title: string, author: string, content: string): void {
-  insertPoem({ title, author, content });
+export function addPoem(
+  title: string,
+  author: string,
+  content: string,
+  language: 'en' | 'ur' = 'en'
+): void {
+  insertPoem({ title, author, content, language });
 }
 
 export function addPoemsInBatch(poems: CreatePoemInput[]): void {
+  // Ensure language is propagated through
   insertPoemsInBatch(poems);
 }
 
@@ -64,10 +75,11 @@ export async function seedPoems(): Promise<void> {
 
   if (poems.length === 0) {
     console.warn('Database empty! Adding bundled starter poems.');
-    const payload: CreatePoemInput[] = STARTER_POEMS.map(({ title, author, content }) => ({
+    const payload: CreatePoemInput[] = STARTER_POEMS.map(({ title, author, content, language }) => ({
       title,
       author,
       content,
+      language,
     }));
     insertPoemsInBatch(payload);
   }

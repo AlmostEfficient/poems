@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import PagerView from 'react-native-pager-view';
+import { useFonts, NotoNastaliqUrdu_400Regular } from '@expo-google-fonts/noto-nastaliq-urdu';
 
 import { usePoemFeed } from './hooks/usePoemFeed';
 import type { Poem } from './lib/types';
@@ -16,21 +17,28 @@ interface PoemPageProps {
   author: string;
   currentPage: number;
   totalPages: number;
+  language: 'en' | 'ur';
 }
 
-function PoemPage({ stanzas, title, author, currentPage, totalPages }: PoemPageProps) {
+function PoemPage({ stanzas, title, author, currentPage, totalPages, language }: PoemPageProps) {
+  const isUrdu = language === 'ur';
+  const titleStyle = isUrdu ? styles.titleUrdu : styles.title;
+  const authorStyle = isUrdu ? styles.authorUrdu : styles.author;
+  const lineStyle = isUrdu ? styles.lineUrdu : styles.line;
+  const authorLabel = isUrdu ? author : `by ${author}`;
+
   return (
     <View style={styles.poemPage}>
       <View style={styles.poemHeader}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.author}>by {author}</Text>
+        <Text style={titleStyle}>{title}</Text>
+        <Text style={authorStyle}>{authorLabel}</Text>
       </View>
 
       <View style={styles.poemBody}>
         {stanzas.map((stanza, stanzaIndex) => (
           <View key={stanzaIndex} style={styles.stanza}>
             {stanza.split('\n').map((line, lineIndex) => (
-              <Text key={lineIndex} style={styles.line}>
+              <Text key={lineIndex} style={lineStyle}>
                 {line}
               </Text>
             ))}
@@ -64,6 +72,12 @@ function PoemView({ poem }: PoemViewProps) {
   const [pages, setPages] = useState<string[][]>([]);
   const [isCalculating, setIsCalculating] = useState(true);
   const scrollRef = useRef<ScrollView>(null);
+
+  const isUrdu = poem.language === 'ur';
+  const titleStyle = isUrdu ? styles.titleUrdu : styles.title;
+  const authorStyle = isUrdu ? styles.authorUrdu : styles.author;
+  const lineStyle = isUrdu ? styles.lineUrdu : styles.line;
+  const authorLabel = isUrdu ? poem.author : `by ${poem.author}`;
 
   const headerHeight = 120;
   const paginationHeight = 40;
@@ -126,10 +140,12 @@ function PoemView({ poem }: PoemViewProps) {
     return (
       <View style={styles.poemContainer}>
         <View style={styles.poemHeader}>
-          <Text style={styles.title}>{poem.title}</Text>
-          <Text style={styles.author}>by {poem.author}</Text>
+          <Text style={titleStyle}>{poem.title}</Text>
+          <Text style={authorStyle}>{authorLabel}</Text>
         </View>
-        <Text style={styles.loadingText}>Loading...</Text>
+        <Text style={styles.loadingText}>
+          {isUrdu ? 'نظم لوڈ ہو رہی ہے...' : 'Loading...'}
+        </Text>
       </View>
     );
   }
@@ -137,8 +153,8 @@ function PoemView({ poem }: PoemViewProps) {
   return (
     <View style={styles.poemContainer}>
       <View style={styles.poemHeader}>
-        <Text style={styles.title}>{poem.title}</Text>
-        <Text style={styles.author}>by {poem.author}</Text>
+        <Text style={titleStyle}>{poem.title}</Text>
+        <Text style={authorStyle}>{authorLabel}</Text>
       </View>
 
       {pages.length > 1 ? (
@@ -160,7 +176,7 @@ function PoemView({ poem }: PoemViewProps) {
                   {pageStanzas.map((stanza, stanzaIndex) => (
                     <View key={stanzaIndex} style={styles.stanza}>
                       {stanza.split('\n').map((line, lineIndex) => (
-                        <Text key={lineIndex} style={styles.line}>
+                        <Text key={lineIndex} style={lineStyle}>
                           {line}
                         </Text>
                       ))}
@@ -187,7 +203,7 @@ function PoemView({ poem }: PoemViewProps) {
           {pages[0].map((stanza, stanzaIndex) => (
             <View key={stanzaIndex} style={styles.stanza}>
               {stanza.split('\n').map((line, lineIndex) => (
-                <Text key={lineIndex} style={styles.line}>
+                <Text key={lineIndex} style={lineStyle}>
                   {line}
                 </Text>
               ))}
@@ -199,11 +215,12 @@ function PoemView({ poem }: PoemViewProps) {
   );
 }
 
-function LoadingPoemView() {
+function LoadingPoemView({ language }: { language: 'en' | 'ur' }) {
+  const message = language === 'ur' ? 'نظم لوڈ ہو رہی ہے...' : 'Loading poem...';
   return (
     <View style={styles.poemContainer}>
       <View style={styles.poemHeader}>
-        <Text style={styles.loadingText}>Loading poem...</Text>
+        <Text style={styles.loadingText}>{message}</Text>
       </View>
     </View>
   );
@@ -220,13 +237,19 @@ function sourceEmoji(source: PoemFeedSource, isOnline: boolean): string {
 }
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    NotoNastaliqUrdu_400Regular,
+  });
+
   const verticalPagerRef = useRef<PagerView>(null);
   const {
     slots,
     poemSource,
     isOnline,
+    language,
     handlePageSelected,
     cyclePoemSource,
+    toggleLanguage,
   } = usePoemFeed();
 
   useEffect(() => {
@@ -235,9 +258,13 @@ export default function App() {
     }
   }, [poemSource]);
 
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
-      <View style={{ position: 'absolute', bottom: 40, right: 20, zIndex: 1000 }}>
+      <View style={{ position: 'absolute', bottom: 40, right: 20, zIndex: 1000, flexDirection: 'column', gap: 12 }}>
         <TouchableOpacity
           onPress={cyclePoemSource}
           style={{
@@ -247,6 +274,19 @@ export default function App() {
           }}
         >
           <Text style={{ color: 'white', fontSize: 12 }}>{sourceEmoji(poemSource, isOnline)}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={toggleLanguage}
+          style={{
+            padding: 8,
+            borderRadius: 4,
+            opacity: 0.8,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          }}
+        >
+          <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>
+            {language === 'en' ? 'EN' : 'UR'}
+          </Text>
         </TouchableOpacity>
       </View>
 
@@ -260,7 +300,7 @@ export default function App() {
       >
         {slots.map((slot, index) => (
           <View key={`slot-${index}`} style={styles.verticalPage} collapsable={false}>
-            {slot.poem ? <PoemView poem={slot.poem} /> : <LoadingPoemView />}
+            {slot.poem ? <PoemView poem={slot.poem} /> : <LoadingPoemView language={language} />}
           </View>
         ))}
       </PagerView>

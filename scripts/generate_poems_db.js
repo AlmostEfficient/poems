@@ -54,12 +54,17 @@ function ensurePoemsShape(rawPoems) {
       const title = String(poem.title || '').trim();
       const author = String(poem.author || '').trim();
       const content = String(poem.content || '').replace(/\r\n/g, '\n').trim();
+      const language = poem.language || 'en';
 
       if (!title || !author || !content) {
         throw new Error(`Poem at index ${index} is missing required fields`);
       }
 
-      return { title, author, content };
+      if (language !== 'en' && language !== 'ur') {
+        throw new Error(`Poem at index ${index} has invalid language: ${language}`);
+      }
+
+      return { title, author, content, language };
     });
 
   return normalized;
@@ -91,12 +96,14 @@ function buildDatabase(inputPath, outputPath) {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
       author TEXT NOT NULL,
-      content TEXT NOT NULL
+      content TEXT NOT NULL,
+      language TEXT NOT NULL DEFAULT 'en',
+      CHECK(language IN ('en','ur'))
     );
   `);
 
   const insert = db.prepare(
-    'INSERT INTO poems (title, author, content) VALUES (@title, @author, @content)'
+    'INSERT INTO poems (title, author, content, language) VALUES (@title, @author, @content, @language)'
   );
 
   const insertMany = db.transaction((rows) => {

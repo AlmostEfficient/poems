@@ -1,11 +1,9 @@
 import * as SQLite from 'expo-sqlite';
-import * as FileSystem from 'expo-file-system';
+import { Paths, File } from 'expo-file-system';
 import { Asset } from 'expo-asset';
 
-const DB_DIRECTORY = `${FileSystem.documentDirectory}SQLite`;
 const DB_NAME = 'poems.db';
-const DB_PATH = `${DB_DIRECTORY}/${DB_NAME}`;
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbInstance: SQLite.SQLiteDatabase | null = null;
 let initializationPromise: Promise<SQLite.SQLiteDatabase> | null = null;
@@ -20,11 +18,10 @@ async function copyBundledDatabase(): Promise<void> {
     throw new Error('Unable to locate bundled poems.db asset');
   }
 
-  await FileSystem.copyAsync({ from: asset.localUri, to: DB_PATH });
-}
-
-async function ensureDirectoryExists(): Promise<void> {
-  await FileSystem.makeDirectoryAsync(DB_DIRECTORY, { intermediates: true });
+  // Copy using new File API
+  const sourceFile = new File(asset.localUri);
+  const destFile = new File(Paths.document, 'SQLite', DB_NAME);
+  sourceFile.copy(destFile);
 }
 
 function closeDatabase(db: SQLite.SQLiteDatabase) {
@@ -45,9 +42,10 @@ function closeDatabase(db: SQLite.SQLiteDatabase) {
   }
 }
 
-async function shouldReplaceExistingDatabase(): Promise<boolean> {
-  const info = await FileSystem.getInfoAsync(DB_PATH);
-  if (!info.exists) {
+function shouldReplaceExistingDatabase(): boolean {
+  const dbFile = new File(Paths.document, 'SQLite', DB_NAME);
+
+  if (!dbFile.exists) {
     return true;
   }
 
@@ -69,14 +67,18 @@ async function shouldReplaceExistingDatabase(): Promise<boolean> {
     closeDatabase(existingDb);
 
     if (Number.isNaN(currentVersion) || currentVersion < DB_VERSION) {
-      await FileSystem.deleteAsync(DB_PATH, { idempotent: true });
+      dbFile.delete();
       return true;
     }
 
     return false;
   } catch (error) {
     console.warn('Failed to inspect existing database, copying bundled version', error);
-    await FileSystem.deleteAsync(DB_PATH, { idempotent: true });
+    try {
+      dbFile.delete();
+    } catch (deleteError) {
+      // Ignore delete errors
+    }
     return true;
   }
 }
@@ -87,7 +89,9 @@ function applyMigrations(database: SQLite.SQLiteDatabase): void {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
       author TEXT NOT NULL,
-      content TEXT NOT NULL
+      content TEXT NOT NULL,
+      language TEXT NOT NULL DEFAULT 'en',
+      CHECK(language IN ('en','ur'))
     );`
   );
 
@@ -111,9 +115,7 @@ export async function initializeDatabase(): Promise<SQLite.SQLiteDatabase> {
 
   if (!initializationPromise) {
     initializationPromise = (async () => {
-      await ensureDirectoryExists();
-
-      const needsReplacement = await shouldReplaceExistingDatabase();
+      const needsReplacement = shouldReplaceExistingDatabase();
       if (needsReplacement) {
         await copyBundledDatabase();
       }
@@ -144,4 +146,4 @@ export function resetDatabaseInstanceForTesting() {
   initializationPromise = null;
 }
 
-export { DB_NAME, DB_PATH, DB_VERSION };
+export { DB_NAME, DB_VERSION };

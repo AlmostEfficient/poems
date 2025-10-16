@@ -90,4 +90,30 @@ export const styles = StyleSheet.create({
   paginationDotActive: {
     backgroundColor: '#666',
   },
+  titleUrdu: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#2c2c2c',
+    textAlign: 'right',
+    marginBottom: 8,
+    fontFamily: 'NotoNastaliqUrdu_400Regular',
+    writingDirection: 'rtl',
+  },
+  authorUrdu: {
+    fontSize: 16,
+    color: '#666',
+    fontStyle: 'italic',
+    textAlign: 'right',
+    fontFamily: 'NotoNastaliqUrdu_400Regular',
+    writingDirection: 'rtl',
+  },
+  lineUrdu: {
+    fontSize: 18,
+    lineHeight: 28,
+    color: '#333',
+    marginBottom: 2,
+    textAlign: 'right',
+    fontFamily: 'NotoNastaliqUrdu_400Regular',
+    writingDirection: 'rtl',
+  },
 }); 

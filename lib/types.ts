@@ -6,6 +6,7 @@ export interface Poem {
   author: string;
   content: string;
   source?: PoemSource;
+  language: 'en' | 'ur';
 }
 
 export interface VirtualSlot {
@@ -16,4 +17,5 @@ export interface VirtualSlot {
 export interface PoemBatchOptions {
   source?: PoemSource;
   limit?: number;
+  language?: 'en' | 'ur';
 }

@@ -54,18 +54,26 @@ export class PoemFeedManager {
 
   private poemSource: PoemFeedSource = 'local';
 
+  private fetchers: PoemFetchers;
+
+  private activeLanguage: Poem['language'];
+
   constructor(
-    private readonly fetchers: PoemFetchers,
-    private readonly options: PoemFeedOptions
+    fetchers: PoemFetchers,
+    private readonly options: PoemFeedOptions,
+    initialLanguage: Poem['language'] = 'en'
   ) {
+    this.fetchers = fetchers;
+    this.activeLanguage = initialLanguage;
     this.virtualSlots = Array.from({ length: options.virtualSize }, () => ({
       poem: null,
       isLoading: false,
     }));
   }
 
-  initialiseWithStarterPoems(): VirtualSlot[] {
-    const shuffled = shuffle(STARTER_POEMS).map((poem, index) =>
+  initialiseWithStarterPoems(language: Poem['language'] = this.activeLanguage): VirtualSlot[] {
+    const starters = STARTER_POEMS.filter((poem) => poem.language === language);
+    const shuffled = shuffle(starters).map((poem, index) =>
       ensurePoemIdentity(poem, `starter_${index}`)
     );
 
@@ -86,9 +94,22 @@ export class PoemFeedManager {
 
   getSlots(): VirtualSlot[] {
     if (!this.isInitialized) {
-      return this.initialiseWithStarterPoems();
+      return this.initialiseWithStarterPoems(this.activeLanguage);
     }
     return this.virtualSlots;
+  }
+
+  updateFetchers(fetchers: PoemFetchers): void {
+    this.fetchers = fetchers;
+  }
+
+  setLanguage(language: Poem['language']): VirtualSlot[] {
+    if (this.activeLanguage === language) {
+      return this.virtualSlots;
+    }
+
+    this.activeLanguage = language;
+    return this.initialiseWithStarterPoems(this.activeLanguage);
   }
 
   setDatabaseReady(ready: boolean): void {
@@ -109,7 +130,7 @@ export class PoemFeedManager {
     }
 
     this.poemSource = source;
-    return this.initialiseWithStarterPoems();
+    return this.initialiseWithStarterPoems(this.activeLanguage);
   }
 
   cleanupAround(index: number): VirtualSlot[] {

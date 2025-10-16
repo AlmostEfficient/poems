@@ -16,9 +16,12 @@ interface UsePoemFeedResult {
   isDatabaseReady: boolean;
   isOnline: boolean;
   totalPoemsCount: number;
+  language: 'en' | 'ur';
   handlePageSelected: (index: number) => void;
   cyclePoemSource: () => void;
   setPoemSource: (source: PoemFeedSource) => void;
+  toggleLanguage: () => void;
+  setLanguage: (language: 'en' | 'ur') => void;
   refreshVisibleWindow: () => void;
 }
 
@@ -32,6 +35,7 @@ function asLocalPoems(
     ...poem,
     id: poem.id ?? `${source}_${Date.now()}_${index}_${Math.random().toString(16).slice(2)}`,
     source,
+    language: poem.language ?? 'en',
   }));
 }
 
@@ -42,10 +46,13 @@ export function usePoemFeed(): UsePoemFeedResult {
   const [isDatabaseReady, setIsDatabaseReady] = useState(false);
   const [isOnline, setIsOnline] = useState(false);
   const [totalPoemsCount, setTotalPoemsCount] = useState(0);
+  const [language, setLanguageState] = useState<'en' | 'ur'>('en');
+
+  const managerRef = useRef<PoemFeedManager | null>(null);
 
   const fetchers = useMemo(() => ({
     fetchLocal: async (limit: number) => {
-      const results = getRandomPoems(limit);
+      const results = getRandomPoems({ limit, language });
       return asLocalPoems(results, 'local');
     },
     fetchHybrid: async (limit: number) => {
@@ -81,16 +88,19 @@ export function usePoemFeed(): UsePoemFeedResult {
         throw error;
       }
     },
-  }), [setIsOnline]);
+  }), [language]);
 
-  const managerRef = useRef<PoemFeedManager | null>(null);
   if (!managerRef.current) {
     managerRef.current = new PoemFeedManager(fetchers, {
       virtualSize: VIRTUAL_SIZE,
       cleanupDistance: CLEANUP_DISTANCE,
-    });
+    }, language);
   }
   const manager = managerRef.current;
+
+  useEffect(() => {
+    manager.updateFetchers(fetchers);
+  }, [fetchers, manager]);
 
   const loadAroundIndex = useCallback(
     (anchorIndex: number) => {
@@ -155,13 +165,22 @@ export function usePoemFeed(): UsePoemFeedResult {
   }, [isOnline, manager]);
 
   useEffect(() => {
-    manager.setSource(poemSource);
-    setSlots([...manager.getSlots()]);
+    const nextSlots = manager.setSource(poemSource);
+    setSlots([...nextSlots]);
     setCurrentIndex(0);
     if (isDatabaseReady) {
       loadAroundIndex(0);
     }
   }, [isDatabaseReady, loadAroundIndex, manager, poemSource]);
+
+  useEffect(() => {
+    const nextSlots = manager.setLanguage(language);
+    setSlots([...nextSlots]);
+    setCurrentIndex(0);
+    if (isDatabaseReady) {
+      loadAroundIndex(0);
+    }
+  }, [language, isDatabaseReady, loadAroundIndex, manager]);
 
   useEffect(() => {
     if (!isDatabaseReady) {
@@ -191,6 +210,14 @@ export function usePoemFeed(): UsePoemFeedResult {
     setPoemSourceState(source);
   }, []);
 
+  const toggleLanguage = useCallback(() => {
+    setLanguageState((prev) => (prev === 'en' ? 'ur' : 'en'));
+  }, []);
+
+  const setLanguage = useCallback((lang: 'en' | 'ur') => {
+    setLanguageState(lang);
+  }, []);
+
   return {
     slots,
     currentIndex,
@@ -198,9 +225,12 @@ export function usePoemFeed(): UsePoemFeedResult {
     isDatabaseReady,
     isOnline,
     totalPoemsCount,
+    language,
     handlePageSelected,
     cyclePoemSource,
     setPoemSource,
+    toggleLanguage,
+    setLanguage,
     refreshVisibleWindow,
   };
 }

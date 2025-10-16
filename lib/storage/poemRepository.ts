@@ -8,28 +8,60 @@ function mapRowToPoem(row: any, defaultSource: Poem['source'] = 'local'): Poem {
     author: row.author,
     content: row.content,
     source: row.source ?? defaultSource,
+    language: row.language ?? 'en',
   };
 }
 
-export function getAllPoems(): Poem[] {
+export function getAllPoems(options?: { language?: 'en' | 'ur' }): Poem[] {
   const db = getDatabase();
-  const rows = db.getAllSync('SELECT id, title, author, content FROM poems;');
+  const language = options?.language;
+
+  if (language) {
+    const rows = db.getAllSync(
+      'SELECT id, title, author, content, language FROM poems WHERE language = ?;',
+      [language]
+    );
+    return rows.map((row) => mapRowToPoem(row));
+  }
+
+  const rows = db.getAllSync('SELECT id, title, author, content, language FROM poems;');
   return rows.map((row) => mapRowToPoem(row));
 }
 
-export function getPoemsPage(offset = 0, limit = 20): Poem[] {
+export function getPoemsPage(offset = 0, limit = 20, options?: { language?: 'en' | 'ur' }): Poem[] {
   const db = getDatabase();
+  const language = options?.language;
+
+  if (language) {
+    const rows = db.getAllSync(
+      'SELECT id, title, author, content, language FROM poems WHERE language = ? LIMIT ? OFFSET ?;',
+      [language, limit, offset]
+    );
+    return rows.map((row) => mapRowToPoem(row));
+  }
+
   const rows = db.getAllSync(
-    'SELECT id, title, author, content FROM poems LIMIT ? OFFSET ?;',
+    'SELECT id, title, author, content, language FROM poems LIMIT ? OFFSET ?;',
     [limit, offset]
   );
   return rows.map((row) => mapRowToPoem(row));
 }
 
-export function getRandomPoems(limit = 20): Poem[] {
+export function getRandomPoems(options?: { limit?: number; language?: 'en' | 'ur' }): Poem[] {
   const db = getDatabase();
+  const limit = options?.limit ?? 20;
+  const language = options?.language;
+
+  if (language) {
+    const rows = db.getAllSync(
+      'SELECT id, title, author, content, language FROM poems WHERE language = ? ORDER BY RANDOM() LIMIT ?;',
+      [language, limit]
+    );
+    return rows.map((row) => mapRowToPoem(row));
+  }
+
   const rows = db.getAllSync(
-    'SELECT id, title, author, content FROM poems ORDER BY RANDOM() LIMIT ?;',
+    'SELECT id, title, author, content, language FROM poems ORDER BY RANDOM() LIMIT ?;',
     [limit]
   );
   return rows.map((row) => mapRowToPoem(row));
@@ -43,10 +75,20 @@ export function getTotalPoemsCount(): number {
   return row?.count ?? 0;
 }
 
-export function getPoemsByAuthor(author: string, limit = 20): Poem[] {
+export function getPoemsByAuthor(author: string, limit = 20, options?: { language?: 'en' | 'ur' }): Poem[] {
   const db = getDatabase();
+  const language = options?.language;
+
+  if (language) {
+    const rows = db.getAllSync(
+      'SELECT id, title, author, content, language FROM poems WHERE author = ? AND language = ? LIMIT ?;',
+      [author, language, limit]
+    );
+    return rows.map((row) => mapRowToPoem(row));
+  }
+
   const rows = db.getAllSync(
-    'SELECT id, title, author, content FROM poems WHERE author = ? LIMIT ?;',
+    'SELECT id, title, author, content, language FROM poems WHERE author = ? LIMIT ?;',
     [author, limit]
   );
   return rows.map((row) => mapRowToPoem(row));
@@ -55,11 +97,20 @@ export function getPoemsByAuthor(author: string, limit = 20): Poem[] {
 export function searchPoems(
   query: string,
   field: 'title' | 'author' | 'content' = 'title',
-  limit = 10
+  limit = 10,
+  options?: { language?: 'en' | 'ur' }
 ): Poem[] {
   const db = getDatabase();
   const wildcard = `%${query}%`;
-  const sql = `SELECT id, title, author, content FROM poems WHERE ${field} LIKE ? LIMIT ?;`;
+  const language = options?.language;
+
+  if (language) {
+    const sql = `SELECT id, title, author, content, language FROM poems WHERE ${field} LIKE ? AND language = ? LIMIT ?;`;
+    const rows = db.getAllSync(sql, [wildcard, language, limit]);
+    return rows.map((row) => mapRowToPoem(row));
+  }
+
+  const sql = `SELECT id, title, author, content, language FROM poems WHERE ${field} LIKE ? LIMIT ?;`;
   const rows = db.getAllSync(sql, [wildcard, limit]);
   return rows.map((row) => mapRowToPoem(row));
 }
@@ -69,6 +120,7 @@ export interface CreatePoemInput {
   author: string;
   content: string;
   source?: Poem['source'];
+  language?: 'en' | 'ur';
 }
 
 export function insertPoem(input: CreatePoemInput): number {
@@ -82,9 +134,10 @@ export function insertPoem(input: CreatePoemInput): number {
     return existing.id;
   }
 
+  const language = input.language ?? 'en';
   db.runSync(
-    'INSERT INTO poems (title, author, content) VALUES (?, ?, ?);',
-    [input.title, input.author, input.content]
+    'INSERT INTO poems (title, author, content, language) VALUES (?, ?, ?, ?);',
+    [input.title, input.author, input.content, language]
   );
 
   const row = db.getFirstSync('SELECT last_insert_rowid() as id;') as { id: number };
@@ -100,9 +153,10 @@ export function insertPoemsInBatch(poems: CreatePoemInput[]): void {
   db.execSync('BEGIN');
   try {
     poems.forEach((poem) => {
+      const language = poem.language ?? 'en';
       db.runSync(
-        'INSERT OR IGNORE INTO poems (title, author, content) VALUES (?, ?, ?);',
-        [poem.title, poem.author, poem.content]
+        'INSERT OR IGNORE INTO poems (title, author, content, language) VALUES (?, ?, ?, ?);',
+        [poem.title, poem.author, poem.content, language]
       );
     });
     db.execSync('COMMIT');
@@ -115,7 +169,7 @@ export function insertPoemsInBatch(poems: CreatePoemInput[]): void {
 export function getPoemByTitleAndAuthor(title: string, author: string): Poem | null {
   const db = getDatabase();
   const row = db.getFirstSync(
-    'SELECT id, title, author, content FROM poems WHERE title = ? AND author = ? LIMIT 1;',
+    'SELECT id, title, author, content, language FROM poems WHERE title = ? AND author = ? LIMIT 1;',
     [title, author]
   );
 

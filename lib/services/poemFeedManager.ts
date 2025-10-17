@@ -44,6 +44,8 @@ export class PoemFeedManager {
 
   private usedPoemIds = new Set<Poem['id']>();
 
+  private poemCursor = 0;
+
   private isInitialized = false;
 
   private isDatabaseReady = false;
@@ -89,6 +91,7 @@ export class PoemFeedManager {
     });
 
     this.isInitialized = true;
+    this.poemCursor = 0;
     return this.virtualSlots;
   }
 
@@ -198,18 +201,8 @@ export class PoemFeedManager {
       const workingUsedIds = new Set(this.usedPoemIds);
       const pendingIndices: number[] = [];
 
-      const takeAvailablePoem = (): Poem | null => {
-        for (const poem of this.availablePoems) {
-          if (!workingUsedIds.has(poem.id)) {
-            workingUsedIds.add(poem.id);
-            return poem;
-          }
-        }
-        return null;
-      };
-
       targetIndices.forEach((index) => {
-        const poem = takeAvailablePoem();
+        const poem = this.takeNextPoem(workingUsedIds);
         if (poem) {
           updates.set(index, { poem, isLoading: false });
         } else {
@@ -222,7 +215,7 @@ export class PoemFeedManager {
         this.absorbPoems(fetched);
 
         pendingIndices.forEach((index) => {
-          const poem = takeAvailablePoem();
+          const poem = this.takeNextPoem(workingUsedIds);
           if (poem) {
             updates.set(index, { poem, isLoading: false });
           } else {
@@ -285,5 +278,59 @@ export class PoemFeedManager {
       console.warn('Falling back to local poems after fetch failure', error);
       return fetchLocal(limit);
     }
+  }
+
+  private refreshCursor(): void {
+    if (this.availablePoems.length === 0) {
+      this.poemCursor = 0;
+      return;
+    }
+
+    const normalizedCursor = this.poemCursor % this.availablePoems.length;
+    this.poemCursor = normalizedCursor >= 0 ? normalizedCursor : normalizedCursor + this.availablePoems.length;
+  }
+
+  private takeNextPoem(workingUsedIds: Set<Poem['id']>): Poem | null {
+    if (this.availablePoems.length === 0) {
+      return null;
+    }
+
+    this.refreshCursor();
+
+    const total = this.availablePoems.length;
+
+    for (let offset = 0; offset < total; offset += 1) {
+      const index = (this.poemCursor + offset) % total;
+      const candidate = this.availablePoems[index];
+      if (!workingUsedIds.has(candidate.id)) {
+        workingUsedIds.add(candidate.id);
+        this.poemCursor = (index + 1) % total;
+        return candidate;
+      }
+    }
+
+    // All poems are currently marked as in use. Rebuild the working set from active slots
+    workingUsedIds.clear();
+    this.virtualSlots.forEach((slot) => {
+      if (slot.poem) {
+        workingUsedIds.add(slot.poem.id);
+      }
+    });
+
+    for (let offset = 0; offset < total; offset += 1) {
+      const index = (this.poemCursor + offset) % total;
+      const candidate = this.availablePoems[index];
+      if (!workingUsedIds.has(candidate.id)) {
+        workingUsedIds.add(candidate.id);
+        this.poemCursor = (index + 1) % total;
+        return candidate;
+      }
+    }
+
+    // Still no available poems (all visible) — loop anyway using next in sequence
+    const fallback = this.availablePoems[this.poemCursor % total];
+    workingUsedIds.add(fallback.id);
+    this.poemCursor = (this.poemCursor + 1) % total;
+    return fallback;
   }
 }

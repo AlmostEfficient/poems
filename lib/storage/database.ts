@@ -1,12 +1,23 @@
 import * as SQLite from 'expo-sqlite';
-import { Paths, File } from 'expo-file-system';
+import { Paths, File, Directory } from 'expo-file-system';
 import { Asset } from 'expo-asset';
 
 const DB_NAME = 'poems.db';
 const DB_VERSION = 2;
+const SQLITE_DIRECTORY = new Directory(Paths.document, 'SQLite');
 
 let dbInstance: SQLite.SQLiteDatabase | null = null;
 let initializationPromise: Promise<SQLite.SQLiteDatabase> | null = null;
+
+function getDatabaseFile(): File {
+  return new File(SQLITE_DIRECTORY, DB_NAME);
+}
+
+function ensureDirectoryExists(): void {
+  if (!SQLITE_DIRECTORY.exists) {
+    SQLITE_DIRECTORY.create({ intermediates: true, idempotent: true });
+  }
+}
 
 async function copyBundledDatabase(): Promise<void> {
   const asset = Asset.fromModule(require('../../assets/poems.db'));
@@ -18,9 +29,13 @@ async function copyBundledDatabase(): Promise<void> {
     throw new Error('Unable to locate bundled poems.db asset');
   }
 
-  // Copy using new File API
+  ensureDirectoryExists();
+
   const sourceFile = new File(asset.localUri);
-  const destFile = new File(Paths.document, 'SQLite', DB_NAME);
+  const destFile = getDatabaseFile();
+  if (destFile.exists) {
+    destFile.delete();
+  }
   sourceFile.copy(destFile);
 }
 
@@ -43,7 +58,8 @@ function closeDatabase(db: SQLite.SQLiteDatabase) {
 }
 
 function shouldReplaceExistingDatabase(): boolean {
-  const dbFile = new File(Paths.document, 'SQLite', DB_NAME);
+  ensureDirectoryExists();
+  const dbFile = getDatabaseFile();
 
   if (!dbFile.exists) {
     return true;
@@ -115,6 +131,7 @@ export async function initializeDatabase(): Promise<SQLite.SQLiteDatabase> {
 
   if (!initializationPromise) {
     initializationPromise = (async () => {
+      ensureDirectoryExists();
       const needsReplacement = shouldReplaceExistingDatabase();
       if (needsReplacement) {
         await copyBundledDatabase();

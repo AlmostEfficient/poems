@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, View, Dimensions, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import PagerView from 'react-native-pager-view';
 import { useFonts, NotoNastaliqUrdu_400Regular } from '@expo-google-fonts/noto-nastaliq-urdu';
+import Toast from 'react-native-toast-message';
 
 import { usePoemFeed } from './hooks/usePoemFeed';
 import type { Poem } from './lib/types';
-import type { PoemFeedSource } from './lib/services/poemFeedManager';
 import { styles } from './styles/styles';
+import { toastConfig } from './components/Toast';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -65,9 +66,10 @@ function PoemPage({ stanzas, title, author, currentPage, totalPages, language }:
 
 interface PoemViewProps {
   poem: Poem;
+  onSecretTap: () => void;
 }
 
-function PoemView({ poem }: PoemViewProps) {
+function PoemView({ poem, onSecretTap }: PoemViewProps) {
   const [currentPage, setCurrentPage] = useState(0);
   const [pages, setPages] = useState<string[][]>([]);
   const [isCalculating, setIsCalculating] = useState(true);
@@ -139,10 +141,12 @@ function PoemView({ poem }: PoemViewProps) {
   if (isCalculating || pages.length === 0) {
     return (
       <View style={styles.poemContainer}>
-        <View style={styles.poemHeader}>
-          <Text style={titleStyle}>{poem.title}</Text>
-          <Text style={authorStyle}>{authorLabel}</Text>
-        </View>
+        <TouchableWithoutFeedback onPress={onSecretTap}>
+          <View style={styles.poemHeader}>
+            <Text style={titleStyle}>{poem.title}</Text>
+            <Text style={authorStyle}>{authorLabel}</Text>
+          </View>
+        </TouchableWithoutFeedback>
         <Text style={styles.loadingText}>
           {isUrdu ? 'نظم لوڈ ہو رہی ہے...' : 'Loading...'}
         </Text>
@@ -152,10 +156,12 @@ function PoemView({ poem }: PoemViewProps) {
 
   return (
     <View style={styles.poemContainer}>
-      <View style={styles.poemHeader}>
-        <Text style={titleStyle}>{poem.title}</Text>
-        <Text style={authorStyle}>{authorLabel}</Text>
-      </View>
+      <TouchableWithoutFeedback onPress={onSecretTap}>
+        <View style={styles.poemHeader}>
+          <Text style={titleStyle}>{poem.title}</Text>
+          <Text style={authorStyle}>{authorLabel}</Text>
+        </View>
+      </TouchableWithoutFeedback>
 
       {pages.length > 1 ? (
         <>
@@ -215,25 +221,17 @@ function PoemView({ poem }: PoemViewProps) {
   );
 }
 
-function LoadingPoemView({ language }: { language: 'en' | 'ur' }) {
+function LoadingPoemView({ language, onSecretTap }: { language: 'en' | 'ur'; onSecretTap: () => void }) {
   const message = language === 'ur' ? 'نظم لوڈ ہو رہی ہے...' : 'Loading poem...';
   return (
-    <View style={styles.poemContainer}>
-      <View style={styles.poemHeader}>
-        <Text style={styles.loadingText}>{message}</Text>
+    <TouchableWithoutFeedback onPress={onSecretTap}>
+      <View style={styles.poemContainer}>
+        <View style={styles.poemHeader}>
+          <Text style={styles.loadingText}>{message}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
-}
-
-function sourceEmoji(source: PoemFeedSource, isOnline: boolean): string {
-  if (source === 'api') {
-    return isOnline ? '🌐' : '💾';
-  }
-  if (source === 'hybrid') {
-    return isOnline ? '🌐+💾' : '💾';
-  }
-  return '💾';
 }
 
 export default function App() {
@@ -242,15 +240,41 @@ export default function App() {
   });
 
   const verticalPagerRef = useRef<PagerView>(null);
+  const tapTimestampsRef = useRef<number[]>([]);
   const {
     slots,
     poemSource,
-    isOnline,
     language,
     handlePageSelected,
-    cyclePoemSource,
     toggleLanguage,
   } = usePoemFeed();
+
+  const handleSecretTap = useCallback(() => {
+    const now = Date.now();
+    const WINDOW_MS = 3000;
+    const TAP_TARGET = 5;
+
+    tapTimestampsRef.current = tapTimestampsRef.current.filter((timestamp) => now - timestamp <= WINDOW_MS);
+    tapTimestampsRef.current.push(now);
+
+    if (tapTimestampsRef.current.length < TAP_TARGET) {
+      return;
+    }
+
+    tapTimestampsRef.current = [];
+    const nextLanguage = language === 'en' ? 'ur' : 'en';
+    toggleLanguage();
+    Toast.show({
+      type: 'info',
+      text1: nextLanguage === 'ur' ? 'Switched to Urdu' : 'Switched to English',
+      text2:
+        nextLanguage === 'ur'
+          ? 'Tap the title 5 times again to go back to English.'
+          : 'Tap the title 5 times again to return to Urdu.',
+      position: 'bottom',
+      visibilityTime: 3000,
+    });
+  }, [language, toggleLanguage]);
 
   useEffect(() => {
     if (verticalPagerRef.current && typeof verticalPagerRef.current.setPageWithoutAnimation === 'function') {
@@ -264,32 +288,6 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={{ position: 'absolute', bottom: 40, right: 20, zIndex: 1000, flexDirection: 'column', gap: 12 }}>
-        <TouchableOpacity
-          onPress={cyclePoemSource}
-          style={{
-            padding: 8,
-            borderRadius: 4,
-            opacity: 0.8,
-          }}
-        >
-          <Text style={{ color: 'white', fontSize: 12 }}>{sourceEmoji(poemSource, isOnline)}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={toggleLanguage}
-          style={{
-            padding: 8,
-            borderRadius: 4,
-            opacity: 0.8,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-          }}
-        >
-          <Text style={{ color: 'white', fontSize: 12, fontWeight: 'bold' }}>
-            {language === 'en' ? 'EN' : 'UR'}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
       <PagerView
         ref={verticalPagerRef}
         style={styles.verticalPager}
@@ -300,11 +298,16 @@ export default function App() {
       >
         {slots.map((slot, index) => (
           <View key={`slot-${index}`} style={styles.verticalPage} collapsable={false}>
-            {slot.poem ? <PoemView poem={slot.poem} /> : <LoadingPoemView language={language} />}
+            {slot.poem ? (
+              <PoemView poem={slot.poem} onSecretTap={handleSecretTap} />
+            ) : (
+              <LoadingPoemView language={language} onSecretTap={handleSecretTap} />
+            )}
           </View>
         ))}
       </PagerView>
       <StatusBar hidden />
+      <Toast config={toastConfig} />
     </View>
   );
 }

@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "import": "bun import_to_db.js --clear",
-    "generate": "bun scripts/generate_poems_db.js",
+    "generate": "tsx scripts/generate_poems_db.ts",
     "build:app": "bun scripts/build.ts",
     "version:bump": "bun scripts/version.ts bump",
     "version:current": "bun scripts/version.ts current"
@@ -27,9 +27,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@types/better-sqlite3": "^7.6.9",
     "@types/react": "~19.1.10",
     "better-sqlite3": "^12.4.1",
     "canvas": "^3.2.0",
+    "tsx": "^4.15.9",
     "typescript": "~5.9.2"
   },
   "private": true

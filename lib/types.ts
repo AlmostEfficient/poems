@@ -1,7 +1,7 @@
 export type PoemSource = 'bundled' | 'local' | 'hybrid' | 'api' | 'user';
 
 export interface Poem {
-  id: number | string;
+  id: string;
   title: string;
   author: string;
   content: string;

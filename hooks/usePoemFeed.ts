@@ -33,7 +33,7 @@ function asLocalPoems(
 ): Poem[] {
   return poems.map((poem, index) => ({
     ...poem,
-    id: poem.id ?? `${source}_${Date.now()}_${index}_${Math.random().toString(16).slice(2)}`,
+    id: poem.id ? String(poem.id) : `${source}_${Date.now()}_${index}_${Math.random().toString(16).slice(2)}`,
     source,
     language: poem.language ?? 'en',
   }));
@@ -63,7 +63,7 @@ export function usePoemFeed(): UsePoemFeedResult {
           title: poem.title,
           author: poem.author,
           content: poem.content,
-          id: poem.id as string | number | undefined,
+          id: poem.id ? String(poem.id) : undefined,
         }));
         return asLocalPoems(normalized, 'hybrid');
       } catch (error) {

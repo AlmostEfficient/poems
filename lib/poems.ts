@@ -52,7 +52,7 @@ export function addPoem(
   content: string,
   language: 'en' | 'ur' = 'en'
 ): void {
-  insertPoem({ title, author, content, language });
+  insertPoem({ title, author, content, language, source: 'user' });
 }
 
 export function addPoemsInBatch(poems: CreatePoemInput[]): void {
@@ -75,11 +75,13 @@ export async function seedPoems(): Promise<void> {
 
   if (poems.length === 0) {
     console.warn('Database empty! Adding bundled starter poems.');
-    const payload: CreatePoemInput[] = STARTER_POEMS.map(({ title, author, content, language }) => ({
+    const payload: CreatePoemInput[] = STARTER_POEMS.map(({ title, author, content, language, id }) => ({
       title,
       author,
       content,
       language,
+      id,
+      source: 'bundled',
     }));
     insertPoemsInBatch(payload);
   }

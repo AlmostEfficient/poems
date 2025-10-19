@@ -23,7 +23,8 @@
     "install": "^0.13.0",
     "react": "19.1.0",
     "react-native": "0.81.4",
-    "react-native-pager-view": "6.9.1"
+    "react-native-pager-view": "6.9.1",
+    "react-native-toast-message": "^2.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

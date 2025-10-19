@@ -4,7 +4,7 @@ import { Asset } from 'expo-asset';
 import { createPoemId, ensureUniquePoemId } from '../utils/poemId';
 
 const DB_NAME = 'poems.db';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 const SQLITE_DIRECTORY = new Directory(Paths.document, 'SQLite');
 
 let dbInstance: SQLite.SQLiteDatabase | null = null;
@@ -150,6 +150,7 @@ function applyMigrations(database: SQLite.SQLiteDatabase): void {
       content TEXT NOT NULL,
       language TEXT NOT NULL DEFAULT 'en',
       source TEXT NOT NULL DEFAULT 'bundled',
+      metadata TEXT NOT NULL DEFAULT '{}',
       CHECK(language IN ('en','ur'))
     );`
   );
@@ -159,6 +160,12 @@ function applyMigrations(database: SQLite.SQLiteDatabase): void {
   }
 
   database.runSync(`UPDATE poems SET source = 'bundled' WHERE source IS NULL OR source = '';`);
+
+  if (!tableHasColumn(database, 'poems', 'metadata')) {
+    database.execSync(`ALTER TABLE poems ADD COLUMN metadata TEXT NOT NULL DEFAULT '{}';`);
+  }
+
+  database.runSync(`UPDATE poems SET metadata = '{}' WHERE metadata IS NULL OR metadata = '';`);
 
   if (!tableHasColumn(database, 'poems', 'poem_id')) {
     database.execSync('ALTER TABLE poems ADD COLUMN poem_id TEXT;');

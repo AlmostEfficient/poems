@@ -2,6 +2,7 @@
 import fs from 'fs';
 import path from 'path';
 import { createPoemId, ensureUniquePoemId } from '../lib/utils/poemId';
+import type { PoemMetadata, PoemLengthBucket } from '../lib/types';
 
 type Provider = 'openai' | 'anthropic';
 
@@ -25,6 +26,7 @@ interface Poem {
   author: string;
   content: string;
   language: 'en' | 'ur';
+  metadata: PoemMetadata;
 }
 
 interface LLMResponse {
@@ -148,16 +150,96 @@ function resolveModel(provider: Provider, override?: string): string {
   return provider === 'openai' ? 'gpt-4.1-mini' : 'claude-3-haiku-1';
 }
 
+function sanitizeStringArray(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+  const items = value
+    .map((entry) => (typeof entry === 'string' ? entry.trim() : ''))
+    .filter(Boolean);
+  return items.length ? items : undefined;
+}
+
+function inferLengthBucket(content: string): PoemLengthBucket {
+  const lineCount = content.split('\n').filter((line) => line.trim().length > 0).length;
+  if (lineCount <= 12) {
+    return 'short';
+  }
+  if (lineCount <= 30) {
+    return 'medium';
+  }
+  return 'long';
+}
+
+function sanitizeMetadata(raw: unknown, fallbackContent: string): PoemMetadata {
+  let payload = raw;
+  if (!payload) {
+    payload = {};
+  } else if (typeof payload === 'string') {
+    try {
+      payload = JSON.parse(payload);
+    } catch {
+      payload = {};
+    }
+  }
+
+  if (!payload || typeof payload !== 'object') {
+    payload = {};
+  }
+
+  const metadata: PoemMetadata = {};
+  const record = payload as Record<string, unknown>;
+
+  const tags = sanitizeStringArray(record.tags);
+  if (tags) {
+    metadata.tags = tags.slice(0, 8);
+  }
+
+  const themes = sanitizeStringArray(record.themes);
+  if (themes) {
+    metadata.themes = themes.slice(0, 8);
+  }
+
+  const moods = sanitizeStringArray(record.moods);
+  if (moods) {
+    metadata.moods = moods.slice(0, 6);
+  }
+
+  const form = typeof record.form === 'string' ? record.form.trim() : '';
+  if (form) {
+    metadata.form = form;
+  }
+
+  const era = typeof record.era === 'string' ? record.era.trim() : '';
+  if (era) {
+    metadata.era = era;
+  }
+
+  const length = typeof record.length === 'string' ? record.length.trim().toLowerCase() : '';
+  if (length === 'short' || length === 'medium' || length === 'long') {
+    metadata.length = length;
+  } else {
+    metadata.length = inferLengthBucket(fallbackContent);
+  }
+
+  return metadata;
+}
+
 function buildSystemPrompt(): string {
   return [
     'You are a meticulous poetry formatter for the Poems mobile app.',
-    'Return *only* a single JSON object with the keys: title, author, content, language.',
+    'Return *only* a single JSON object with the keys: title, author, content, language, metadata.',
     'Guidelines:',
     '- Preserve original line breaks and stanza spacing (blank line between stanzas).',
     '- Normalise whitespace: no trailing spaces, use "\\n" for line breaks.',
     '- Ensure `content` ends with the poem (no extra commentary).',
     '- Keep `title` and `author` near sentence case unless source specifies otherwise.',
     '- Use language code "en" for English, "ur" for Urdu.',
+    '- Always include a `metadata` object with the keys: tags, themes, moods (arrays of 1-5 short lowercase strings), form (string or null), era (string or null), length (short|medium|long).',
+    '- Choose descriptive tags/themes that help users filter by topic, mood, and style.',
+    '- Set `form` to a common poetic form (e.g. "sonnet", "haiku", "free verse"). If unknown, return null.',
+    '- Set `era` to a broad period (e.g. "Renaissance", "19th century", "Harlem Renaissance"). If unknown, return null.',
+    '- Estimate `length` from the poem: short (<=12 lines), medium (<=30 lines), otherwise long.',
     'If metadata (title/author/language) is supplied, keep it unless it conflicts with the poem.',
   ].join('\n');
 }
@@ -180,7 +262,9 @@ function buildUserPrompt(poemText: string, options: CLIOptions): string {
     parts.push('No additional metadata supplied.');
   }
 
-  parts.push('Return JSON only. Example format: {"title":"...","author":"...","content":"...","language":"en"}');
+  parts.push(
+    'Return JSON only. Example format: {"title":"...","author":"...","content":"...","language":"en","metadata":{"tags":["identity","resilience"],"themes":["perseverance"],"moods":["defiant"],"form":"free verse","era":"20th century","length":"medium"}}'
+  );
   return parts.join('\n');
 }
 
@@ -278,12 +362,13 @@ function normalizePoem(raw: any, fallbackLanguage: 'en' | 'ur'): Poem {
   const author = String(raw.author ?? '').trim();
   const language = sanitizeLanguage(raw.language ?? fallbackLanguage);
   const content = String(raw.content ?? '').replace(/\r\n/g, '\n').trim();
+  const metadata = sanitizeMetadata(raw.metadata, content);
 
   if (!title || !author || !content) {
     throw new Error('Model output missing required fields (title, author, content).');
   }
 
-  return { id, title, author, content, language };
+  return { id, title, author, content, language, metadata };
 }
 
 function loadPoems(poemsPath: string): Poem[] {
@@ -301,9 +386,10 @@ function loadPoems(poemsPath: string): Poem[] {
     const author = String(entry.author ?? '').trim();
     const content = String(entry.content ?? '').replace(/\r\n/g, '\n').trim();
     const language = sanitizeLanguage(entry.language);
+    const metadata = sanitizeMetadata(entry.metadata, content);
     const id = entry.id ? String(entry.id).trim() : createPoemId({ title, author, content, language });
 
-    return { id, title, author, content, language };
+    return { id, title, author, content, language, metadata };
   });
 }
 

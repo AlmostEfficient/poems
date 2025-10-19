@@ -1,5 +1,16 @@
 export type PoemSource = 'bundled' | 'local' | 'hybrid' | 'api' | 'user';
 
+export type PoemLengthBucket = 'short' | 'medium' | 'long';
+
+export interface PoemMetadata {
+  tags?: string[];
+  themes?: string[];
+  moods?: string[];
+  form?: string | null;
+  era?: string | null;
+  length?: PoemLengthBucket | null;
+}
+
 export interface Poem {
   id: string;
   title: string;
@@ -7,6 +18,7 @@ export interface Poem {
   content: string;
   source?: PoemSource;
   language: 'en' | 'ur';
+  metadata?: PoemMetadata | null;
 }
 
 export interface VirtualSlot {

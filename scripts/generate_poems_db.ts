@@ -11,6 +11,7 @@ interface RawPoem {
   content: string;
   language?: 'en' | 'ur';
   source?: string;
+  metadata?: PoemMetadata | null;
 }
 
 interface NormalizedPoem {
@@ -20,9 +21,21 @@ interface NormalizedPoem {
   content: string;
   language: 'en' | 'ur';
   source: string;
+  metadata: string;
 }
 
-const DB_VERSION = 3;
+type PoemLengthBucket = 'short' | 'medium' | 'long';
+
+interface PoemMetadata {
+  tags?: string[];
+  themes?: string[];
+  moods?: string[];
+  form?: string | null;
+  era?: string | null;
+  length?: PoemLengthBucket | null;
+}
+
+const DB_VERSION = 4;
 
 function parseArgs() {
   const args = process.argv.slice(2);
@@ -81,7 +94,7 @@ function ensurePoemsShape(rawPoems: unknown[]): NormalizedPoem[] {
       throw new Error(`Poem at index ${index} is not an object`);
     }
 
-    const { id, title, author, content, language, source } = poem as RawPoem;
+    const { id, title, author, content, language, source, metadata } = poem as RawPoem;
 
     const normalizedTitle = String(title ?? '').trim();
     const normalizedAuthor = String(author ?? '').trim();
@@ -110,10 +123,73 @@ function ensurePoemsShape(rawPoems: unknown[]): NormalizedPoem[] {
       content: normalizedContent,
       language: normalizedLanguage,
       source: normalizedSource,
+      metadata: JSON.stringify(normalizeMetadata(metadata)),
     };
   });
 
   return normalized;
+}
+
+function normalizeMetadata(raw: unknown): PoemMetadata {
+  if (!raw || typeof raw !== 'object') {
+    return {};
+  }
+
+  const asRecord = raw as Record<string, unknown>;
+  const metadata: PoemMetadata = {};
+
+  const tags = normalizeStringArray(asRecord.tags);
+  if (tags) {
+    metadata.tags = tags;
+  }
+
+  const themes = normalizeStringArray(asRecord.themes);
+  if (themes) {
+    metadata.themes = themes;
+  }
+
+  const moods = normalizeStringArray(asRecord.moods);
+  if (moods) {
+    metadata.moods = moods;
+  }
+
+  const form = typeof asRecord.form === 'string' ? asRecord.form.trim() : '';
+  if (form) {
+    metadata.form = form;
+  }
+
+  const era = typeof asRecord.era === 'string' ? asRecord.era.trim() : '';
+  if (era) {
+    metadata.era = era;
+  }
+
+  const length = normalizeLength(asRecord.length);
+  if (length) {
+    metadata.length = length;
+  }
+
+  return metadata;
+}
+
+function normalizeStringArray(value: unknown): string[] | undefined {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+  const items = value
+    .map((entry) => (typeof entry === 'string' ? entry.trim() : ''))
+    .filter(Boolean);
+  return items.length ? items : undefined;
+}
+
+function normalizeLength(value: unknown): PoemLengthBucket | undefined {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+  const normalized = value.trim().toLowerCase();
+  if (normalized === 'short' || normalized === 'medium' || normalized === 'long') {
+    return normalized;
+  }
+  return undefined;
 }
 
 function buildDatabase(inputPath: string, outputPath: string, log: (message: string) => void) {
@@ -145,6 +221,7 @@ function buildDatabase(inputPath: string, outputPath: string, log: (message: str
       content TEXT NOT NULL,
       language TEXT NOT NULL DEFAULT 'en',
       source TEXT NOT NULL DEFAULT 'bundled',
+      metadata TEXT NOT NULL DEFAULT '{}',
       CHECK(language IN ('en','ur'))
     );
   `);
@@ -157,8 +234,8 @@ function buildDatabase(inputPath: string, outputPath: string, log: (message: str
   `);
 
   const insert = db.prepare(
-    `INSERT INTO poems (poem_id, title, author, content, language, source)
-     VALUES (@id, @title, @author, @content, @language, @source)`
+    `INSERT INTO poems (poem_id, title, author, content, language, source, metadata)
+     VALUES (@id, @title, @author, @content, @language, @source, @metadata)`
   );
 
   const insertMany = db.transaction((rows: NormalizedPoem[]) => {

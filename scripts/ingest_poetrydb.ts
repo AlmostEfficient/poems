@@ -109,6 +109,36 @@ function parseArgs(): CLIOptions {
   return options;
 }
 
+function selectPreferredPoems(poems: PoetryDBPoem[], limit: number): PoetryDBPoem[] {
+  if (poems.length <= limit) {
+    return poems;
+  }
+
+  const sorted = [...poems].sort((a, b) => {
+    if (b.linecount === a.linecount) {
+      return a.title.localeCompare(b.title);
+    }
+    return b.linecount - a.linecount;
+  });
+
+  const unique: PoetryDBPoem[] = [];
+  const seen = new Set<string>();
+
+  for (const poem of sorted) {
+    const key = `${poem.title}|||${poem.author}`.toLowerCase();
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    unique.push(poem);
+    if (unique.length >= limit) {
+      break;
+    }
+  }
+
+  return unique;
+}
+
 async function fetchPoems(endpoint: string): Promise<PoetryDBPoem[]> {
   const response = await fetch(`${POETRYDB_BASE_URL}${endpoint}`);
 
@@ -247,9 +277,11 @@ async function main() {
         console.log(`[${i + 1}/${FAMOUS_AUTHORS.length}] Fetching ${author}...`);
 
         try {
-          const poems = await getAuthorPoems(author, poemsPerAuthor);
-          console.log(`  ✓ Got ${poems.length} poems`);
-          allPoems.push(...poems);
+          const fetchLimit = Math.max(poemsPerAuthor, Math.min(poemsPerAuthor * 2, 50));
+          const poems = await getAuthorPoems(author, fetchLimit);
+          const curated = selectPreferredPoems(poems, poemsPerAuthor);
+          console.log(`  ✓ Got ${poems.length} poems (${curated.length} curated)`);
+          allPoems.push(...curated);
         } catch (error) {
           console.log(`  ✗ Failed: ${error}`);
         }
@@ -272,8 +304,10 @@ async function main() {
         console.log(`  [${i + 1}/${FAMOUS_AUTHORS.length}] ${author}...`);
 
         try {
-          const poems = await getAuthorPoems(author, poemsPerAuthor);
-          allPoems.push(...poems);
+          const fetchLimit = Math.max(poemsPerAuthor, Math.min(poemsPerAuthor * 2, 50));
+          const poems = await getAuthorPoems(author, fetchLimit);
+          const curated = selectPreferredPoems(poems, poemsPerAuthor);
+          allPoems.push(...curated);
         } catch (error) {
           console.log(`    ✗ Failed`);
         }

@@ -1,192 +1,843 @@
 [
   {
+    "id": "robert-frost-the-road-not-taken-en-5bbab9ef",
     "title": "The Road Not Taken",
     "author": "Robert Frost",
     "content": "Two roads diverged in a yellow wood,\nAnd sorry I could not travel both\nAnd be one traveler, long I stood\nAnd looked down one as far as I could\nTo where it bent in the undergrowth;\n\nThen took the other, as just as fair,\nAnd having perhaps the better claim,\nBecause it was grassy and wanted wear;\nThough as for that the passing there\nHad worn them really ahttps://developer.apple.com/bout the same,\n\nAnd both that morning equally lay\nIn leaves no step had trodden black.\nOh, I kept the first for another day!\nYet knowing how way leads on to way,\nI doubted if I should ever be back.\n\nI shall be telling this with a sigh\nSomewhere ages and ages hence:\nTwo roads diverged in a wood, and I—\nI took the one less traveled by,\nAnd that has made all the difference.",
-    "id": "robert-frost-the-road-not-taken-en-5bbab9ef"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "maya-angelou-still-i-rise-en-ecdd0f66",
     "title": "Still I Rise",
     "author": "Maya Angelou",
     "content": "You may write me down in history\nWith your bitter, twisted lies,\nYou may trod me in the very dirt\nBut still, like dust, I rise.\n\nDoes my sassiness upset you?\nWhy are you beset with gloom?\n'Cause I walk like I've got oil wells\nPumping in my living room.\n\nJust like moons and like suns,\nWith the certainty of tides,\nJust like hopes springing high,\nStill I'll rise.",
-    "id": "maya-angelou-still-i-rise-en-ecdd0f66"
+    "language": "en",
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "rudyard-kipling-if-en-b8afec11",
     "title": "If—",
     "author": "Rudyard Kipling",
     "content": "If you can keep your head when all about you\nAre losing theirs and blaming it on you,\nIf you can trust yourself when all men doubt you,\nBut make allowance for their doubting too;\nIf you can wait and not be tired by waiting,\nOr being lied about, don't deal in lies,\nOr being hated, don't give way to hating,\nAnd yet don't look too good, nor talk too wise:\n\nIf you can dream—and not make dreams your master;\nIf you can think—and not make thoughts your aim;\nIf you can meet with Triumph and Disaster\nAnd treat those two impostors just the same;\nIf you can bear to hear the truth you've spoken\nTwisted by knaves to make a trap for fools,\nOr watch the things you gave your life to, broken,\nAnd stoop and build 'em up with worn-out tools:\n\nIf you can make one heap of all your winnings\nAnd risk it on one turn of pitch-and-toss,\nAnd lose, and start again at your beginnings\nAnd never breathe a word about your loss;\nIf you can force your heart and nerve and sinew\nTo serve your turn long after they are gone,\nAnd so hold on when there is nothing in you\nExcept the Will which says to them: 'Hold on!'\n\nIf you can talk with crowds and keep your virtue,\nOr walk with Kings—nor lose the common touch,\nIf neither foes nor loving friends can hurt you,\nIf all men count with you, but none too much;\nIf you can fill the unforgiving minute\nWith sixty seconds' worth of distance run,\nYours is the Earth and everything that's in it,\nAnd—which is more—you'll be a Man, my son!",
-    "id": "rudyard-kipling-if-en-b8afec11"
+    "language": "en",
+    "metadata": {
+      "length": "long"
+    }
   },
   {
+    "id": "edgar-allan-poe-the-raven-en-e5ed49ca",
     "title": "The Raven",
     "author": "Edgar Allan Poe",
     "content": "Once upon a midnight dreary, while I pondered, weak and weary,\nOver many a quaint and curious volume of forgotten lore—\nWhile I nodded, nearly napping, suddenly there came a tapping,\nAs of some one gently rapping, rapping at my chamber door.\n\"'Tis some visitor,\" I muttered, \"tapping at my chamber door—\nOnly this and nothing more.\"\n\nAh, distinctly I remember it was in the bleak December;\nAnd each separate dying ember wrought its ghost upon the floor.\nEagerly I wished the morrow;—vainly I had sought to borrow\nFrom my books surcease of sorrow—sorrow for the lost Lenore—\nFor the rare and radiant maiden whom the angels name Lenore—\nNameless here for evermore.\n\nAnd the silken, sad, uncertain rustling of each purple curtain\nThrilled me—filled me with fantastic terrors never felt before;\nSo that now, to still the beating of my heart, I stood repeating\n\"'Tis some visitor entreating entrance at my chamber door—\nSome late visitor entreating entrance at my chamber door;—\nThis it is and nothing more.\"\n\nPresently my soul grew stronger; hesitating then no longer,\n\"Sir,\" said I, \"or Madam, truly your forgiveness I implore;\nBut the fact is I was napping, and so gently you came rapping,\nAnd so faintly you came tapping, tapping at my chamber door,\nThat I scarce was sure I heard you\"—here I opened wide the door;—\nDarkness there and nothing more.",
-    "id": "edgar-allan-poe-the-raven-en-e5ed49ca"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "robert-frost-fire-and-ice-en-1fb84b27",
     "title": "Fire and Ice",
     "author": "Robert Frost",
     "content": "Some say the world will end in fire,\nSome say in ice.\nFrom what I've tasted of desire\nI hold with those who favor fire.\nBut if it had to perish twice,\nI think I know enough of hate\nTo say that for destruction ice\nIs also great\nAnd would suffice.",
-    "id": "robert-frost-fire-and-ice-en-1fb84b27"
+    "language": "en",
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "emily-dickinson-hope-en-8998a399",
     "title": "Hope",
     "author": "Emily Dickinson",
     "content": "Hope is the thing with feathers\nThat perches in the soul,\nAnd sings the tune without the words,\nAnd never stops at all,\n\nAnd sweetest in the gale is heard;\nAnd sore must be the storm\nThat could abash the little bird\nThat kept so many warm.\n\nI've heard it in the chillest land,\nAnd on the strangest sea;\nYet, never, in extremity,\nIt asked a crumb of me.",
-    "id": "emily-dickinson-hope-en-8998a399"
+    "language": "en",
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "robert-frost-stopping-by-woods-on-a-snowy-evening-en-c09ee774",
     "title": "Stopping by Woods on a Snowy Evening",
     "author": "Robert Frost",
     "content": "Whose woods these are I think I know.\nHis house is in the village though;\nHe will not see me stopping here\nTo watch his woods fill up with snow.\n\nMy little horse must think it queer\nTo stop without a farmhouse near\nBetween the woods and frozen lake\nThe darkest evening of the year.\n\nHe gives his harness bells a shake\nTo ask if there is some mistake.\nThe only other sound's the sweep\nOf easy wind and downy flake.\n\nThe woods are lovely, dark and deep,\nBut I have promises to keep,\nAnd miles to go before I sleep,\nAnd miles to go before I sleep.",
-    "id": "robert-frost-stopping-by-woods-on-a-snowy-evening-en-c09ee774"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "edgar-allan-poe-a-dream-en-1a08d3a5",
     "title": "A Dream",
     "author": "Edgar Allan Poe",
     "content": "In visions of the dark night\nI have dreamed of joy departed—\nBut a waking dream of life and light\nHath left me broken-hearted.\n\nAh! what is not a dream by day\nTo him whose eyes are cast\nOn things around him with a ray\nTurned back upon the past?\n\nThat holy dream—that holy dream,\nWhile all the world were chiding,\nHath cheered me as a lovely beam\nA lonely spirit guiding.\n\nWhat though that light, thro' storm and night,\nSo trembled from afar—\nWhat could there be more purely bright\nIn Truth's day-star?",
-    "id": "edgar-allan-poe-a-dream-en-1a08d3a5"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "sara-teasdale-the-star-en-4f5c58a2",
     "title": "The Star",
     "author": "Sara Teasdale",
     "content": "When I am dead and over me bright April\nShakes out her rain-drenched hair,\nTho' you should lean above me broken-hearted,\nI shall not care.\n\nI shall have peace, as leafy trees are peaceful\nWhen rain bends down the bough,\nAnd I shall be more silent and cold-hearted\nThan you are now.",
-    "id": "sara-teasdale-the-star-en-4f5c58a2"
+    "language": "en",
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "william-butler-yeats-a-drinking-song-en-48d79085",
     "title": "A Drinking Song",
     "author": "William Butler Yeats",
     "content": "Wine comes in at the mouth\nAnd love comes in at the eye;\nThat's all we shall know for truth\nBefore we grow old and die.\nI lift the glass to my mouth,\nI look at you, and I sigh.",
-    "id": "william-butler-yeats-a-drinking-song-en-48d79085"
+    "language": "en",
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "william-ernest-henley-invictus-en-f463c44e",
     "title": "Invictus",
     "author": "William Ernest Henley",
     "content": "Out of the night that covers me,\nBlack as the pit from pole to pole,\nI thank whatever gods may be\nFor my unconquerable soul.\n\nIn the fell clutch of circumstance\nI have not winced nor cried aloud.\nUnder the bludgeonings of chance\nMy head is bloody, but unbowed.\n\nBeyond this place of wrath and tears\nLooms but the Horror of the shade,\nAnd yet the menace of the years\nFinds and shall find me unafraid.\n\nIt matters not how strait the gate,\nHow charged with punishments the scroll,\nI am the master of my fate,\nI am the captain of my soul.",
-    "id": "william-ernest-henley-invictus-en-f463c44e"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "t-s-eliot-the-love-song-of-j-alfred-prufrock-en-044a0b87",
     "title": "The Love Song of J. Alfred Prufrock",
     "author": "T.S. Eliot",
     "content": "Let us go then, you and I,\nWhen the evening is spread out against the sky\nLike a patient etherized upon a table;\nLet us go, through certain half-deserted streets,\nThe muttering retreats\nOf restless nights in one-night cheap hotels\nAnd sawdust restaurants with oyster-shells:\nStreets that follow like a tedious argument\nOf insidious intent\nTo lead you to an overwhelming question ...\nOh, do not ask, \"What is it?\"\nLet us go and make our visit.",
-    "id": "t-s-eliot-the-love-song-of-j-alfred-prufrock-en-044a0b87"
+    "language": "en",
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "percy-bysshe-shelley-ozymandias-en-797b9e20",
     "title": "Ozymandias",
     "author": "Percy Bysshe Shelley",
     "content": "I met a traveller from an antique land,\nWho said—\"Two vast and trunkless legs of stone\nStand in the desert. . . . Near them, on the sand,\nHalf sunk a shattered visage lies, whose frown,\nAnd wrinkled lip, and sneer of cold command,\nTell that its sculptor well those passions read\nWhich yet survive, stamped on these lifeless things,\nThe hand that mocked them, and the heart that fed;\nAnd on the pedestal, these words appear:\nMy name is Ozymandias, King of Kings;\nLook on my Works, ye Mighty, and despair!\nNothing beside remains. Round the decay\nOf that colossal Wreck, boundless and bare\nThe lone and level sands stretch far away.\"",
-    "id": "percy-bysshe-shelley-ozymandias-en-797b9e20"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "dylan-thomas-do-not-go-gentle-into-that-good-night-en-24664e17",
     "title": "Do Not Go Gentle Into That Good Night",
     "author": "Dylan Thomas",
     "content": "Do not go gentle into that good night,\nOld age should burn and rave at close of day;\nRage, rage against the dying of the light.\n\nThough wise men at their end know dark is right,\nBecause their words had forked no lightning they\nDo not go gentle into that good night.\n\nGood men, the last wave by, crying how bright\nTheir frail deeds might have danced in a green bay,\nRage, rage against the dying of the light.\n\nWild men who caught and sang the sun in flight,\nAnd learn, too late, they grieved it on its way,\nDo not go gentle into that good night.\n\nGrave men, near death, who see with blinding sight\nBlind eyes could blaze like meteors and be gay,\nRage, rage against the dying of the light.\n\nAnd you, my father, there on the sad height,\nCurse, bless, me now with your fierce tears, I pray.\nDo not go gentle into that good night.\nRage, rage against the dying of the light.",
-    "id": "dylan-thomas-do-not-go-gentle-into-that-good-night-en-24664e17"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "lord-byron-she-walks-in-beauty-en-1b9d9646",
     "title": "She Walks in Beauty",
     "author": "Lord Byron",
     "content": "She walks in beauty, like the night\nOf cloudless climes and starry skies;\nAnd all that's best of dark and bright\nMeet in her aspect and her eyes;\nThus mellowed to that tender light\nWhich heaven to gaudy day denies.\n\nOne shade the more, one ray the less,\nHad half impaired the nameless grace\nWhich waves in every raven tress,\nOr softly lightens o'er her face;\nWhere thoughts serenely sweet express,\nHow pure, how dear their dwelling-place.\n\nAnd on that cheek, and o'er that brow,\nSo soft, so calm, yet eloquent,\nThe smiles that win, the tints that glow,\nBut tell of days in goodness spent,\nA mind at peace with all below,\nA heart whose love is innocent!",
-    "id": "lord-byron-she-walks-in-beauty-en-1b9d9646"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "william-blake-the-tyger-en-f825c68f",
     "title": "The Tyger",
     "author": "William Blake",
     "content": "Tyger Tyger, burning bright,\nIn the forests of the night;\nWhat immortal hand or eye,\nCould frame thy fearful symmetry?\n\nIn what distant deeps or skies.\nBurnt the fire of thine eyes?\nOn what wings dare he aspire?\nWhat the hand, dare seize the fire?\n\nAnd what shoulder, & what art,\nCould twist the sinews of thy heart?\nAnd when thy heart began to beat,\nWhat dread hand? & what dread feet?\n\nWhat the hammer? what the chain,\nIn what furnace was thy brain?\nWhat the anvil? what dread grasp,\nDare its deadly terrors clasp!\n\nWhen the stars threw down their spears\nAnd water'd heaven with their tears:\nDid he smile his work to see?\nDid he who made the Lamb make thee?\n\nTyger Tyger burning bright,\nIn the forests of the night:\nWhat immortal hand or eye,\nDare frame thy fearful symmetry?",
-    "id": "william-blake-the-tyger-en-f825c68f"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "edgar-allan-poe-annabel-lee-en-f02f68d2",
     "title": "Annabel Lee",
     "author": "Edgar Allan Poe",
     "content": "It was many and many a year ago,\nIn a kingdom by the sea,\nThat a maiden there lived whom you may know\nBy the name of Annabel Lee;\nAnd this maiden she lived with no other thought\nThan to love and be loved by me.\n\nI was a child and she was a child,\nIn this kingdom by the sea,\nBut we loved with a love that was more than love—\nI and my Annabel Lee—\nWith a love that the wingèd seraphs of Heaven\nCoveted her and me.\n\nAnd this was the reason that, long ago,\nIn this kingdom by the sea,\nA wind blew out of a cloud, chilling\nMy beautiful Annabel Lee;\nSo that her highborn kinsmen came\nAnd bore her away from me,\nTo shut her up in a sepulchre\nIn this kingdom by the sea.\n\nThe angels, not half so happy in Heaven,\nWent envying her and me—\nYes!—that was the reason (as all men know,\nIn this kingdom by the sea)\nThat the wind came out of the cloud by night,\nChilling and killing my Annabel Lee.\n\nBut our love it was stronger by far than the love\nOf those who were older than we—\nOf many far wiser than we—\nAnd neither the angels in Heaven above\nNor the demons down under the sea\nCan ever dissever my soul from the soul\nOf the beautiful Annabel Lee;\n\nFor the moon never beams, without bringing me dreams\nOf the beautiful Annabel Lee;\nAnd the stars never rise, but I feel the bright eyes\nOf the beautiful Annabel Lee;\nAnd so, all the night-tide, I lie down by the side\nOf my darling—my darling—my life and my bride,\nIn her sepulchre there by the sea—\nIn her tomb by the sounding sea.",
-    "id": "edgar-allan-poe-annabel-lee-en-f02f68d2"
+    "language": "en",
+    "metadata": {
+      "length": "long"
+    }
   },
   {
+    "id": "william-shakespeare-sonnet-18-en-4469d66e",
     "title": "Sonnet 18",
     "author": "William Shakespeare",
     "content": "Shall I compare thee to a summer's day?\nThou art more lovely and more temperate:\nRough winds do shake the darling buds of May,\nAnd summer's lease hath all too short a date:\nSometime too hot the eye of heaven shines,\nAnd often is his gold complexion dimm'd;\nAnd every fair from fair sometime declines,\nBy chance or nature's changing course untrimm'd;\nBut thy eternal summer shall not fade\nNor lose possession of that fair thou owest;\nNor shall Death brag thou wander'st in his shade,\nWhen in eternal lines to time thou growest:\nSo long as men can breathe or eyes can see,\nSo long lives this, and this gives life to thee.",
-    "id": "william-shakespeare-sonnet-18-en-4469d66e"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "t-s-eliot-the-hollow-men-en-f024b34d",
     "title": "The Hollow Men",
     "author": "T.S. Eliot",
     "content": "We are the hollow men\nWe are the stuffed men\nLeaning together\nHeadpiece filled with straw. Alas!\nOur dried voices, when\nWe whisper together\nAre quiet and meaningless\nAs wind in dry grass\nOr rats' feet over broken glass\nIn our dry cellar\n\nShape without form, shade without colour,\nParalysed force, gesture without motion;\n\nThose who have crossed\nWith direct eyes, to death's other Kingdom\nRemember us—if at all—not as lost\nViolent souls, but only\nAs the hollow men\nThe stuffed men.",
-    "id": "t-s-eliot-the-hollow-men-en-f024b34d"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "maya-angelou-i-know-why-the-caged-bird-sings-en-d4e299d2",
     "title": "I Know Why the Caged Bird Sings",
     "author": "Maya Angelou",
     "content": "A free bird leaps on the back\nOf the wind and floats downstream\nTill the current ends and dips his wing\nIn the orange suns rays\nAnd dares to claim the sky.\n\nBut a bird that stalks down his narrow cage\nCan seldom see through his bars of rage\nHis wings are clipped and his feet are tied\nSo he opens his throat to sing.\n\nThe caged bird sings with a fearful trill\nOf things unknown but longed for still\nAnd his tune is heard on the distant hill for\nThe caged bird sings of freedom.\n\nThe free bird thinks of another breeze\nAnd the trade winds soft through\nThe sighing trees\nAnd the fat worms waiting on a dawn-bright\nLawn and he names the sky his own.\n\nBut a caged bird stands on the grave of dreams\nHis shadow shouts on a nightmare scream\nHis wings are clipped and his feet are tied\nSo he opens his throat to sing.\n\nThe caged bird sings with\nA fearful trill of things unknown\nBut longed for still and his\nTune is heard on the distant hill\nFor the caged bird sings of freedom.",
-    "id": "maya-angelou-i-know-why-the-caged-bird-sings-en-d4e299d2"
+    "language": "en",
+    "metadata": {
+      "length": "medium"
+    }
   },
   {
+    "id": "ur-bc2e1a40",
     "title": "شکوہ",
     "author": "علامہ اقبال",
     "content": "کیوں زیاں کار بنوں سود فراموش رہوں\nفکر فردا نہ کروں محو غم دوش رہوں\n\nتو نے پوچھا ہے غرض زندگی کیا ہے میری\nخود کشی ہے مری، خویش کشی ہے مری\n\nنالہ بلبل کا سنا دیتا ہے گلشن کو خبر\nجوہر آئینہ ہے، فطرت کی جلوہ گری\n\nرنگ خاکستر و خرمن کی بجا ہے مجھے\nزندگی اپنی تو ہے دیر پہ قربانی\n\nگرد پا میں کبھی پائی نہ ثبات نشیمن\nہے مرا کار جہاں ہمرہِ کاروان",
     "language": "ur",
-    "id": "ur-bc2e1a40"
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "ur-49399246",
     "title": "لب پہ آتی ہے دعا",
     "author": "علامہ اقبال",
     "content": "لب پہ آتی ہے دعا بن کے تمنا میری\nزندگی شمع کی صورت ہو خدایا میری\n\nدور دنیا کا مرے دم سے اندھیرا ہو جائے\nہر جگہ میرے چمکنے سے اجالا ہو جائے\n\nہو مرے دم سے یونہی میرے وطن کی زینت\nجس طرح پھول سے ہوتی ہے چمن کی زینت\n\nزندگی ہو مری پروانے کی صورت یا رب\nعلم کی شمع سے ہو مجھ کو محبت یا رب",
     "language": "ur",
-    "id": "ur-49399246"
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "ur-795e1f46",
     "title": "خوشبو",
     "author": "ن م راشد",
     "content": "پھول کی خوشبو، رات کی خوشبو\nہوا میں بکھری ہوئی خوشبو\nتمہاری یادوں کی خوشبو\n\nمیں نے سانس لیا تو محسوس ہوا\nزمانہ رک گیا ہے\nاور میں کھڑا ہوں\nتمہاری یادوں کے صحرا میں\n\nیہ خوشبو جو ہوا میں تیرتی ہے\nمجھے لے جاتی ہے\nان لمحوں میں\nجو گزر گئے\nمگر دل میں بسے ہیں",
     "language": "ur",
-    "id": "ur-795e1f46"
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "ur-e3f3d021",
     "title": "یاد",
     "author": "میر تقی میر",
     "content": "میر کے دین و ایماں کو اب پوچھتے کیا ہو\nان کو دیکھو تو عیاں ہے کہ بے ایماں ہیں\n\nاے محبت تیرے انجام پہ رونا آیا\nعمر بھر تیرا اسیر و تیرا پابند\n\nیاد میں تیری خوشی سے میں نے گزارے تھے\nلمحے وہ جو اب غموں میں ڈوبے ہوئے ہیں\n\nمیں جو بولا تو ہر اک بات کو رشکِ گل سمجھا\nتو جو خاموش رہا تو وہی نغمہ بن گئی",
     "language": "ur",
-    "id": "ur-e3f3d021"
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "ur-16165cb7",
     "title": "تنہائی",
     "author": "فیض احمد فیض",
     "content": "تنہائی میں تیرا ساتھ ہو\nتو کیا غم ہے\nخیالوں میں تری یاد ہو\nتو کیا کم ہے\n\nیہ دنیا کا شور و غل بھی\nسناٹے میں بدل جاتا ہے\nجب تیری محبت کا\nخیال آ جاتا ہے\n\nتنہائیوں میں بھی\nتیری خوشبو مہکتی ہے\nاور دل میری دھڑکن\nتیرا نام لیتی ہے",
     "language": "ur",
-    "id": "ur-16165cb7"
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "ur-7cd2c701",
     "title": "دل کی دنیا",
     "author": "احمد فراز",
     "content": "دل کی دنیا میں بسے ہو تم\nخوابوں میں سجے ہو تم\n\nہر سانس میں تمہاری خوشبو\nہر دھڑکن میں تمہارا نام\n\nجدائی کے موسم میں بھی\nتمہارے ساتھ کا احساس\nدل کو سکون دیتا ہے\n\nتم ہو تو زندگی ہے\nتم نہیں تو کچھ نہیں",
     "language": "ur",
-    "id": "ur-7cd2c701"
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "ur-b06da71a",
     "title": "ستارے",
     "author": "حفیظ جالندھری",
     "content": "آسمان پہ ستارے بکھرے ہوئے ہیں\nجیسے خوابوں میں تمہاری یادیں\n\nرات کی تنہائی میں\nہر ستارہ چمکتا ہے\nاور دل میں تمہاری یاد\nتازہ ہو جاتی ہے\n\nچاندنی رات میں\nجب ہوا چلتی ہے\nلگتا ہے جیسے تم\nقریب آ گئے ہو\n\nستاروں کی روشنی میں\nتمہارا چہرہ نظر آتا ہے",
     "language": "ur",
-    "id": "ur-b06da71a"
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "ur-8e4a6084",
     "title": "خواب",
     "author": "پروین شاکر",
     "content": "خوابوں میں تم آتے ہو\nتو دل خوش ہو جاتا ہے\nآنکھ کھلتی ہے تو\nسب کچھ خالی لگتا ہے\n\nتمہاری باتیں، تمہاری ہنسی\nسب کچھ یاد آتا ہے\nمگر حقیقت میں\nکچھ بھی نہیں ملتا\n\nخواب ہی تو ہیں\nجو دل کو تسلی دیتے ہیں\nورنہ زندگی میں\nصرف تنہائی ہے",
     "language": "ur",
-    "id": "ur-8e4a6084"
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "ur-be0d4bff",
     "title": "محبت",
     "author": "جون ایلیا",
     "content": "محبت کرنے والے کم نہ ہوں گے\nتری محفل میں لیکن ہم نہ ہوں گے\n\nوہ افسانہ جسے انجام تک لانا نہ ہو ممکن\nاسے اک خوبصورت موڑ دے کر چھوڑنا اچھا\n\nمحبت میں ترے کس کس نے ہنگامہ کیا ہوگا\nمرا افسانہ تو دنیا میں بڑا مشہور نکلا\n\nتمہیں دیکھا تو یہ خیال دل میں آیا\nکہ جیون سارتھی ملا ہی جائے\n\nمحبت میں یقیں ہونا ضروری ہے\nنہ ہو جس کو یقیں وہ بے نیاز رہتا ہے",
     "language": "ur",
-    "id": "ur-be0d4bff"
+    "metadata": {
+      "length": "short"
+    }
   },
   {
+    "id": "ur-beaff3f9",
     "title": "انتظار",
     "author": "ساحر لدھیانوی",
     "content": "انتظار میں گزرتے ہیں دن اور راتیں\nتمہاری یادوں میں کھوئی ہوئی باتیں\n\nکب آؤ گے، کب ملو گے\nیہ سوال دل میں ہمیشہ رہتا ہے\n\nہر راہ پہ نظر رکھتا ہوں\nشاید تم نظر آ جاؤ\n\nیہ انتظار کی گھڑیاں\nبڑی بھاری ہیں\nمگر تمہارے لیے\nسب کچھ کر سکتا ہوں\n\nانتظار ہی تو محبت ہے\nاور محبت ہی زندگی",
     "language": "ur",
-    "id": "ur-beaff3f9"
+    "metadata": {
+      "length": "short"
+    }
+  },
+  {
+    "id": "william-wordsworth-i-wandered-lonely-as-a-cloud-en-dc2813b4",
+    "title": "I Wandered Lonely As A Cloud",
+    "author": "William Wordsworth",
+    "content": "I wandered lonely as a cloud\nThat floats on high o'er vales and hills,\nWhen all at once I saw a crowd,\nA host, of golden daffodils;\nBeside the lake, beneath the trees,\nFluttering and dancing in the breeze.\n\nContinuous as the stars that shine\nAnd twinkle on the milky way,\nThey stretched in never-ending line\nAlong the margin of a bay:\nTen thousand saw I at a glance,\nTossing their heads in sprightly dance.\n\nThe waves beside them danced, but they\nOut-did the sparkling leaves in glee;\nA poet could not be but gay,\nIn such a jocund company!\nI gazed—and gazed—but little thought\nWhat wealth the show to me had brought:\n\nFor oft, when on my couch I lie\nIn vacant or in pensive mood,\nThey flash upon that inward eye\nWhich is the bliss of solitude;\nAnd then my heart with pleasure fills,\nAnd dances with the daffodils.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "solitude",
+        "joy",
+        "memory",
+        "daffodils"
+      ],
+      "themes": [
+        "nature's beauty",
+        "solitude and reflection",
+        "joy and inspiration"
+      ],
+      "moods": [
+        "peaceful",
+        "joyful",
+        "reflective"
+      ],
+      "form": "lyric poem",
+      "era": "Romantic era",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "emily-dickinson-could-hope-inspect-her-basis-en-b86fe4fa",
+    "title": "Could Hope inspect her Basis",
+    "author": "Emily Dickinson",
+    "content": "Could Hope inspect her Basis\nHer Craft were done --\nHas a fictitious Charter\nOr it has none --\n\nBalked in the vastest instance\nBut to renew --\nFelled by but one assassin --\nProsperity --",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "hope",
+        "uncertainty",
+        "resilience"
+      ],
+      "themes": [
+        "hope",
+        "fragility of success"
+      ],
+      "moods": [
+        "reflective",
+        "melancholy"
+      ],
+      "form": "free verse",
+      "era": "19th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "john-keats-a-thing-of-beauty-endymion-en-5afb7e0a",
+    "title": "A Thing of Beauty (Endymion)",
+    "author": "John Keats",
+    "content": "A thing of beauty is a joy for ever:\nIts lovliness increases; it will never\nPass into nothingness; but still will keep\nA bower quiet for us, and a sleep\nFull of sweet dreams, and health, and quiet breathing.\n\nTherefore, on every morrow, are we wreathing\nA flowery band to bind us to the earth,\nSpite of despondence, of the inhuman dearth\nOf noble natures, of the gloomy days,\nOf all the unhealthy and o'er-darkn'd ways\nMade for our searching: yes, in spite of all,\nSome shape of beauty moves away the pall\nFrom our dark spirits. Such the sun, the moon,\nTrees old and young, sprouting a shady boon\nFor simple sheep; and such are daffodils\nWith the green world they live in; and clear rills\nThat for themselves a cooling covert make\n'Gainst the hot season; the mid-forest brake,\nRich with a sprinkling of fair musk-rose blooms:\nAnd such too is the grandeur of the dooms\nWe have imagined for the mighty dead;\nAn endless fountain of immortal drink,\nPouring unto us from the heaven's brink.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "beauty",
+        "inspiration",
+        "hope"
+      ],
+      "themes": [
+        "beauty",
+        "nature's resilience",
+        "immortality"
+      ],
+      "moods": [
+        "uplifting",
+        "reflective",
+        "serene"
+      ],
+      "form": "blank verse",
+      "era": "19th century",
+      "length": "long"
+    }
+  },
+  {
+    "id": "joyce-kilmer-trees-en-834e11e2",
+    "title": "Trees",
+    "author": "Joyce Kilmer",
+    "content": "(For Mrs. Henry Mills Alden)\n\nI think that I shall never see\nA poem lovely as a tree.\nA tree whose hungry mouth is prest\nAgainst the earth's sweet flowing breast;\nA tree that looks at God all day,\nAnd lifts her leafy arms to pray;\nA tree that may in Summer wear\nA nest of robins in her hair;\nUpon whose bosom snow has lain;\nWho intimately lives with rain.\nPoems are made by fools like me,\nBut only God can make a tree.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "trees",
+        "God",
+        "poetry"
+      ],
+      "themes": [
+        "nature",
+        "divinity",
+        "creation"
+      ],
+      "moods": [
+        "reflective",
+        "reverent"
+      ],
+      "form": "rhymed quatrain",
+      "era": "20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "john-donne-holy-sonnet-xvi-father-part-of-his-double-interest-en-922257e4",
+    "title": "Holy Sonnet XVI: Father, Part Of His Double Interest",
+    "author": "John Donne",
+    "content": "Father, part of his double interest\nUnto thy kingdom, thy Son gives to me,\nHis jointure in the knotty Trinity\nHe keeps, and gives to me his death's conquest.\nThis Lamb, whose death with life the world hath blest,\nWas from the world's beginning slain, and he\nHath made two Wills which with the Legacy\nOf his and thy kingdom do thy Sons invest.\nYet such are thy laws that men argue yet\nWhether a man those statutes can fulfil;\nNone doth; but all-healing grace and spirit\nRevive again what law and letter kill.\nThy law's abridgement, and thy last command\nIs all but love; Oh let this last Will stand!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "religion",
+        "Christianity",
+        "theology",
+        "grace",
+        "law"
+      ],
+      "themes": [
+        "divine law",
+        "grace vs law",
+        "trinity",
+        "salvation"
+      ],
+      "moods": [
+        "reflective",
+        "devotional",
+        "hopeful"
+      ],
+      "form": "sonnet",
+      "era": "17th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "john-keats-to-autumn-en-ca9768b7",
+    "title": "To Autumn",
+    "author": "John Keats",
+    "content": "I\nSeason of mists and mellow fruitfulness,\n   Close bosom-friend of the maturing sun;\nConspiring with him how to load and bless\n   With fruit the vines that round the thatch-eves run;\nTo bend with apples the moss'd cottage-trees,\n   And fill all fruit with ripeness to the core;\n       To swell the gourd, and plump the hazel shells\n   With a sweet kernel; to set budding more,\nAnd still more, later flowers for the bees,\nUntil they think warm days will never cease,\n       For Summer has o'er-brimm'd their clammy cells.\n\nII\nWho hath not seen thee oft amid thy store?\n   Sometimes whoever seeks abroad may find\nThee sitting careless on a granary floor,\n   Thy hair soft-lifted by the winnowing wind;\nOr on a half-reap'd furrow sound asleep,\n   Drows'd with the fume of poppies, while thy hook\n       Spares the next swath and all its twined flowers:\nAnd sometimes like a gleaner thou dost keep\n   Steady thy laden head across a brook;\n   Or by a cyder-press, with patient look,\n       Thou watchest the last oozings hours by hours.\n\nIII\nWhere are the songs of Spring? Ay, where are they?\n   Think not of them, thou hast thy music too,--\nWhile barred clouds bloom the soft-dying day,\n   And touch the stubble-plains with rosy hue;\nThen in a wailful choir the small gnats mourn\n   Among the river sallows, borne aloft\n       Or sinking as the light wind lives or dies;\nAnd full-grown lambs loud bleat from hilly bourn;\n   Hedge-crickets sing; and now with treble soft\n   The red-breast whistles from a garden-croft;\n       And gathering swallows twitter in the skies.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "seasons",
+        "autumn",
+        "ripeness",
+        "harvest"
+      ],
+      "themes": [
+        "change",
+        "nature's cycle",
+        "maturity",
+        "time"
+      ],
+      "moods": [
+        "reflective",
+        "peaceful",
+        "melancholic"
+      ],
+      "form": "ode",
+      "era": "Romantic",
+      "length": "long"
+    }
+  },
+  {
+    "id": "christina-rossetti-a-birthday-en-25d5af79",
+    "title": "A Birthday",
+    "author": "Christina Rossetti",
+    "content": "My heart is like a singing bird\nWhose nest is in a water'd shoot;\nMy heart is like an apple-tree\nWhose boughs are bent with thickset fruit;\nMy heart is like a rainbow shell\nThat paddles in a halcyon sea;\nMy heart is gladder than all these\nBecause my love is come to me.\n\nRaise me a dais of silk and down;\nHang it with vair and purple dyes;\nCarve it in doves and pomegranates,\nAnd peacocks with a hundred eyes;\nWork it in gold and silver grapes,\nIn leaves and silver fleurs-de-lys;\nBecause the birthday of my life\nIs come, my love is come to me.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "love",
+        "nature",
+        "joy",
+        "celebration"
+      ],
+      "themes": [
+        "love",
+        "happiness",
+        "nature imagery"
+      ],
+      "moods": [
+        "joyful",
+        "celebratory",
+        "romantic"
+      ],
+      "form": "lyric poem",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "robert-burns-447-song-a-red-red-rose-en-0ec7b566",
+    "title": "447. Song—A red, red Rose",
+    "author": "Robert Burns",
+    "content": "O MY Luve’s like a red, red rose,\n  That’s newly sprung in June:\nO my Luve’s like the melodie,\n  That’s sweetly play’d in tune.\n\nAs fair art thou, my bonie lass,\n  So deep in luve am I;\nAnd I will luve thee still, my dear,\n  Till a’ the seas gang dry.\n\nTill a’ the seas gang dry, my dear,\n  And the rocks melt wi’ the sun;\nAnd I will luve thee still, my dear,\n  While the sands o’ life shall run.\n\nAnd fare-thee-weel, my only Luve!\n  And fare-thee-weel, a while!\nAnd I will come again, my Luve,\n  Tho’ ’twere ten thousand mile!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "love",
+        "nature",
+        "romance",
+        "Scottish poetry"
+      ],
+      "themes": [
+        "enduring love",
+        "nature imagery"
+      ],
+      "moods": [
+        "romantic",
+        "devoted",
+        "hopeful"
+      ],
+      "form": "ballad",
+      "era": "18th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "walt-whitman-when-i-heard-at-the-close-of-the-day-en-76d79cd8",
+    "title": "When I heard at the Close of the Day.",
+    "author": "Walt Whitman",
+    "content": "WHEN I heard at the close of the day how my name had been receiv’d with plaudits in the\n  capitol,\n  still it was not a happy night for me that follow’d;\nAnd else, when I carous’d, or when my plans were accomplish’d, still I was not happy;\nBut the day when I rose at dawn from the bed of perfect health, refresh’d, singing,\n    inhaling\n  the\n  ripe breath of autumn,\nWhen I saw the full moon in the west grow pale and disappear in the morning light,\nWhen I wander’d alone over the beach, and undressing, bathed, laughing with the cool\n    waters,\n  and\n  saw the sun rise,\nAnd when I thought how my dear friend, my lover, was on his way coming, O then I was\n    happy;\nO then each breath tasted sweeter—and all that day my food nourish’d me more—and the\n    beautiful\n  day pass’d well,\nAnd the next came with equal joy—and with the next, at evening, came my friend;\nAnd that night, while all was still, I heard the waters roll slowly continually up the\n    shores,\n\nI heard the hissing rustle of the liquid and sands, as directed to me, whispering, to\n  congratulate\n  me,\nFor the one I love most lay sleeping by me under the same cover in the cool night,\nIn the stillness, in the autumn moonbeams, his face was inclined toward me,\nAnd his arm lay lightly around my breast—and that night I was happy.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "love",
+        "happiness",
+        "friendship",
+        "autumn"
+      ],
+      "themes": [
+        "joy",
+        "companionship",
+        "nature's beauty"
+      ],
+      "moods": [
+        "reflective",
+        "content",
+        "peaceful"
+      ],
+      "form": "free verse",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "christopher-marlowe-the-passionate-shepherd-to-his-love-en-cfe02413",
+    "title": "The Passionate Shepherd To His Love",
+    "author": "Christopher Marlowe",
+    "content": "Come live with me, and be my love,\nAnd we will all the pleasures prove,\nThat hills and valleys, dales and fields,\nAnd all the craggy mountain yields.\n\nThere we will sit upon the rocks,\nAnd see the shepherds feed their flocks\nBy shallow rivers, to whose falls\nMelodious birds sing madrigals.\n\nAnd I will make thee beds of roses,\nWith a thousand fragrant posies,\nA cap of flowers and a kirtle\nEmbroidered all with leaves of myrtle;\n\nA gown made of the finest wool,\nWhich from our pretty lambs we pull;\nFair lined slippers for the cold,\nWith buckles of the purest gold;\n\nA belt of straw and ivy buds,\nWith coral clasps and amber studs;\nAnd if these pleasures may thee move,\nCome live with me, and be my love.\n\nThe shepherd swains shall dance and sing\nFor thy delight each May morning:\nIf these delights thy mind may move,\nThen live with me, and be my love.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "love",
+        "nature",
+        "pastoral",
+        "romantic",
+        "invitation"
+      ],
+      "themes": [
+        "love",
+        "nature",
+        "pleasure",
+        "rural life"
+      ],
+      "moods": [
+        "romantic",
+        "hopeful",
+        "inviting"
+      ],
+      "form": "pastoral lyric",
+      "era": "Renaissance",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "robert-frost-the-road-not-taken-en-f0d23749",
+    "title": "The Road Not Taken",
+    "author": "Robert Frost",
+    "content": "Two roads diverged in a yellow wood,\nAnd sorry I could not travel both\nAnd be one traveler, long I stood\nAnd looked down one as far as I could\nTo where it bent in the undergrowth;\n\nThen took the other, as just as fair,\nAnd having perhaps the better claim,\nBecause it was grassy and wanted wear;\nThough as for that the passing there\nHad worn them really about the same,\n\nAnd both that morning equally lay\nIn leaves no step had trodden black.\nOh, I kept the first for another day!\nYet knowing how way leads on to way,\nI doubted if I should ever come back.\n\nI shall be telling this with a sigh\nSomewhere ages and ages hence:\nTwo roads diverged in a wood, and I—\nI took the one less traveled by,\nAnd that has made all the difference.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "choices",
+        "nature",
+        "travel",
+        "decision",
+        "reflection"
+      ],
+      "themes": [
+        "individuality",
+        "decision making",
+        "life journey"
+      ],
+      "moods": [
+        "thoughtful",
+        "reflective",
+        "nostalgic"
+      ],
+      "form": "rhymed quatrain",
+      "era": "20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "william-ernest-henley-invictus-en-f463c44e-1",
+    "title": "Invictus",
+    "author": "William Ernest Henley",
+    "content": "Out of the night that covers me,\n      Black as the pit from pole to pole,\nI thank whatever gods may be\n      For my unconquerable soul.\n\nIn the fell clutch of circumstance\n      I have not winced nor cried aloud.\nUnder the bludgeonings of chance\n      My head is bloody, but unbowed.\n\nBeyond this place of wrath and tears\n      Looms but the Horror of the shade,\nAnd yet the menace of the years\n      Finds and shall find me unafraid.\n\nIt matters not how strait the gate,\n      How charged with punishments the scroll,\nI am the master of my fate,\n      I am the captain of my soul.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "resilience",
+        "courage",
+        "fate",
+        "strength",
+        "determination"
+      ],
+      "themes": [
+        "perseverance",
+        "self-mastery",
+        "defiance"
+      ],
+      "moods": [
+        "defiant",
+        "resolute",
+        "inspirational"
+      ],
+      "form": "quatrain",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "william-wordsworth-the-world-is-too-much-with-us-en-86f7f66e",
+    "title": "The World Is Too Much With Us",
+    "author": "William Wordsworth",
+    "content": "The world is too much with us; late and soon,\nGetting and spending, we lay waste our powers;—\nLittle we see in Nature that is ours;\nWe have given our hearts away, a sordid boon!\nThis Sea that bares her bosom to the moon;\nThe winds that will be howling at all hours,\nAnd are up-gathered now like sleeping flowers;\nFor this, for everything, we are out of tune;\nIt moves us not. Great God! I'd rather be\nA Pagan suckled in a creed outworn;\nSo might I, standing on this pleasant lea,\nHave glimpses that would make me less forlorn;\nHave sight of Proteus rising from the sea;\nOr hear old Triton blow his wreathèd horn.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "industrialization",
+        "romanticism",
+        "disconnection"
+      ],
+      "themes": [
+        "nature vs. humanity",
+        "materialism",
+        "spirituality"
+      ],
+      "moods": [
+        "melancholy",
+        "reflective",
+        "critical"
+      ],
+      "form": "sonnet",
+      "era": "Romantic",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "elizabeth-barrett-browning-how-do-i-love-thee-sonnet-43-en-2d9639d0",
+    "title": "How Do I Love Thee? (Sonnet 43)",
+    "author": "Elizabeth Barrett Browning",
+    "content": "How do I love thee? Let me count the ways.\nI love thee to the depth and breadth and height\nMy soul can reach, when feeling out of sight\nFor the ends of being and ideal grace.\nI love thee to the level of every day's\nMost quiet need, by sun and candle-light.\nI love thee freely, as men strive for right;\nI love thee purely, as they turn from praise.\nI love thee with the passion put to use\nIn my old griefs, and with my childhood's faith.\nI love thee with a love I seemed to lose\nWith my lost saints. I love thee with the breath,\nSmiles, tears, of all my life; and, if God choose,\nI shall but love thee better after death.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "love",
+        "devotion",
+        "passion",
+        "faith"
+      ],
+      "themes": [
+        "love",
+        "eternity",
+        "spirituality"
+      ],
+      "moods": [
+        "romantic",
+        "devoted",
+        "reflective"
+      ],
+      "form": "sonnet",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "ralph-waldo-emerson-the-rhodora-en-24189864",
+    "title": "The Rhodora",
+    "author": "Ralph Waldo Emerson",
+    "content": "In May, when sea-winds pierced our solitudes,\nI found the fresh Rhodora in the woods,\nSpreading its leafless blooms in a damp nook,\nTo please the desert and the sluggish brook.\nThe purple petals fallen in the pool\nMade the black water with their beauty gay;\nHere might the red-bird come his plumes to cool,\nAnd court the flower that cheapens his array.\n\nRhodora! if the sages ask thee why\nThis charm is wasted on the earth and sky,\nTell them, dear, that, if eyes were made for seeing,\nThen beauty is its own excuse for Being;\nWhy thou wert there, O rival of the rose!\nI never thought to ask; I never knew;\nBut in my simple ignorance suppose\nThe self-same power that brought me there, brought you.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "beauty",
+        "flowers",
+        "philosophy"
+      ],
+      "themes": [
+        "nature appreciation",
+        "beauty",
+        "existence"
+      ],
+      "moods": [
+        "reflective",
+        "serene"
+      ],
+      "form": "quatrain",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "lewis-carroll-jabberwocky-en-8c9b1b9d",
+    "title": "Jabberwocky",
+    "author": "Lewis Carroll",
+    "content": "'Twas brillig, and the slithy toves\n      Did gyre and gimble in the wabe:\nAll mimsy were the borogoves,\n      And the mome raths outgrabe.\n\n\"Beware the Jabberwock, my son!\n      The jaws that bite, the claws that catch!\nBeware the Jubjub bird, and shun\n      The frumious Bandersnatch!\"\n\nHe took his vorpal sword in hand;\n      Long time the manxome foe he sought—\nSo rested he by the Tumtum tree\n      And stood awhile in thought.\n\nAnd, as in uffish thought he stood,\n      The Jabberwock, with eyes of flame,\nCame whiffling through the tulgey wood,\n      And burbled as it came!\n\nOne, two! One, two! And through and through\n      The vorpal blade went snicker-snack!\nHe left it dead, and with its head\n      He went galumphing back.\n\n\"And hast thou slain the Jabberwock?\n      Come to my arms, my beamish boy!\nO frabjous day! Callooh! Callay!\"\n      He chortled in his joy.\n\n'Twas brillig, and the slithy toves\n      Did gyre and gimble in the wabe:\nAll mimsy were the borogoves,\n      And the mome raths outgrabe.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nonsense",
+        "fantasy",
+        "adventure",
+        "mythical creatures",
+        "imaginative"
+      ],
+      "themes": [
+        "heroism",
+        "danger",
+        "victory",
+        "imagination"
+      ],
+      "moods": [
+        "whimsical",
+        "playful",
+        "exciting",
+        "mysterious"
+      ],
+      "form": "nonsense verse",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "william-wordsworth-my-heart-leaps-up-en-0fee033e",
+    "title": "My Heart Leaps Up",
+    "author": "William Wordsworth",
+    "content": "My heart leaps up when I behold\nA rainbow in the sky:\nSo was it when my life began;\nSo is it now I am a man;\nSo be it when I shall grow old,\nOr let me die!\nThe Child is father of the Man;\nAnd I could wish my days to be\nBound each to each by natural piety.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "childhood",
+        "life",
+        "rainbow",
+        "emotion"
+      ],
+      "themes": [
+        "innocence",
+        "continuity",
+        "nature",
+        "growth"
+      ],
+      "moods": [
+        "joyful",
+        "reflective"
+      ],
+      "form": "lyric poem",
+      "era": "19th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "john-masefield-sea-fever-en-2f1f097d",
+    "title": "Sea Fever",
+    "author": "John Masefield",
+    "content": "I must go down to the seas again, to the lonely sea and the sky,\nAnd all I ask is a tall ship and a star to steer her by;\nAnd the wheel's kick and the wind's song and the white sail's shaking,\nAnd a grey mist on the sea's face, and a grey dawn breaking.\n\nI must go down to the seas again, for the call of the running tide\nIs a wild call and a clear call that may not be denied;\nAnd all I ask is a windy day with the white clouds flying,\nAnd the flung spray and the blown spume, and the sea-gulls crying.\n\nI must go down to the seas again, to the vagrant gypsy life,\nTo the gull's way and the whale's way where the wind's like a whetted knife;\nAnd all I ask is a merry yarn from a laughing fellow-rover,\nAnd quiet sleep and a sweet dream when the long trick's over.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "sea",
+        "nature",
+        "adventure",
+        "freedom",
+        "travel"
+      ],
+      "themes": [
+        "yearning",
+        "nature",
+        "freedom"
+      ],
+      "moods": [
+        "nostalgic",
+        "restless",
+        "hopeful"
+      ],
+      "form": "quatrain",
+      "era": "20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "robert-browning-pippa-s-song-en-72d827f8",
+    "title": "Pippa's Song",
+    "author": "Robert Browning",
+    "content": "The year's at the spring,\nAnd day's at the morn;\nMorning's at seven;\nThe hill-side's dew-pearl'd;\nThe lark's on the wing;\nThe snail's on the thorn;\nGod's in His heaven--\nAll's right with the world!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "optimism",
+        "morning",
+        "faith"
+      ],
+      "themes": [
+        "hope",
+        "nature's beauty",
+        "divine order"
+      ],
+      "moods": [
+        "peaceful",
+        "uplifting",
+        "joyful"
+      ],
+      "form": "lyric poem",
+      "era": "Victorian",
+      "length": "short"
+    }
   }
 ]

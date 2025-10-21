@@ -18,7 +18,10 @@
       "supportsTablet": true,
       "statusBarHidden": true,
       "bundleIdentifier": "com.raza.poems",
-      "buildNumber": "1"
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {

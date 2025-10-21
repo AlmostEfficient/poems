@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "poems",
-    "slug": "poems",
+    "name": "Poems",
+    "slug": "Poems",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +16,9 @@
     },
     "ios": {
       "supportsTablet": true,
-      "statusBarHidden": true
+      "statusBarHidden": true,
+      "bundleIdentifier": "com.raza.poems",
+      "buildNumber": "1"
     },
     "android": {
       "adaptiveIcon": {
@@ -34,6 +36,11 @@
     "plugins": [
       "expo-font",
       "expo-sqlite"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "9841873d-1043-4edb-8474-01b6f9070388"
+      }
+    }
   }
 }

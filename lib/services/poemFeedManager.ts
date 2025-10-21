@@ -1,4 +1,4 @@
-import { STARTER_POEMS } from '../data/starterPoems';
+import { STARTER_POEMS, FEATURED_STARTER_IDS } from '../data/starterPoems';
 import type { Poem, VirtualSlot } from '../types';
 
 export type PoemFeedSource = 'local' | 'hybrid' | 'api';
@@ -75,17 +75,21 @@ export class PoemFeedManager {
 
   initialiseWithStarterPoems(language: Poem['language'] = this.activeLanguage): VirtualSlot[] {
     const starters = STARTER_POEMS.filter((poem) => poem.language === language);
-    const shuffled = shuffle(starters).map((poem, index) =>
-      ensurePoemIdentity(poem, `starter_${index}`)
+    const featuredSet = new Set(FEATURED_STARTER_IDS);
+    const featured = FEATURED_STARTER_IDS.map((id) => starters.find((poem) => poem.id === id)).filter(
+      (poem): poem is Poem => Boolean(poem)
     );
+    const remaining = starters.filter((poem) => !featuredSet.has(poem.id));
+    const ordered = [...featured, ...shuffle(remaining)];
+    const normalised = ordered.map((poem, index) => ensurePoemIdentity(poem, `starter_${index}`));
 
-    this.availablePoems = [...shuffled];
-    this.availablePoemIds = new Set(shuffled.map((poem) => poem.id));
-    this.usedPoemIds = new Set(shuffled.map((poem) => poem.id));
+    this.availablePoems = [...normalised];
+    this.availablePoemIds = new Set(normalised.map((poem) => poem.id));
+    this.usedPoemIds = new Set(normalised.map((poem) => poem.id));
 
     this.virtualSlots = Array.from({ length: this.options.virtualSize }, (_, index) => {
-      if (index < shuffled.length) {
-        return { poem: shuffled[index], isLoading: false };
+      if (index < normalised.length) {
+        return { poem: normalised[index], isLoading: false };
       }
       return { poem: null, isLoading: false };
     });

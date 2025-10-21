@@ -1,15 +1,5 @@
 [
   {
-    "id": "robert-frost-the-road-not-taken-en-5bbab9ef",
-    "title": "The Road Not Taken",
-    "author": "Robert Frost",
-    "content": "Two roads diverged in a yellow wood,\nAnd sorry I could not travel both\nAnd be one traveler, long I stood\nAnd looked down one as far as I could\nTo where it bent in the undergrowth;\n\nThen took the other, as just as fair,\nAnd having perhaps the better claim,\nBecause it was grassy and wanted wear;\nThough as for that the passing there\nHad worn them really ahttps://developer.apple.com/bout the same,\n\nAnd both that morning equally lay\nIn leaves no step had trodden black.\nOh, I kept the first for another day!\nYet knowing how way leads on to way,\nI doubted if I should ever be back.\n\nI shall be telling this with a sigh\nSomewhere ages and ages hence:\nTwo roads diverged in a wood, and I—\nI took the one less traveled by,\nAnd that has made all the difference.",
-    "language": "en",
-    "metadata": {
-      "length": "medium"
-    }
-  },
-  {
     "id": "maya-angelou-still-i-rise-en-ecdd0f66",
     "title": "Still I Rise",
     "author": "Maya Angelou",
@@ -97,16 +87,6 @@
     "language": "en",
     "metadata": {
       "length": "short"
-    }
-  },
-  {
-    "id": "william-ernest-henley-invictus-en-f463c44e",
-    "title": "Invictus",
-    "author": "William Ernest Henley",
-    "content": "Out of the night that covers me,\nBlack as the pit from pole to pole,\nI thank whatever gods may be\nFor my unconquerable soul.\n\nIn the fell clutch of circumstance\nI have not winced nor cried aloud.\nUnder the bludgeonings of chance\nMy head is bloody, but unbowed.\n\nBeyond this place of wrath and tears\nLooms but the Horror of the shade,\nAnd yet the menace of the years\nFinds and shall find me unafraid.\n\nIt matters not how strait the gate,\nHow charged with punishments the scroll,\nI am the master of my fate,\nI am the captain of my soul.",
-    "language": "en",
-    "metadata": {
-      "length": "medium"
     }
   },
   {

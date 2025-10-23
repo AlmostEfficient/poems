@@ -71,8 +71,6 @@ interface PoemViewProps {
 
 function PoemView({ poem, onSecretTap }: PoemViewProps) {
   const [currentPage, setCurrentPage] = useState(0);
-  const [pages, setPages] = useState<string[][]>([]);
-  const [isCalculating, setIsCalculating] = useState(true);
   const scrollRef = useRef<ScrollView>(null);
 
   const isUrdu = poem.language === 'ur';
@@ -102,7 +100,7 @@ function PoemView({ poem, onSecretTap }: PoemViewProps) {
     return totalHeight;
   }, []);
 
-  const paginateStanzas = useCallback(() => {
+  const buildPages = useCallback((): string[][] => {
     const allStanzas = poem.content.split('\n\n');
     const nextPages: string[][] = [];
     let currentStanzas: string[] = [];
@@ -128,17 +126,17 @@ function PoemView({ poem, onSecretTap }: PoemViewProps) {
       nextPages.push(allStanzas);
     }
 
-    setPages(nextPages);
-    setIsCalculating(false);
+    return nextPages;
   }, [availableHeight, measureStanzasHeight, poem.content]);
 
-  useEffect(() => {
-    setIsCalculating(true);
-    setCurrentPage(0);
-    paginateStanzas();
-  }, [paginateStanzas]);
+  const [pages, setPages] = useState<string[][]>(() => buildPages());
 
-  if (isCalculating || pages.length === 0) {
+  useEffect(() => {
+    setCurrentPage(0);
+    setPages(buildPages());
+  }, [buildPages]);
+
+  if (pages.length === 0) {
     return (
       <View style={styles.poemContainer}>
         <TouchableWithoutFeedback onPress={onSecretTap}>
@@ -148,7 +146,7 @@ function PoemView({ poem, onSecretTap }: PoemViewProps) {
           </View>
         </TouchableWithoutFeedback>
         <Text style={styles.loadingText}>
-          {isUrdu ? 'نظم لوڈ ہو رہی ہے...' : 'Loading...'}
+          {isUrdu ? 'کوئی مواد دستیاب نہیں' : 'No verses available.'}
         </Text>
       </View>
     );

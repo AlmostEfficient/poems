@@ -4,14 +4,15 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "import": "bun import_to_db.js --clear",
     "generate": "tsx scripts/generate_poems_db.ts",
     "build:app": "bun scripts/build.ts",
     "version:bump": "bun scripts/version.ts bump",
-    "version:current": "bun scripts/version.ts current"
+    "version:current": "bun scripts/version.ts current",
+    "check:poems": "tsx scripts/check_poems_format.ts"
   },
   "dependencies": {
     "@expo-google-fonts/noto-nastaliq-urdu": "^0.4.2",

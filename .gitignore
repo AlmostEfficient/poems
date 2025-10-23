@@ -38,3 +38,8 @@ yarn-error.*
 # SQLite
 *.db-shm
 *.db-wal
+
+.ios/*
+ios/*
+.android/*
+android/*

@@ -110,11 +110,15 @@ function parseArgs(): CLIOptions {
 }
 
 function selectPreferredPoems(poems: PoetryDBPoem[], limit: number): PoetryDBPoem[] {
-  if (poems.length <= limit) {
-    return poems;
+  // Filter out poems over 30 lines (too long for mobile)
+  const MAX_LINES = 30;
+  const filtered = poems.filter(poem => poem.linecount <= MAX_LINES);
+
+  if (filtered.length <= limit) {
+    return filtered;
   }
 
-  const sorted = [...poems].sort((a, b) => {
+  const sorted = [...filtered].sort((a, b) => {
     if (b.linecount === a.linecount) {
       return a.title.localeCompare(b.title);
     }
@@ -171,10 +175,17 @@ async function getAuthorPoems(author: string, limit: number): Promise<PoetryDBPo
   return fetchPoems(`/author,poemcount/${encodedAuthor}:abs;${limit}`);
 }
 
+interface FormatResult {
+  success: boolean;
+  duplicate: boolean;
+  dryRun: boolean;
+  error?: string;
+}
+
 async function formatPoemWithScript(
   poem: PoetryDBPoem,
   options: CLIOptions
-): Promise<{ success: boolean; error?: string }> {
+): Promise<FormatResult> {
   return new Promise((resolve) => {
     const scriptPath = path.resolve(__dirname, 'format_poem.ts');
     const poemText = poem.lines.join('\n');
@@ -222,15 +233,24 @@ async function formatPoemWithScript(
     });
 
     child.on('close', (code) => {
+      const added = stdout.includes('✅ Added');
+      const duplicate = stdout.includes('Duplicate poem detected');
+      const dryRun = stdout.includes('Dry run enabled');
+
       if (code === 0) {
-        resolve({ success: true });
+        resolve({
+          success: added,
+          duplicate,
+          dryRun,
+          error: duplicate || added ? undefined : stderr || stdout,
+        });
       } else {
-        resolve({ success: false, error: stderr || stdout });
+        resolve({ success: false, duplicate: false, dryRun: false, error: stderr || stdout });
       }
     });
 
     child.on('error', (err) => {
-      resolve({ success: false, error: err.message });
+      resolve({ success: false, duplicate: false, dryRun: false, error: err.message });
     });
   });
 }
@@ -355,15 +375,14 @@ async function main() {
       process.stdout.write(`${num} "${poem.title}" by ${poem.author}... `);
 
       const result = await formatPoemWithScript(poem, options);
-
-      if (result.success) {
-        if (result.error?.includes('Duplicate')) {
-          console.log('⚠️  duplicate');
-          skipCount++;
-        } else {
-          console.log('✅');
-          successCount++;
-        }
+      if (result.duplicate) {
+        console.log('⚠️  duplicate');
+        skipCount++;
+      } else if (result.dryRun) {
+        console.log('ℹ️  dry run (not added)');
+      } else if (result.success) {
+        console.log('✅');
+        successCount++;
       } else {
         console.log(`❌ ${result.error?.split('\n')[0] || 'unknown error'}`);
         errorCount++;

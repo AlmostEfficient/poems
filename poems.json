@@ -10,16 +10,6 @@
     }
   },
   {
-    "id": "rudyard-kipling-if-en-b8afec11",
-    "title": "If—",
-    "author": "Rudyard Kipling",
-    "content": "If you can keep your head when all about you\nAre losing theirs and blaming it on you,\nIf you can trust yourself when all men doubt you,\nBut make allowance for their doubting too;\nIf you can wait and not be tired by waiting,\nOr being lied about, don't deal in lies,\nOr being hated, don't give way to hating,\nAnd yet don't look too good, nor talk too wise:\n\nIf you can dream—and not make dreams your master;\nIf you can think—and not make thoughts your aim;\nIf you can meet with Triumph and Disaster\nAnd treat those two impostors just the same;\nIf you can bear to hear the truth you've spoken\nTwisted by knaves to make a trap for fools,\nOr watch the things you gave your life to, broken,\nAnd stoop and build 'em up with worn-out tools:\n\nIf you can make one heap of all your winnings\nAnd risk it on one turn of pitch-and-toss,\nAnd lose, and start again at your beginnings\nAnd never breathe a word about your loss;\nIf you can force your heart and nerve and sinew\nTo serve your turn long after they are gone,\nAnd so hold on when there is nothing in you\nExcept the Will which says to them: 'Hold on!'\n\nIf you can talk with crowds and keep your virtue,\nOr walk with Kings—nor lose the common touch,\nIf neither foes nor loving friends can hurt you,\nIf all men count with you, but none too much;\nIf you can fill the unforgiving minute\nWith sixty seconds' worth of distance run,\nYours is the Earth and everything that's in it,\nAnd—which is more—you'll be a Man, my son!",
-    "language": "en",
-    "metadata": {
-      "length": "long"
-    }
-  },
-  {
     "id": "edgar-allan-poe-the-raven-en-e5ed49ca",
     "title": "The Raven",
     "author": "Edgar Allan Poe",
@@ -140,16 +130,6 @@
     }
   },
   {
-    "id": "edgar-allan-poe-annabel-lee-en-f02f68d2",
-    "title": "Annabel Lee",
-    "author": "Edgar Allan Poe",
-    "content": "It was many and many a year ago,\nIn a kingdom by the sea,\nThat a maiden there lived whom you may know\nBy the name of Annabel Lee;\nAnd this maiden she lived with no other thought\nThan to love and be loved by me.\n\nI was a child and she was a child,\nIn this kingdom by the sea,\nBut we loved with a love that was more than love—\nI and my Annabel Lee—\nWith a love that the wingèd seraphs of Heaven\nCoveted her and me.\n\nAnd this was the reason that, long ago,\nIn this kingdom by the sea,\nA wind blew out of a cloud, chilling\nMy beautiful Annabel Lee;\nSo that her highborn kinsmen came\nAnd bore her away from me,\nTo shut her up in a sepulchre\nIn this kingdom by the sea.\n\nThe angels, not half so happy in Heaven,\nWent envying her and me—\nYes!—that was the reason (as all men know,\nIn this kingdom by the sea)\nThat the wind came out of the cloud by night,\nChilling and killing my Annabel Lee.\n\nBut our love it was stronger by far than the love\nOf those who were older than we—\nOf many far wiser than we—\nAnd neither the angels in Heaven above\nNor the demons down under the sea\nCan ever dissever my soul from the soul\nOf the beautiful Annabel Lee;\n\nFor the moon never beams, without bringing me dreams\nOf the beautiful Annabel Lee;\nAnd the stars never rise, but I feel the bright eyes\nOf the beautiful Annabel Lee;\nAnd so, all the night-tide, I lie down by the side\nOf my darling—my darling—my life and my bride,\nIn her sepulchre there by the sea—\nIn her tomb by the sounding sea.",
-    "language": "en",
-    "metadata": {
-      "length": "long"
-    }
-  },
-  {
     "id": "william-shakespeare-sonnet-18-en-4469d66e",
     "title": "Sonnet 18",
     "author": "William Shakespeare",
@@ -164,16 +144,6 @@
     "title": "The Hollow Men",
     "author": "T.S. Eliot",
     "content": "We are the hollow men\nWe are the stuffed men\nLeaning together\nHeadpiece filled with straw. Alas!\nOur dried voices, when\nWe whisper together\nAre quiet and meaningless\nAs wind in dry grass\nOr rats' feet over broken glass\nIn our dry cellar\n\nShape without form, shade without colour,\nParalysed force, gesture without motion;\n\nThose who have crossed\nWith direct eyes, to death's other Kingdom\nRemember us—if at all—not as lost\nViolent souls, but only\nAs the hollow men\nThe stuffed men.",
-    "language": "en",
-    "metadata": {
-      "length": "medium"
-    }
-  },
-  {
-    "id": "maya-angelou-i-know-why-the-caged-bird-sings-en-d4e299d2",
-    "title": "I Know Why the Caged Bird Sings",
-    "author": "Maya Angelou",
-    "content": "A free bird leaps on the back\nOf the wind and floats downstream\nTill the current ends and dips his wing\nIn the orange suns rays\nAnd dares to claim the sky.\n\nBut a bird that stalks down his narrow cage\nCan seldom see through his bars of rage\nHis wings are clipped and his feet are tied\nSo he opens his throat to sing.\n\nThe caged bird sings with a fearful trill\nOf things unknown but longed for still\nAnd his tune is heard on the distant hill for\nThe caged bird sings of freedom.\n\nThe free bird thinks of another breeze\nAnd the trade winds soft through\nThe sighing trees\nAnd the fat worms waiting on a dawn-bright\nLawn and he names the sky his own.\n\nBut a caged bird stands on the grave of dreams\nHis shadow shouts on a nightmare scream\nHis wings are clipped and his feet are tied\nSo he opens his throat to sing.\n\nThe caged bird sings with\nA fearful trill of things unknown\nBut longed for still and his\nTune is heard on the distant hill\nFor the caged bird sings of freedom.",
     "language": "en",
     "metadata": {
       "length": "medium"
@@ -416,36 +386,6 @@
       "form": "sonnet",
       "era": "17th century",
       "length": "medium"
-    }
-  },
-  {
-    "id": "john-keats-to-autumn-en-ca9768b7",
-    "title": "To Autumn",
-    "author": "John Keats",
-    "content": "I\nSeason of mists and mellow fruitfulness,\n   Close bosom-friend of the maturing sun;\nConspiring with him how to load and bless\n   With fruit the vines that round the thatch-eves run;\nTo bend with apples the moss'd cottage-trees,\n   And fill all fruit with ripeness to the core;\n       To swell the gourd, and plump the hazel shells\n   With a sweet kernel; to set budding more,\nAnd still more, later flowers for the bees,\nUntil they think warm days will never cease,\n       For Summer has o'er-brimm'd their clammy cells.\n\nII\nWho hath not seen thee oft amid thy store?\n   Sometimes whoever seeks abroad may find\nThee sitting careless on a granary floor,\n   Thy hair soft-lifted by the winnowing wind;\nOr on a half-reap'd furrow sound asleep,\n   Drows'd with the fume of poppies, while thy hook\n       Spares the next swath and all its twined flowers:\nAnd sometimes like a gleaner thou dost keep\n   Steady thy laden head across a brook;\n   Or by a cyder-press, with patient look,\n       Thou watchest the last oozings hours by hours.\n\nIII\nWhere are the songs of Spring? Ay, where are they?\n   Think not of them, thou hast thy music too,--\nWhile barred clouds bloom the soft-dying day,\n   And touch the stubble-plains with rosy hue;\nThen in a wailful choir the small gnats mourn\n   Among the river sallows, borne aloft\n       Or sinking as the light wind lives or dies;\nAnd full-grown lambs loud bleat from hilly bourn;\n   Hedge-crickets sing; and now with treble soft\n   The red-breast whistles from a garden-croft;\n       And gathering swallows twitter in the skies.",
-    "language": "en",
-    "metadata": {
-      "tags": [
-        "nature",
-        "seasons",
-        "autumn",
-        "ripeness",
-        "harvest"
-      ],
-      "themes": [
-        "change",
-        "nature's cycle",
-        "maturity",
-        "time"
-      ],
-      "moods": [
-        "reflective",
-        "peaceful",
-        "melancholic"
-      ],
-      "form": "ode",
-      "era": "Romantic",
-      "length": "long"
     }
   },
   {
@@ -704,37 +644,6 @@
     }
   },
   {
-    "id": "lewis-carroll-jabberwocky-en-8c9b1b9d",
-    "title": "Jabberwocky",
-    "author": "Lewis Carroll",
-    "content": "'Twas brillig, and the slithy toves\n      Did gyre and gimble in the wabe:\nAll mimsy were the borogoves,\n      And the mome raths outgrabe.\n\n\"Beware the Jabberwock, my son!\n      The jaws that bite, the claws that catch!\nBeware the Jubjub bird, and shun\n      The frumious Bandersnatch!\"\n\nHe took his vorpal sword in hand;\n      Long time the manxome foe he sought—\nSo rested he by the Tumtum tree\n      And stood awhile in thought.\n\nAnd, as in uffish thought he stood,\n      The Jabberwock, with eyes of flame,\nCame whiffling through the tulgey wood,\n      And burbled as it came!\n\nOne, two! One, two! And through and through\n      The vorpal blade went snicker-snack!\nHe left it dead, and with its head\n      He went galumphing back.\n\n\"And hast thou slain the Jabberwock?\n      Come to my arms, my beamish boy!\nO frabjous day! Callooh! Callay!\"\n      He chortled in his joy.\n\n'Twas brillig, and the slithy toves\n      Did gyre and gimble in the wabe:\nAll mimsy were the borogoves,\n      And the mome raths outgrabe.",
-    "language": "en",
-    "metadata": {
-      "tags": [
-        "nonsense",
-        "fantasy",
-        "adventure",
-        "mythical creatures",
-        "imaginative"
-      ],
-      "themes": [
-        "heroism",
-        "danger",
-        "victory",
-        "imagination"
-      ],
-      "moods": [
-        "whimsical",
-        "playful",
-        "exciting",
-        "mysterious"
-      ],
-      "form": "nonsense verse",
-      "era": "19th century",
-      "length": "medium"
-    }
-  },
-  {
     "id": "william-wordsworth-my-heart-leaps-up-en-0fee033e",
     "title": "My Heart Leaps Up",
     "author": "William Wordsworth",
@@ -818,6 +727,716 @@
       "form": "lyric poem",
       "era": "Victorian",
       "length": "short"
+    }
+  },
+  {
+    "id": "william-shakespeare-blow-blow-thou-winter-wind-en-5449b467",
+    "title": "Blow, Blow, Thou Winter Wind",
+    "author": "William Shakespeare",
+    "content": "Blow, blow, thou winter wind\nThou art not so unkind\nAs man's ingratitude;\nThy tooth is not so keen,\nBecause thou art not seen,\nAlthough thy breath be rude.\n\nHeigh-ho! sing, heigh-ho! unto the green holly:\nMost freindship if feigning, most loving mere folly:\nThen heigh-ho, the holly!\nThis life is most jolly.\n\nFreeze, freeze thou bitter sky,\nThat does not bite so nigh\nAs benefits forgot:\nThough thou the waters warp,\nThy sting is not so sharp\nAs a friend remembered not.\nHeigh-ho! sing, heigh-ho! unto the green holly:\nMost freindship if feigning, most loving mere folly:\nThen heigh-ho, the holly!\nThis life is most jolly.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "winter",
+        "nature",
+        "friendship",
+        "ingratitude",
+        "holly"
+      ],
+      "themes": [
+        "ingratitude",
+        "friendship",
+        "nature",
+        "life"
+      ],
+      "moods": [
+        "melancholy",
+        "reflective",
+        "wistful"
+      ],
+      "form": "song",
+      "era": "Renaissance",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "william-shakespeare-spring-en-12d51b4c",
+    "title": "Spring",
+    "author": "William Shakespeare",
+    "content": "When daisies pied, and violets blue,\nAnd lady-smocks all silver-white,\nAnd cuckoo-buds of yellow hue\nDo paint the meadows with delight,\n\nThe cuckoo then, on every tree,\nMocks married men, for thus sings he:\n'Cuckoo!\nCuckoo, cuckoo!' O word of fear,\nUnpleasing to a married ear.\n\nWhen shepherds pipe on oaten straws,\nAnd merry larks are ploughmen's clocks,\nWhen turtles tread, and rooks, and daws,\nAnd maidens bleach their summer smocks,\n\nThe cuckoo then, on every tree,\nMocks married men, for thus sings he:\n'Cuckoo!\nCuckoo, cuckoo!' O word of fear,\nUnpleasing to a married ear.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "spring",
+        "birds",
+        "marriage"
+      ],
+      "themes": [
+        "seasonal change",
+        "nature's beauty",
+        "marriage"
+      ],
+      "moods": [
+        "joyful",
+        "playful",
+        "melancholy"
+      ],
+      "form": "lyric poem",
+      "era": "Elizabethan",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "emily-dickinson-summer-begins-to-have-the-look-en-0d8d9fc9",
+    "title": "Summer begins to have the look",
+    "author": "Emily Dickinson",
+    "content": "Summer begins to have the look\nPeruser of enchanting Book\nReluctantly but sure perceives\nA gain upon the backward leaves --\n\nAutumn begins to be inferred\nBy millinery of the cloud\nOr deeper color in the shawl\nThat wraps the everlasting hill.\n\nThe eye begins its avarice\nA meditation chastens speech\nSome Dyer of a distant tree\nResumes his gaudy industry.\n\nConclusion is the course of All\nAt most to be perennial\nAnd then elude stability\nRecalls to immortality.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "seasons",
+        "nature",
+        "change",
+        "time",
+        "reflection"
+      ],
+      "themes": [
+        "transience",
+        "nature's cycle",
+        "mortality",
+        "perception"
+      ],
+      "moods": [
+        "contemplative",
+        "serene",
+        "thoughtful"
+      ],
+      "form": "quatrain",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "emily-dickinson-than-heaven-more-remote-en-1522a346",
+    "title": "Than Heaven more remote,",
+    "author": "Emily Dickinson",
+    "content": "Than Heaven more remote,\nFor Heaven is the root,\nBut these the flitted seed.\nMore flown indeed\nThan ones that never were,\nOr those that hide, and are.\n\nWhat madness, by their side,\nA vision to provide\nOf future days\nThey cannot praise.\n\nMy soul, to find them, come,\nThey cannot call, they're dumb,\nNor prove, nor woo,\nBut that they have abode\nIs absolute as God,\nAnd instant, too.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "spirituality",
+        "existence",
+        "soul",
+        "vision"
+      ],
+      "themes": [
+        "transcendence",
+        "faith",
+        "mystery"
+      ],
+      "moods": [
+        "contemplative",
+        "mysterious"
+      ],
+      "form": "free verse",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "emily-dickinson-the-notice-that-is-called-the-spring-en-5621e84b",
+    "title": "The Notice that is called the Spring",
+    "author": "Emily Dickinson",
+    "content": "The Notice that is called the Spring\nIs but a month from here --\nPut up my Heart thy Hoary work\nAnd take a Rosy Chair.\n\nNot any House the Flowers keep --\nThe Birds enamor Care --\nOur salary the longest Day\nIs nothing but a Bier.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "spring",
+        "nature",
+        "time",
+        "life",
+        "death"
+      ],
+      "themes": [
+        "change",
+        "nature's cycles",
+        "mortality"
+      ],
+      "moods": [
+        "reflective",
+        "melancholy"
+      ],
+      "form": "quatrain",
+      "era": "19th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "william-wordsworth-lines-written-in-early-spring-en-d420abff",
+    "title": "Lines Written In Early Spring",
+    "author": "William Wordsworth",
+    "content": "I heard a thousand blended notes,\nWhile in a grove I sate reclined,\nIn that sweet mood when pleasant thoughts\nBring sad thoughts to the mind.\n\nTo her fair works did Nature link\nThe human soul that through me ran;\nAnd much it grieved my heart to think\nWhat man has made of man.\n\nThrough primrose tufts, in that green bower,\nThe periwinkle trailed its wreaths;\nAnd 'tis my faith that every flower\nEnjoys the air it breathes.\n\nThe birds around me hopped and played,\nTheir thoughts I cannot measure:--\nBut the least motion which they made\nIt seemed a thrill of pleasure.\n\nThe budding twigs spread out their fan,\nTo catch the breezy air;\nAnd I must think, do all I can,\nThat there was pleasure there.\n\nIf this belief from heaven be sent,\nIf such be Nature's holy plan,\nHave I not reason to lament\nWhat man has made of man?",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "reflection",
+        "melancholy",
+        "humanity",
+        "spring"
+      ],
+      "themes": [
+        "nature",
+        "human condition",
+        "loss of innocence"
+      ],
+      "moods": [
+        "thoughtful",
+        "melancholy",
+        "reflective"
+      ],
+      "form": "quatrain",
+      "era": "Romantic",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "william-blake-the-human-abstract-en-07dd7513",
+    "title": "The Human Abstract",
+    "author": "William Blake",
+    "content": "Pity would be no more\nIf we did not make somebody poor,\nAnd Mercy no more could be\nIf all were as happy as we.\n\nAnd mutual fear brings Peace,\nTill the selfish loves increase;\nThen Cruelty knits a snare,\nAnd spreads his baits with care.\n\nHe sits down with his holy fears,\nAnd waters the ground with tears;\nThen Humility takes its root\nUnderneath his foot.\n\nSoon spreads the dismal shade\nOf Mystery over his head,\nAnd the caterpillar and fly\nFeed on the Mystery.\n\nAnd it bears the fruit of Deceit,\nRuddy and sweet to eat,\nAnd the raven his nest has made\nIn its thickest shade.\n\nThe gods of the earth and sea\nSought through nature to find this tree,\nBut their search was all in vain:\nThere grows one in the human Brain.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "morality",
+        "human nature",
+        "society",
+        "philosophy"
+      ],
+      "themes": [
+        "hypocrisy",
+        "cruelty",
+        "innocence",
+        "deceit"
+      ],
+      "moods": [
+        "dark",
+        "reflective",
+        "somber"
+      ],
+      "form": "rhymed quatrains",
+      "era": "18th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "william-blake-songs-of-innocence-introduction-en-b7063e51",
+    "title": "Songs of Innocence: Introduction",
+    "author": "William Blake",
+    "content": "Piping down the valleys wild,\n  Piping songs of pleasant glee,\nOn a cloud I saw a child,\n  And he laughing said to me:\n\n\"Pipe a song about a Lamb!\"\n  So I piped with merry cheer.\n\"Piper, pipe that song again;\"\n  So I piped: he wept to hear.\n\n\"Drop thy pipe, thy happy pipe;\n  Sing thy songs of happy cheer!\"\nSo I sang the same again,\n  While he wept with joy to hear.\n\n\"Piper, sit thee down and write\n  In a book, that all may read.\"\nSo he vanish'd from my sight;\n  And I pluck'd a hollow reed,\n\nAnd I made a rural pen,\n  And I stain'd the water clear,\nAnd I wrote my happy songs\n  Every child may joy to hear.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "childhood",
+        "innocence",
+        "nature",
+        "music",
+        "joy"
+      ],
+      "themes": [
+        "innocence",
+        "creativity",
+        "childhood",
+        "happiness"
+      ],
+      "moods": [
+        "joyful",
+        "playful",
+        "whimsical"
+      ],
+      "form": "lyric poem",
+      "era": "18th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "william-shakespeare-spring-and-winter-i-en-bfbaed25",
+    "title": "Spring and Winter i",
+    "author": "William Shakespeare",
+    "content": "WHEN daisies pied and violets blue,\n   And lady-smocks all silver-white,\nAnd cuckoo-buds of yellow hue\n   Do paint the meadows with delight,\nThe cuckoo then, on every tree,\nMocks married men; for thus sings he,\n   Cuckoo!\nCuckoo, cuckoo!--O word of fear,\nUnpleasing to a married ear!\n\nWhen shepherds pipe on oaten straws,\n   And merry larks are ploughmen's clocks,\nWhen turtles tread, and rooks, and daws,\n   And maidens bleach their summer smocks\nThe cuckoo then, on every tree,\nMocks married men; for thus sings he,\n   Cuckoo!\nCuckoo, cuckoo!--O word of fear,\nUnpleasing to a married ear!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "spring",
+        "marriage",
+        "birds"
+      ],
+      "themes": [
+        "nature's cycles",
+        "marriage and fidelity",
+        "seasonal change"
+      ],
+      "moods": [
+        "playful",
+        "melancholy"
+      ],
+      "form": "lyric poem",
+      "era": "Renaissance",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "walt-whitman-primeval-my-love-for-the-woman-i-love-en-73bda037",
+    "title": "Primeval my Love for the Woman I Love.",
+    "author": "Walt Whitman",
+    "content": "PRIMEVAL my love for the woman I love,\nO bride! O wife! more resistless, more enduring than I can tell, the thought of you!\n\nThen separate, as disembodied, the purest born,\nThe ethereal, the last athletic reality, my consolation,\nI ascend—I float in the regions of your love, O man,\nO sharer of my roving life.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "love",
+        "devotion",
+        "spirituality"
+      ],
+      "themes": [
+        "love",
+        "union",
+        "transcendence"
+      ],
+      "moods": [
+        "passionate",
+        "reflective"
+      ],
+      "form": "free verse",
+      "era": "19th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "walt-whitman-or-from-that-sea-of-time-en-84f65ba3",
+    "title": "Or from that Sea of Time.",
+    "author": "Walt Whitman",
+    "content": "1\nOR, from that Sea of Time,\nSpray, blown by the wind—a double winrow-drift of weeds and shells;\n(O little shells, so curious-convolute! so limpid-cold and voiceless!\nYet will you not, to the tympans of temples held,\nMurmurs and echoes still bring up—Eternity’s music, faint and far,\nWafted inland, sent from Atlantica’s rim—strains for the Soul of the Prairies,\nWhisper’d reverberations—chords for the ear of the West, joyously sounding\nYour tidings old, yet ever new and untranslatable;)\nInfinitessimals out of my life, and many a life,\n(For not my life and years alone I give—all, all I give;)\nThese thoughts and Songs—waifs from the deep—here, cast high and dry,\nWash’d on America’s shores.\n\n2\nCurrents of starting a Continent new,\nOvertures sent to the solid out of the liquid,\nFusion of ocean and land—tender and pensive waves,\n(Not safe and peaceful only—waves rous’d and ominous too.\nOut of the depths, the storm’s abysms—Who knows whence? Death’s waves,\nRaging over the vast, with many a broken spar and tatter’d sail.)",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "time",
+        "sea",
+        "America",
+        "waves"
+      ],
+      "themes": [
+        "eternity",
+        "life",
+        "nature",
+        "continent",
+        "music"
+      ],
+      "moods": [
+        "reflective",
+        "mysterious",
+        "contemplative"
+      ],
+      "form": "free verse",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "edgar-allan-poe-a-valentine-en-ac54e302",
+    "title": "A Valentine",
+    "author": "Edgar Allan Poe",
+    "content": "For her this rhyme is penned, whose luminous eyes,\n  Brightly expressive as the twins of Leda,\nShall find her own sweet name, that, nestling lies\n  Upon the page, enwrapped from every reader.\n\nSearch narrowly the lines!--they hold a treasure\n  Divine--a talisman--an amulet\nThat must be worn _at heart_. Search well the measure--\n  The words--the syllables! Do not forget\nThe trivialest point, or you may lose your labor!\n  And yet there is in this no Gordian knot\nWhich one might not undo without a sabre,\n  If one could merely comprehend the plot.\n\nEnwritten upon the leaf where now are peering\n  Eyes scintillating soul, there lie _perdus_\nThree eloquent words oft uttered in the hearing\n  Of poets by poets--as the name is a poet's, too.\nIts letters, although naturally lying\n  Like the knight Pinto--Mendez Ferdinando--\nStill form a synonym for Truth--Cease trying!\n  You will not read the riddle, though you do the best you _can_ do.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "riddle",
+        "love",
+        "valentine",
+        "poetry",
+        "mystery"
+      ],
+      "themes": [
+        "love",
+        "identity",
+        "secrecy"
+      ],
+      "moods": [
+        "enigmatic",
+        "romantic",
+        "intriguing"
+      ],
+      "form": "sonnet",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "john-keats-a-thing-of-beauty-endymion-en-5afb7e0a-1",
+    "title": "A Thing of Beauty (Endymion)",
+    "author": "John Keats",
+    "content": "A thing of beauty is a joy for ever:\nIts lovliness increases; it will never\nPass into nothingness; but still will keep\nA bower quiet for us, and a sleep\nFull of sweet dreams, and health, and quiet breathing.\nTherefore, on every morrow, are we wreathing\nA flowery band to bind us to the earth,\nSpite of despondence, of the inhuman dearth\nOf noble natures, of the gloomy days,\nOf all the unhealthy and o'er-darkn'd ways\nMade for our searching: yes, in spite of all,\nSome shape of beauty moves away the pall\nFrom our dark spirits. Such the sun, the moon,\nTrees old and young, sprouting a shady boon\nFor simple sheep; and such are daffodils\nWith the green world they live in; and clear rills\nThat for themselves a cooling covert make\n'Gainst the hot season; the mid-forest brake,\nRich with a sprinkling of fair musk-rose blooms:\nAnd such too is the grandeur of the dooms\nWe have imagined for the mighty dead;\nAn endless fountain of immortal drink,\nPouring unto us from the heaven's brink.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "beauty",
+        "inspiration",
+        "hope",
+        "life"
+      ],
+      "themes": [
+        "beauty",
+        "nature",
+        "immortality",
+        "hope"
+      ],
+      "moods": [
+        "uplifting",
+        "reflective",
+        "serene"
+      ],
+      "era": "19th century",
+      "length": "long"
+    }
+  },
+  {
+    "id": "john-keats-happy-is-england-i-could-be-content-en-ecb4a4ad",
+    "title": "Happy Is England! I Could Be Content",
+    "author": "John Keats",
+    "content": "Happy is England! I could be content\nTo see no other verdure than its own;\nTo feel no other breezes than are blown\nThrough its tall woods with high romances blent;\nYet do I sometimes feel a languishment\nFor skies Italian, and an inward groan\nTo sit upon an Alp as on a throne,\nAnd half forget what world or worldling meant.\n\nHappy is England, sweet her artless daughters;\nEnough their simple loveliness for me,\nEnough their whitest arms in silence clinging;\nYet do I often warmly burn to see\nBeauties of deeper glance, and hear their singing,\nAnd float with them about the summer waters.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "England",
+        "nature",
+        "nostalgia",
+        "beauty",
+        "romanticism"
+      ],
+      "themes": [
+        "homesickness",
+        "nature appreciation",
+        "cultural contrast"
+      ],
+      "moods": [
+        "wistful",
+        "reflective",
+        "melancholic"
+      ],
+      "form": "sonnet",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "john-keats-to-homer-en-87a8124a",
+    "title": "To Homer",
+    "author": "John Keats",
+    "content": "Standing aloof in giant ignorance,\n    Of thee I hear and of the Cyclades,\nAs one who sits ashore and longs perchance\n    To visit dolphin-coral in deep seas.\nSo thou wast blind;--but then the veil was rent,\n    For Jove uncurtain'd Heaven to let thee live,\nAnd Neptune made for thee a spumy tent,\n    And Pan made sing for thee his forest-hive;\nAye on the shores of darkness there is light,\n    And precipices show untrodden green,\nThere is a budding morrow in midnight,\n    There is a triple sight in blindness keen;\nSuch seeing hadst thou, as it once befel\nTo Dian, Queen of Earth, and Heaven, and Hell.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "mythology",
+        "blindness",
+        "nature",
+        "vision"
+      ],
+      "themes": [
+        "perception",
+        "divine inspiration",
+        "nature"
+      ],
+      "moods": [
+        "reflective",
+        "admiring"
+      ],
+      "form": "sonnet",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "percy-bysshe-shelley-fragment-a-serpent-face-en-439c01d5",
+    "title": "Fragment: A Serpent-Face",
+    "author": "Percy Bysshe Shelley",
+    "content": "His face was like a snake's--wrinkled and loose\nAnd withered--",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "appearance",
+        "decay"
+      ],
+      "themes": [
+        "mortality",
+        "transformation"
+      ],
+      "moods": [
+        "melancholy",
+        "reflective"
+      ],
+      "era": "19th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "percy-bysshe-shelley-fragment-when-soft-winds-and-sunny-skies-en-6c6bea6c",
+    "title": "Fragment: 'When Soft Winds and Sunny Skies'",
+    "author": "Percy Bysshe Shelley",
+    "content": "When soft winds and sunny skies\nWith the green earth harmonize,\nAnd the young and dewy dawn,\nBold as an unhunted fawn,\nUp the windless heaven is gone,--\nLaugh--for ambushed in the day,--\nClouds and whirlwinds watch their prey.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "wind",
+        "dawn",
+        "weather"
+      ],
+      "themes": [
+        "nature's harmony",
+        "vulnerability",
+        "contrast"
+      ],
+      "moods": [
+        "peaceful",
+        "tense"
+      ],
+      "form": "fragment",
+      "era": "19th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "william-blake-the-echoing-green-en-caf08a0b",
+    "title": "The Echoing Green",
+    "author": "William Blake",
+    "content": "The sun does arise,\nAnd make happy the skies;\nThe merry bells ring\nTo welcome the Spring;\nThe skylark and thrush,\nThe birds of the bush,\nSing louder around\nTo the bells' cheerful sound;\nWhile our sports shall be seen\nOn the echoing Green.\n\nOld John, with white hair,\nDoes laugh away care,\nSitting under the oak,\nAmong the old folk.\nThey laugh at our play,\nAnd soon they all say,\n\"Such, such were the joys\nWhen we all--girls and boys--\nIn our youth-time were seen\nOn the echoing Green.\"\n\nTill the little ones, weary,\nNo more can be merry:\nThe sun does descend,\nAnd our sports have an end.\nRound the laps of their mothers\nMany sisters and brothers,\nLike birds in their nest,\nAre ready for rest,\nAnd sport no more seen\nOn the darkening green.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "nature",
+        "childhood",
+        "community",
+        "seasons",
+        "joy"
+      ],
+      "themes": [
+        "innocence",
+        "passing of time",
+        "nature's cycle"
+      ],
+      "moods": [
+        "joyful",
+        "nostalgic",
+        "peaceful"
+      ],
+      "form": "lyric poem",
+      "era": "18th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "robert-burns-292-song-farewell-to-the-highlands-en-68dee6e5",
+    "title": "292. Song—Farewell to the Highlands",
+    "author": "Robert Burns",
+    "content": "FAREWELL to the Highlands, farewell to the North,\nThe birth-place of Valour, the country of Worth;\nWherever I wander, wherever I rove,\nThe hills of the Highlands for ever I love.\n\n\nChorus.—My heart’s in the Highlands, my heart is not here,\nMy heart’s in the Highlands, a-chasing the deer;\nChasing the wild-deer, and following the roe,\nMy heart’s in the Highlands, wherever I go.\n\n\nFarewell to the mountains, high-cover’d with snow,\nFarewell to the straths and green vallies below;\nFarewell to the forests and wild-hanging woods,\nFarewell to the torrents and loud-pouring floods.\n    My heart’s in the Highlands, &c.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "highlands",
+        "farewell",
+        "nature",
+        "nostalgia",
+        "scotland"
+      ],
+      "themes": [
+        "home",
+        "nature",
+        "longing"
+      ],
+      "moods": [
+        "melancholy",
+        "nostalgic",
+        "reflective"
+      ],
+      "form": "song",
+      "era": "18th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "robert-burns-38-epitaph-on-my-ever-honoured-father-en-c5ce5806",
+    "title": "38. Epitaph on my Ever Honoured Father",
+    "author": "Robert Burns",
+    "content": "O YE whose cheek the tear of pity stains,\n  Draw near with pious rev’rence, and attend!\nHere lie the loving husband’s dear remains,\n  The tender father, and the gen’rous friend;\nThe pitying heart that felt for human woe,\n  The dauntless heart that fear’d no human pride;\nThe friend of man-to vice alone a foe;\n  For “ev’n his failings lean’d to virtue’s side.” 1",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "epitaph",
+        "father",
+        "pity",
+        "virtue",
+        "friendship"
+      ],
+      "themes": [
+        "mourning",
+        "love",
+        "virtue",
+        "humanity"
+      ],
+      "moods": [
+        "solemn",
+        "reverent",
+        "reflective"
+      ],
+      "form": "epitaph",
+      "era": "18th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "elizabeth-barrett-browning-sonnet-32-the-first-time-that-the-sun-rose-on-thine-oath-en-423dffb3",
+    "title": "Sonnet 32 - The first time that the sun rose on thine oath",
+    "author": "Elizabeth Barrett Browning",
+    "content": "The first time that the sun rose on thine oath\nTo love me, I looked forward to the moon\nTo slacken all those bonds which seemed too soon\nAnd quickly tied to make a lasting troth.\n\nQuick-loving hearts, I thought, may quickly loathe;\nAnd, looking on myself, I seemed not one\nFor such man's love!—more like an out-of-tune\nWorn viol, a good singer would be wroth\nTo spoil his song with, and which, snatched in haste,\nIs laid down at the first ill-sounding note.\n\nI did not wrong myself so, but I placed\nA wrong on thee. For perfect strains may float\n'Neath master-hands, from instruments defaced,—\nAnd great souls, at one stroke, may do and doat.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "love",
+        "self-reflection",
+        "doubt",
+        "music",
+        "commitment"
+      ],
+      "themes": [
+        "love and doubt",
+        "self-worth",
+        "music as metaphor"
+      ],
+      "moods": [
+        "thoughtful",
+        "melancholic",
+        "hopeful"
+      ],
+      "form": "sonnet",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "elizabeth-barrett-browning-sonnet-34-with-the-same-heart-i-said-i-ll-answer-thee-en-435b58b7",
+    "title": "Sonnet 34 - With the same heart, I said, I'll answer thee",
+    "author": "Elizabeth Barrett Browning",
+    "content": "With the same heart, I said, I'll answer thee\nAs those, when thou shalt call me by my name—\nLo, the vain promise! is the same, the same,\nPerplexed and ruffled by life's strategy?\nWhen called before, I told how hastily\nI dropped my flowers or brake off from a game,\nTo run and answer with the smile that came\nAt play last moment, and went on with me\nThrough my obedience. When I answer now,\nI drop a grave thought, break from solitude;\nYet still my heart goes to thee—ponder how—\nNot as to a single good, but all my good!\nLay thy hand on it, best one, and allow\nThat no child's foot could run fast as this blood.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "love",
+        "promise",
+        "obedience",
+        "heart",
+        "emotion"
+      ],
+      "themes": [
+        "love and devotion",
+        "commitment",
+        "inner conflict"
+      ],
+      "moods": [
+        "reflective",
+        "solemn",
+        "devoted"
+      ],
+      "form": "sonnet",
+      "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "robert-burns-38-epitaph-on-my-ever-honoured-father-en-0bb8d621",
+    "title": "38. Epitaph on my Ever Honoured Father",
+    "author": "Robert Burns",
+    "content": "O YE whose cheek the tear of pity stains,\n  Draw near with pious rev’rence, and attend!\nHere lie the loving husband’s dear remains,\n  The tender father, and the gen’rous friend;\nThe pitying heart that felt for human woe,\n  The dauntless heart that fear’d no human pride;\nThe friend of man-to vice alone a foe;\n  For “ev’n his failings lean’d to virtue’s side.”",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "epitaph",
+        "father",
+        "pity",
+        "virtue",
+        "friendship"
+      ],
+      "themes": [
+        "mourning",
+        "virtue",
+        "humanity"
+      ],
+      "moods": [
+        "solemn",
+        "reverent",
+        "reflective"
+      ],
+      "form": "epitaph",
+      "era": "18th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "walt-whitman-primeval-my-love-for-the-woman-i-love-en-73bda037-1",
+    "title": "Primeval my Love for the Woman I Love.",
+    "author": "Walt Whitman",
+    "content": "PRIMEVAL my love for the woman I love,\nO bride! O wife! more resistless, more enduring than I can tell, the thought of you!\nThen separate, as disembodied, the purest born,\nThe ethereal, the last athletic reality, my consolation,\nI ascend—I float in the regions of your love, O man,\nO sharer of my roving life.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "love",
+        "devotion",
+        "spirituality"
+      ],
+      "themes": [
+        "love",
+        "union",
+        "transcendence"
+      ],
+      "moods": [
+        "passionate",
+        "reflective"
+      ],
+      "form": "free verse",
+      "era": "19th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "edgar-allan-poe-a-valentine-en-ac54e302-1",
+    "title": "A Valentine",
+    "author": "Edgar Allan Poe",
+    "content": "For her this rhyme is penned, whose luminous eyes,\n  Brightly expressive as the twins of Leda,\nShall find her own sweet name, that, nestling lies\n  Upon the page, enwrapped from every reader.\n\nSearch narrowly the lines!--they hold a treasure\n  Divine--a talisman--an amulet\nThat must be worn _at heart_. Search well the measure--\n  The words--the syllables! Do not forget\nThe trivialest point, or you may lose your labor!\n  And yet there is in this no Gordian knot\nWhich one might not undo without a sabre,\n  If one could merely comprehend the plot.\n\nEnwritten upon the leaf where now are peering\n  Eyes scintillating soul, there lie _perdus_\nThree eloquent words oft uttered in the hearing\n  Of poets by poets--as the name is a poet's, too.\n\nIts letters, although naturally lying\n  Like the knight Pinto--Mendez Ferdinando--\nStill form a synonym for Truth--Cease trying!\n  You will not read the riddle, though you do the best you _can_ do.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "riddle",
+        "love",
+        "valentine",
+        "poetry",
+        "mystery"
+      ],
+      "themes": [
+        "love",
+        "identity",
+        "secrecy"
+      ],
+      "moods": [
+        "enigmatic",
+        "romantic",
+        "intriguing"
+      ],
+      "form": "riddle poem",
+      "era": "19th century",
+      "length": "medium"
     }
   }
 ]

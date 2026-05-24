@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import fs from 'fs';
 import { spawn } from 'child_process';
 import path from 'path';
 
@@ -44,7 +45,39 @@ const FAMOUS_AUTHORS = [
   'Rainer Maria Rilke',
   'Robert Burns',
   'Elizabeth Barrett Browning',
+  'Alfred Lord Tennyson',
+  'Christina Rossetti',
+  'Gerard Manley Hopkins',
+  'Rudyard Kipling',
+  'Carl Sandburg',
+  'Sara Teasdale',
+  'Dylan Thomas',
+  'Allen Ginsberg',
+  'Seamus Heaney',
+  'Ted Hughes',
+  'Wallace Stevens',
+  'Ezra Pound',
+  'Gwendolyn Brooks',
+  'James Joyce',
+  'Thomas Hardy',
+  'George Herbert',
+  'John Donne',
+  'A. E. Housman',
+  'Amy Lowell',
+  'Christina Georgina Rossetti',
+  'Philip Larkin',
+  'Elizabeth Bishop',
+  'John Clare',
+  'Henry Wadsworth Longfellow',
+  'Paul Laurence Dunbar',
+  'Alice Dunbar-Nelson',
+  'Claude McKay',
+  'Anne Bradstreet',
+  'Countee Cullen',
+  'Louise Bogan',
 ];
+
+const CACHE_PATH = path.resolve(__dirname, '.poetrydb-cache.json');
 
 function parseArgs(): CLIOptions {
   const args = process.argv.slice(2);
@@ -107,6 +140,31 @@ function parseArgs(): CLIOptions {
   }
 
   return options;
+}
+
+function loadCache(filePath: string): Set<string> {
+  if (!fs.existsSync(filePath)) {
+    return new Set();
+  }
+  try {
+    const raw = fs.readFileSync(filePath, 'utf8');
+    const data = JSON.parse(raw);
+    if (Array.isArray(data)) {
+      return new Set(data.map((entry) => String(entry)));
+    }
+    console.warn('Cache file is not an array. Ignoring and starting fresh.');
+  } catch (error) {
+    console.warn('Failed to read poetry cache. Starting fresh.', error instanceof Error ? error.message : error);
+  }
+  return new Set();
+}
+
+function saveCache(filePath: string, cache: Set<string>): void {
+  try {
+    fs.writeFileSync(filePath, `${JSON.stringify(Array.from(cache.values()), null, 2)}\n`, 'utf8');
+  } catch (error) {
+    console.warn('Failed to persist poetry cache.', error instanceof Error ? error.message : error);
+  }
 }
 
 function selectPreferredPoems(poems: PoetryDBPoem[], limit: number): PoetryDBPoem[] {
@@ -262,6 +320,7 @@ function sleep(ms: number): Promise<void> {
 async function main() {
   try {
     const options = parseArgs();
+    const cache = loadCache(CACHE_PATH);
 
     console.log(`\n📚 PoetryDB Ingestion Script`);
     console.log(`Target: ${options.targetCount} poems`);
@@ -269,6 +328,9 @@ async function main() {
     console.log(`Provider: ${options.provider}${options.model ? ` (${options.model})` : ''}`);
     console.log(`Batch size: ${options.batchSize}`);
     console.log(`Delay: ${options.delay}ms\n`);
+    if (cache.size > 0) {
+      console.log(`Using cache with ${cache.size} poem signatures to avoid reprocessing.\n`);
+    }
 
     let allPoems: PoetryDBPoem[] = [];
 
@@ -350,17 +412,26 @@ async function main() {
 
     // Deduplicate by title + author
     const seen = new Set<string>();
+    let cacheHitCount = 0;
     const uniquePoems = allPoems.filter((poem) => {
       const key = `${poem.title}|||${poem.author}`.toLowerCase();
       if (seen.has(key)) return false;
+      if (cache.has(key)) {
+        cacheHitCount += 1;
+        return false;
+      }
       seen.add(key);
       return true;
     });
 
-    console.log(`\n✓ Fetched ${allPoems.length} poems (${uniquePoems.length} unique)\n`);
+    console.log(`\n✓ Fetched ${allPoems.length} poems (${uniquePoems.length} unique, ${cacheHitCount} cached skips)\n`);
 
     // Limit to target count
     const poemsToProcess = uniquePoems.slice(0, options.targetCount);
+
+    if (poemsToProcess.length < options.targetCount) {
+      console.log(`⚠️  Only ${poemsToProcess.length} new poems available after filtering (target ${options.targetCount}).`);
+    }
 
     console.log(`📝 Processing ${poemsToProcess.length} poems through formatter...\n`);
 
@@ -371,6 +442,7 @@ async function main() {
     for (let i = 0; i < poemsToProcess.length; i++) {
       const poem = poemsToProcess[i];
       const num = `[${i + 1}/${poemsToProcess.length}]`;
+      const cacheKey = `${poem.title}|||${poem.author}`.toLowerCase();
 
       process.stdout.write(`${num} "${poem.title}" by ${poem.author}... `);
 
@@ -388,6 +460,8 @@ async function main() {
         errorCount++;
       }
 
+      cache.add(cacheKey);
+
       // Add delay between formatting calls to avoid rate limits
       if (i < poemsToProcess.length - 1) {
         await sleep(options.delay);
@@ -398,6 +472,8 @@ async function main() {
     console.log(`✅ Added: ${successCount}`);
     console.log(`⚠️  Skipped (duplicates): ${skipCount}`);
     console.log(`❌ Errors: ${errorCount}`);
+    saveCache(CACHE_PATH, cache);
+    console.log(`🗃️  Cache now tracks ${cache.size} poem signatures.`);
   } catch (error) {
     console.error('Fatal error:', error);
     process.exit(1);

@@ -50,6 +50,16 @@ Flags:
 - `--submit` – run `eas submit --latest` after a successful build.
 - `--dry-run` – log commands without executing.
 
+## Poems Data Workflow
+
+The shipped catalogue flows through three steps:
+
+1. **Curate `poems.json`** – append new poems manually or via `bun scripts/format_poem.ts --input <file> [--title ... --author ...]`. Each poem carries a stable `id` (slug + hash) so favourites and sync remain consistent; the formatter generates it automatically. Entries can also ship with optional `metadata` (`tags`, `themes`, `moods`, `form`, `era`, `length`) which the formatter now back-fills for you.
+2. **Rebuild the bundled SQLite asset** – run `bun run generate` (alias for `scripts/generate_poems_db.js`). This validates the JSON, normalises whitespace, and outputs `assets/poems.db`.
+3. **Ship and copy on device** – `initializeDatabase()` (called from `usePoemFeed`) copies `assets/poems.db` into Expo’s Documents directory the first time the app launches. Subsequent launches reuse the on-device copy unless `DB_VERSION` in `lib/storage/database.ts` is bumped.
+
+If the on-device database is ever empty, `seedPoems()` backfills a small `STARTER_POEMS` set, so exports remain resilient even when a copy is interrupted.
+
 ## Testing & Verification
 
 1. **Regenerate the bundled catalog (optional but recommended)**

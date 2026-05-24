@@ -16,9 +16,19 @@ The long-term shape is:
 - User-saved poems that survive app restarts and eventually sync across devices.
 - User uploads and scanner imports that become first-class poems in the user's library.
 - Supabase for auth, cloud sync, entitlements, and remote catalogue/user data.
+- Nexus for trusted backend work, LLM scanning/proxying, observability, support, and privileged database operations.
 - SQLite as the local source of truth for reader performance and offline availability.
 
 Do not treat Supabase as a replacement for local storage. Remote systems should sync into local storage; the reading experience should primarily consume local data.
+
+## Backend Boundaries
+
+Poems uses two backend paths:
+
+- The mobile app may call Supabase directly for client-safe work: auth, public catalogue reads, user saved poems, user-created poems, and sync under Row Level Security.
+- Nexus lives at `/Users/raza/Projects/nexus` and is the backend for trusted work: LLM scanning, service-role Supabase writes, catalogue/admin updates, Eyeball observability, Hotline support, and other backend-only workflows.
+
+Do not put Supabase service-role credentials in this repo. Client-safe Supabase config is acceptable here when needed. For backend schema changes, privileged database updates, LLM/scanner endpoints, or observability integration, work in Nexus.
 
 ## Architecture Map
 
@@ -74,7 +84,7 @@ Before adding major save/upload/sync features, harden the SQLite migration path 
 - Keep `poems.json` as the source for bundled poems and regenerate `assets/poems.db` after catalogue changes.
 - Treat `assets/poems.db` as generated output.
 - Keep new durable architecture notes here high level. Do not use this file as a progress log.
-- Prefer small, typed modules for future Supabase, scanner, entitlement, and sync clients.
+- Prefer small, typed modules for Supabase, Nexus, scanner, entitlement, and sync clients.
 - Avoid coupling network fetches directly to the reader UI. Sync remote data into local storage, then render from local repositories.
 
 ## Current Technical Baseline
@@ -86,4 +96,3 @@ bunx expo install --check
 bunx expo-doctor
 bunx tsc --noEmit
 ```
-

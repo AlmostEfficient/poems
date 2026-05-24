@@ -6,17 +6,8 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "statusBarHidden": true,
-    "statusBarStyle": "default",
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true,
-      "statusBarHidden": true,
       "bundleIdentifier": "com.raza.poems",
       "buildNumber": "1",
       "infoPlist": {
@@ -27,10 +18,6 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true,
-      "statusBar": {
-        "hidden": true
       }
     },
     "web": {
@@ -38,7 +25,23 @@
     },
     "plugins": [
       "expo-font",
-      "expo-sqlite"
+      "expo-sqlite",
+      [
+        "expo-status-bar",
+        {
+          "style": "default",
+          "hidden": true
+        }
+      ],
+      "expo-asset",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
     ],
     "extra": {
       "eas": {

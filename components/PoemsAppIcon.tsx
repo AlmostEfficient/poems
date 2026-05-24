@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   canvas: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
   },
   textContainer: {
     position: 'absolute',

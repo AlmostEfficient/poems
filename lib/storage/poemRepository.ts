@@ -95,6 +95,97 @@ function mapRowToPoem(row: any, defaultSource: Poem['source'] = 'local'): Poem {
   };
 }
 
+function getTimestamp(): string {
+  return new Date().toISOString();
+}
+
+export type SavedPoemScope = 'catalogue' | 'user';
+export type SavedPoemSyncStatus = 'dirty' | 'synced' | 'error';
+export type UserPoemSyncStatus = 'dirty' | 'synced' | 'error';
+
+export interface SavedPoemSyncRow {
+  poemId: string;
+  poemScope: SavedPoemScope;
+  savedAt: string;
+  updatedAt: string;
+  syncStatus: SavedPoemSyncStatus;
+  remoteId: string | null;
+  deletedAt: string | null;
+}
+
+export interface RemoteSavedPoemRow {
+  poemId: string;
+  poemScope?: SavedPoemScope;
+  savedAt: string;
+  updatedAt: string;
+  remoteId: string;
+  deletedAt?: string | null;
+}
+
+export interface UserPoemSyncRow {
+  poemId: string;
+  title: string;
+  author: string;
+  content: string;
+  language: 'en' | 'ur';
+  metadata: PoemMetadata | null;
+  createdAt: string;
+  updatedAt: string;
+  syncStatus: UserPoemSyncStatus;
+  remoteId: string | null;
+  deletedAt: string | null;
+}
+
+export interface RemoteUserPoemRow {
+  poemId: string;
+  title: string;
+  author: string;
+  content: string;
+  language: 'en' | 'ur';
+  metadata?: PoemMetadata | null;
+  createdAt: string;
+  updatedAt: string;
+  remoteId: string;
+  deletedAt?: string | null;
+}
+
+function mapRowToSavedPoemSyncRow(row: any): SavedPoemSyncRow {
+  return {
+    poemId: row.poem_id,
+    poemScope: (row.poem_scope ?? 'catalogue') as SavedPoemScope,
+    savedAt: row.saved_at,
+    updatedAt: row.updated_at,
+    syncStatus: row.sync_status as SavedPoemSyncStatus,
+    remoteId: row.remote_id ?? null,
+    deletedAt: row.deleted_at ?? null,
+  };
+}
+
+function mapRowToUserPoemSyncRow(row: any): UserPoemSyncRow {
+  const timestamp = row.updated_at ?? row.created_at ?? getTimestamp();
+  return {
+    poemId: row.poem_id,
+    title: row.title,
+    author: row.author,
+    content: row.content,
+    language: row.language ?? 'en',
+    metadata: normalizeMetadata(row.metadata),
+    createdAt: row.created_at ?? timestamp,
+    updatedAt: row.updated_at ?? timestamp,
+    syncStatus: row.sync_status as UserPoemSyncStatus,
+    remoteId: row.remote_id ?? null,
+    deletedAt: row.deleted_at ?? null,
+  };
+}
+
+function metadataKeyForSavedPoemsCheckpoint(userId: string): string {
+  return `saved_poems_sync_checkpoint:${userId}`;
+}
+
+function metadataKeyForUserPoemsCheckpoint(userId: string): string {
+  return `user_poems_sync_checkpoint:${userId}`;
+}
+
 export function getAllPoems(options?: { language?: 'en' | 'ur' }): Poem[] {
   const db = getDatabase();
   const language = options?.language;
@@ -137,14 +228,14 @@ export function getRandomPoems(options?: { limit?: number; language?: 'en' | 'ur
 
   if (language) {
     const rows = db.getAllSync(
-      'SELECT poem_id, title, author, content, language, source, metadata FROM poems WHERE language = ? ORDER BY RANDOM() LIMIT ?;',
+      "SELECT poem_id, title, author, content, language, source, metadata FROM poems WHERE source != 'user' AND language = ? ORDER BY RANDOM() LIMIT ?;",
       [language, limit]
     );
     return rows.map((row) => mapRowToPoem(row));
   }
 
   const rows = db.getAllSync(
-    'SELECT poem_id, title, author, content, language, source, metadata FROM poems ORDER BY RANDOM() LIMIT ?;',
+    "SELECT poem_id, title, author, content, language, source, metadata FROM poems WHERE source != 'user' ORDER BY RANDOM() LIMIT ?;",
     [limit]
   );
   return rows.map((row) => mapRowToPoem(row));
@@ -208,9 +299,18 @@ export interface CreatePoemInput {
   metadata?: PoemMetadata | null;
 }
 
+export interface CreateLocalUserPoemInput {
+  title?: string;
+  author?: string;
+  content: string;
+  language?: 'en' | 'ur';
+}
+
 export function insertPoem(input: CreatePoemInput): number {
   const db = getDatabase();
   const language = input.language ?? 'en';
+  const source = input.source ?? 'user';
+  const timestamp = source === 'user' ? getTimestamp() : null;
   const baseId = input.id ?? createPoemId({
     title: input.title,
     author: input.author,
@@ -233,12 +333,261 @@ export function insertPoem(input: CreatePoemInput): number {
   });
 
   db.runSync(
-    'INSERT INTO poems (poem_id, title, author, content, language, source, metadata) VALUES (?, ?, ?, ?, ?, ?, ?);',
-    [poemId, input.title, input.author, input.content, language, input.source ?? 'user', serializeMetadata(input.metadata)]
+    `INSERT INTO poems
+       (poem_id, title, author, content, language, source, metadata, created_at, updated_at, sync_status)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+    [
+      poemId,
+      input.title,
+      input.author,
+      input.content,
+      language,
+      source,
+      serializeMetadata(input.metadata),
+      timestamp,
+      timestamp,
+      source === 'user' ? 'dirty' : 'synced',
+    ]
   );
 
   const row = db.getFirstSync('SELECT last_insert_rowid() as id;') as { id: number };
   return row.id;
+}
+
+function getPoemByLocalRowId(id: number): Poem | null {
+  const db = getDatabase();
+  const row = db.getFirstSync(
+    'SELECT poem_id, title, author, content, language, source, metadata FROM poems WHERE id = ? LIMIT 1;',
+    [id]
+  );
+
+  return row ? mapRowToPoem(row) : null;
+}
+
+export function createLocalUserPoem(input: CreateLocalUserPoemInput): Poem {
+  const title = input.title?.trim() || 'Untitled';
+  const author = input.author?.trim() || 'Anonymous';
+  const content = input.content.trim();
+  const language = input.language ?? 'en';
+
+  if (!content) {
+    throw new Error('Poem content is required.');
+  }
+
+  const id = `user-${createPoemId({ title, author, content, language })}`;
+  const rowId = insertPoem({
+    id,
+    title,
+    author,
+    content,
+    language,
+    source: 'user',
+  });
+  const poem = getPoemByLocalRowId(rowId);
+
+  if (!poem) {
+    throw new Error('Created poem could not be loaded.');
+  }
+
+  return poem;
+}
+
+export function getLocalUserPoems(options?: { limit?: number; offset?: number }): Poem[] {
+  const db = getDatabase();
+  const limit = options?.limit ?? 100;
+  const offset = options?.offset ?? 0;
+  const rows = db.getAllSync(
+    `SELECT poem_id, title, author, content, language, source, metadata
+     FROM poems
+     WHERE source = 'user' AND deleted_at IS NULL
+     ORDER BY COALESCE(updated_at, created_at) DESC, id DESC
+     LIMIT ? OFFSET ?;`,
+    [limit, offset]
+  );
+
+  return rows.map((row) => mapRowToPoem(row));
+}
+
+export function listDirtyUserPoems(): UserPoemSyncRow[] {
+  const db = getDatabase();
+  const rows = db.getAllSync(
+    `SELECT poem_id, title, author, content, language, metadata, created_at, updated_at, sync_status, remote_id, deleted_at
+     FROM poems
+     WHERE source = 'user' AND sync_status IN ('dirty', 'error')
+     ORDER BY COALESCE(updated_at, created_at) ASC;`
+  );
+  return rows.map((row) => mapRowToUserPoemSyncRow(row));
+}
+
+export function markUserPoemSynced(input: {
+  poemId: string;
+  remoteId: string;
+  createdAt?: string;
+  updatedAt: string;
+  deletedAt?: string | null;
+  expectedLocalUpdatedAt?: string;
+}): boolean {
+  const db = getDatabase();
+  const updatedAtGuard = input.expectedLocalUpdatedAt ? ' AND updated_at = ?' : '';
+
+  db.runSync(
+    `UPDATE poems
+     SET remote_id = ?,
+       created_at = COALESCE(?, created_at),
+       updated_at = ?,
+       deleted_at = ?,
+       sync_status = 'synced'
+     WHERE source = 'user' AND poem_id = ?${updatedAtGuard};`,
+    [
+      input.remoteId,
+      input.createdAt ?? null,
+      input.updatedAt,
+      input.deletedAt ?? null,
+      input.poemId,
+      ...(input.expectedLocalUpdatedAt ? [input.expectedLocalUpdatedAt] : []),
+    ]
+  );
+
+  const row = db.getFirstSync(
+    `SELECT 1
+     FROM poems
+     WHERE source = 'user'
+       AND poem_id = ?
+       AND remote_id = ?
+       AND updated_at = ?
+       AND sync_status = 'synced'
+     LIMIT 1;`,
+    [input.poemId, input.remoteId, input.updatedAt]
+  );
+  return Boolean(row);
+}
+
+export function applyRemoteUserPoem(input: RemoteUserPoemRow): boolean {
+  const db = getDatabase();
+  const deletedAt = input.deletedAt ?? null;
+  const metadata = serializeMetadata(input.metadata);
+  const current = db.getFirstSync(
+    `SELECT poem_id, source, created_at, updated_at, deleted_at
+     FROM poems
+     WHERE poem_id = ?
+     LIMIT 1;`,
+    [input.poemId]
+  ) as any | undefined;
+
+  if (current?.source && current.source !== 'user') {
+    return false;
+  }
+
+  if (current) {
+    const currentUpdatedAt = current.updated_at ?? current.created_at ?? '';
+    if (currentUpdatedAt > input.updatedAt) {
+      return false;
+    }
+
+    const remoteIsDeletedTie = currentUpdatedAt === input.updatedAt && !current.deleted_at && deletedAt;
+    if (remoteIsDeletedTie) {
+      return false;
+    }
+  }
+
+  db.runSync(
+    `INSERT INTO poems
+       (poem_id, title, author, content, language, source, metadata, created_at, updated_at, sync_status, remote_id, deleted_at)
+     VALUES (?, ?, ?, ?, ?, 'user', ?, ?, ?, 'synced', ?, ?)
+     ON CONFLICT(poem_id) DO UPDATE SET
+       title = excluded.title,
+       author = excluded.author,
+       content = excluded.content,
+       language = excluded.language,
+       source = 'user',
+       metadata = excluded.metadata,
+       created_at = excluded.created_at,
+       updated_at = excluded.updated_at,
+       sync_status = 'synced',
+       remote_id = excluded.remote_id,
+       deleted_at = excluded.deleted_at;`,
+    [
+      input.poemId,
+      input.title,
+      input.author,
+      input.content,
+      input.language,
+      metadata,
+      input.createdAt,
+      input.updatedAt,
+      input.remoteId,
+      deletedAt,
+    ]
+  );
+
+  return true;
+}
+
+export function updateLocalUserPoem(input: {
+  poemId: string;
+  title?: string;
+  author?: string;
+  content?: string;
+  language?: 'en' | 'ur';
+  metadata?: PoemMetadata | null;
+}): Poem | null {
+  const db = getDatabase();
+  const current = db.getFirstSync(
+    `SELECT poem_id, title, author, content, language, source, metadata
+     FROM poems
+     WHERE source = 'user' AND poem_id = ? AND deleted_at IS NULL
+     LIMIT 1;`,
+    [input.poemId]
+  ) as any | undefined;
+
+  if (!current) {
+    return null;
+  }
+
+  const title = input.title === undefined ? current.title : input.title.trim() || 'Untitled';
+  const author = input.author === undefined ? current.author : input.author.trim() || 'Anonymous';
+  const content = input.content === undefined ? current.content : input.content.trim();
+  const language = input.language ?? current.language ?? 'en';
+  const metadata = input.metadata === undefined ? current.metadata : serializeMetadata(input.metadata);
+
+  if (!content) {
+    throw new Error('Poem content is required.');
+  }
+
+  const timestamp = getTimestamp();
+  db.runSync(
+    `UPDATE poems
+     SET title = ?,
+       author = ?,
+       content = ?,
+       language = ?,
+       metadata = ?,
+       updated_at = ?,
+       sync_status = 'dirty',
+       deleted_at = NULL
+     WHERE source = 'user' AND poem_id = ?;`,
+    [title, author, content, language, metadata, timestamp, input.poemId]
+  );
+
+  const row = db.getFirstSync(
+    'SELECT poem_id, title, author, content, language, source, metadata FROM poems WHERE poem_id = ? LIMIT 1;',
+    [input.poemId]
+  );
+  return row ? mapRowToPoem(row) : null;
+}
+
+export function deleteLocalUserPoem(poemId: string): void {
+  const db = getDatabase();
+  const timestamp = getTimestamp();
+
+  db.runSync(
+    `UPDATE poems
+     SET updated_at = ?,
+       deleted_at = ?,
+       sync_status = 'dirty'
+     WHERE source = 'user' AND poem_id = ?;`,
+    [timestamp, timestamp, poemId]
+  );
 }
 
 export function insertPoemsInBatch(poems: CreatePoemInput[]): void {
@@ -268,9 +617,25 @@ export function insertPoemsInBatch(poems: CreatePoemInput[]): void {
         return Boolean(row);
       });
 
+      const source = poem.source ?? 'user';
+      const timestamp = source === 'user' ? getTimestamp() : null;
+
       db.runSync(
-        'INSERT OR IGNORE INTO poems (poem_id, title, author, content, language, source, metadata) VALUES (?, ?, ?, ?, ?, ?, ?);',
-        [poemId, poem.title, poem.author, poem.content, language, poem.source ?? 'user', serializeMetadata(poem.metadata)]
+        `INSERT OR IGNORE INTO poems
+           (poem_id, title, author, content, language, source, metadata, created_at, updated_at, sync_status)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+        [
+          poemId,
+          poem.title,
+          poem.author,
+          poem.content,
+          language,
+          source,
+          serializeMetadata(poem.metadata),
+          timestamp,
+          timestamp,
+          source === 'user' ? 'dirty' : 'synced',
+        ]
       );
     });
     db.execSync('COMMIT');
@@ -296,4 +661,191 @@ export function getDistinctAuthors(): string[] {
     author: string;
   }>;
   return rows.map((row) => row.author);
+}
+
+export function savePoem(poemId: string, poemScope: SavedPoemScope = 'catalogue'): void {
+  const db = getDatabase();
+  const timestamp = getTimestamp();
+
+  db.runSync(
+    `INSERT INTO saved_poems (poem_id, poem_scope, saved_at, updated_at, sync_status, remote_id, deleted_at)
+     VALUES (?, ?, ?, ?, 'dirty', NULL, NULL)
+     ON CONFLICT(poem_id) DO UPDATE SET
+       poem_scope = excluded.poem_scope,
+       saved_at = excluded.saved_at,
+       updated_at = excluded.updated_at,
+       sync_status = 'dirty',
+       remote_id = saved_poems.remote_id,
+       deleted_at = NULL;`,
+    [poemId, poemScope, timestamp, timestamp]
+  );
+}
+
+export function unsavePoem(poemId: string, poemScope: SavedPoemScope = 'catalogue'): void {
+  const db = getDatabase();
+  const timestamp = getTimestamp();
+
+  db.runSync(
+    `INSERT INTO saved_poems (poem_id, poem_scope, saved_at, updated_at, sync_status, remote_id, deleted_at)
+     VALUES (?, ?, ?, ?, 'dirty', NULL, ?)
+     ON CONFLICT(poem_id) DO UPDATE SET
+       poem_scope = excluded.poem_scope,
+       updated_at = excluded.updated_at,
+       sync_status = 'dirty',
+       remote_id = saved_poems.remote_id,
+       deleted_at = excluded.deleted_at;`,
+    [poemId, poemScope, timestamp, timestamp, timestamp]
+  );
+}
+
+export function isPoemSaved(poemId: string, poemScope: SavedPoemScope = 'catalogue'): boolean {
+  const db = getDatabase();
+  const row = db.getFirstSync(
+    'SELECT 1 FROM saved_poems WHERE poem_scope = ? AND poem_id = ? AND deleted_at IS NULL LIMIT 1;',
+    [poemScope, poemId]
+  );
+  return Boolean(row);
+}
+
+export function getSavedPoemIds(poemScope: SavedPoemScope = 'catalogue'): string[] {
+  const db = getDatabase();
+  const rows = db.getAllSync(
+    'SELECT poem_id FROM saved_poems WHERE poem_scope = ? AND deleted_at IS NULL ORDER BY saved_at DESC;',
+    [poemScope]
+  ) as Array<{ poem_id: string }>;
+  return rows.map((row) => row.poem_id);
+}
+
+export function getSavedPoems(options?: { limit?: number; offset?: number; poemScope?: SavedPoemScope }): Poem[] {
+  const db = getDatabase();
+  const limit = options?.limit ?? 100;
+  const offset = options?.offset ?? 0;
+  const poemScope = options?.poemScope ?? 'catalogue';
+  const rows = db.getAllSync(
+    `SELECT poems.poem_id, poems.title, poems.author, poems.content, poems.language, poems.source, poems.metadata
+     FROM saved_poems
+     INNER JOIN poems ON poems.poem_id = saved_poems.poem_id
+     WHERE saved_poems.poem_scope = ? AND saved_poems.deleted_at IS NULL
+     ORDER BY saved_poems.saved_at DESC
+     LIMIT ? OFFSET ?;`,
+    [poemScope, limit, offset]
+  );
+  return rows.map((row) => mapRowToPoem(row));
+}
+
+export function listDirtySavedPoems(): SavedPoemSyncRow[] {
+  const db = getDatabase();
+  const rows = db.getAllSync(
+    `SELECT poem_id, poem_scope, saved_at, updated_at, sync_status, remote_id, deleted_at
+     FROM saved_poems
+     WHERE sync_status IN ('dirty', 'error')
+     ORDER BY updated_at ASC;`
+  );
+  return rows.map((row) => mapRowToSavedPoemSyncRow(row));
+}
+
+export function markSavedPoemSynced(input: {
+  poemId: string;
+  poemScope?: SavedPoemScope;
+  remoteId: string;
+  savedAt?: string;
+  updatedAt: string;
+  deletedAt?: string | null;
+  expectedLocalUpdatedAt?: string;
+}): void {
+  const db = getDatabase();
+  const poemScope = input.poemScope ?? 'catalogue';
+  const updatedAtGuard = input.expectedLocalUpdatedAt ? ' AND updated_at = ?' : '';
+
+  db.runSync(
+    `UPDATE saved_poems
+     SET remote_id = ?,
+       saved_at = COALESCE(?, saved_at),
+       updated_at = ?,
+       deleted_at = ?,
+       sync_status = 'synced'
+     WHERE poem_scope = ? AND poem_id = ?${updatedAtGuard};`,
+    [
+      input.remoteId,
+      input.savedAt ?? null,
+      input.updatedAt,
+      input.deletedAt ?? null,
+      poemScope,
+      input.poemId,
+      ...(input.expectedLocalUpdatedAt ? [input.expectedLocalUpdatedAt] : []),
+    ]
+  );
+}
+
+export function applyRemoteSavedPoem(input: RemoteSavedPoemRow): boolean {
+  const db = getDatabase();
+  const poemScope = input.poemScope ?? 'catalogue';
+  const deletedAt = input.deletedAt ?? null;
+  const current = db.getFirstSync(
+    `SELECT poem_id, poem_scope, saved_at, updated_at, sync_status, remote_id, deleted_at
+     FROM saved_poems
+     WHERE poem_scope = ? AND poem_id = ?
+     LIMIT 1;`,
+    [poemScope, input.poemId]
+  ) as any | undefined;
+
+  if (current) {
+    if (current.updated_at > input.updatedAt) {
+      return false;
+    }
+
+    const remoteIsDeletedTie = current.updated_at === input.updatedAt && !current.deleted_at && deletedAt;
+    if (remoteIsDeletedTie) {
+      return false;
+    }
+  }
+
+  db.runSync(
+    `INSERT INTO saved_poems (poem_id, poem_scope, saved_at, updated_at, sync_status, remote_id, deleted_at)
+     VALUES (?, ?, ?, ?, 'synced', ?, ?)
+     ON CONFLICT(poem_id) DO UPDATE SET
+       poem_scope = excluded.poem_scope,
+       saved_at = excluded.saved_at,
+       updated_at = excluded.updated_at,
+       sync_status = 'synced',
+       remote_id = excluded.remote_id,
+       deleted_at = excluded.deleted_at;`,
+    [input.poemId, poemScope, input.savedAt, input.updatedAt, input.remoteId, deletedAt]
+  );
+
+  return true;
+}
+
+export function getSavedPoemsSyncCheckpoint(userId: string): string | null {
+  const db = getDatabase();
+  const row = db.getFirstSync(
+    'SELECT value FROM metadata WHERE key = ? LIMIT 1;',
+    [metadataKeyForSavedPoemsCheckpoint(userId)]
+  ) as { value: string } | undefined;
+  return row?.value ?? null;
+}
+
+export function setSavedPoemsSyncCheckpoint(userId: string, checkpoint: string): void {
+  const db = getDatabase();
+  db.runSync(
+    'INSERT OR REPLACE INTO metadata (key, value) VALUES (?, ?);',
+    [metadataKeyForSavedPoemsCheckpoint(userId), checkpoint]
+  );
+}
+
+export function getUserPoemsSyncCheckpoint(userId: string): string | null {
+  const db = getDatabase();
+  const row = db.getFirstSync(
+    'SELECT value FROM metadata WHERE key = ? LIMIT 1;',
+    [metadataKeyForUserPoemsCheckpoint(userId)]
+  ) as { value: string } | undefined;
+  return row?.value ?? null;
+}
+
+export function setUserPoemsSyncCheckpoint(userId: string, checkpoint: string): void {
+  const db = getDatabase();
+  db.runSync(
+    'INSERT OR REPLACE INTO metadata (key, value) VALUES (?, ?);',
+    [metadataKeyForUserPoemsCheckpoint(userId), checkpoint]
+  );
 }

@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { initDB, seedPoems, getRandomPoems, getTotalPoemsCount } from '../lib/poems';
+import {
+  initDB,
+  seedPoems,
+  getRandomPoems,
+  getTotalPoemsCount,
+  getLocalSavedPoemIds,
+  saveLocalPoem,
+  unsaveLocalPoem,
+} from '../lib/poems';
 import { poetryAPI } from '../lib/poetry-api';
 import type { Poem, VirtualSlot } from '../lib/types';
 import { PoemFeedManager, type PoemFeedSource } from '../lib/services/poemFeedManager';
@@ -17,12 +25,16 @@ interface UsePoemFeedResult {
   isOnline: boolean;
   totalPoemsCount: number;
   language: 'en' | 'ur';
+  savedPoemIds: Set<string>;
   handlePageSelected: (index: number) => void;
   cyclePoemSource: () => void;
   setPoemSource: (source: PoemFeedSource) => void;
   toggleLanguage: () => void;
   setLanguage: (language: 'en' | 'ur') => void;
   refreshVisibleWindow: () => void;
+  refreshSavedPoemIds: () => void;
+  isPoemSaved: (poemId: string) => boolean;
+  toggleSavedPoem: (poemId: string) => Promise<boolean>;
 }
 
 const POEM_SOURCES: PoemFeedSource[] = ['local', 'hybrid', 'api'];
@@ -47,6 +59,7 @@ export function usePoemFeed(): UsePoemFeedResult {
   const [isOnline, setIsOnline] = useState(false);
   const [totalPoemsCount, setTotalPoemsCount] = useState(0);
   const [language, setLanguageState] = useState<'en' | 'ur'>('en');
+  const [savedPoemIds, setSavedPoemIds] = useState<Set<string>>(() => new Set());
 
   const managerRef = useRef<PoemFeedManager | null>(null);
 
@@ -127,6 +140,13 @@ export function usePoemFeed(): UsePoemFeedResult {
     loadAroundIndex(currentIndex);
   }, [currentIndex, loadAroundIndex]);
 
+  const refreshSavedPoemIds = useCallback(() => {
+    if (!isDatabaseReady) {
+      return;
+    }
+    setSavedPoemIds(new Set(getLocalSavedPoemIds()));
+  }, [isDatabaseReady]);
+
   useEffect(() => {
     let cancelled = false;
     const initialise = async () => {
@@ -139,11 +159,13 @@ export function usePoemFeed(): UsePoemFeedResult {
         await initDB();
         await seedPoems();
         const count = getTotalPoemsCount();
+        const savedIds = getLocalSavedPoemIds();
         if (cancelled) {
           return;
         }
 
         setTotalPoemsCount(count);
+        setSavedPoemIds(new Set(savedIds));
         setIsDatabaseReady(true);
         manager.setDatabaseReady(true);
         loadAroundIndex(0);
@@ -218,6 +240,39 @@ export function usePoemFeed(): UsePoemFeedResult {
     setLanguageState(lang);
   }, []);
 
+  const isPoemSaved = useCallback(
+    (poemId: string) => savedPoemIds.has(poemId),
+    [savedPoemIds]
+  );
+
+  const toggleSavedPoem = useCallback(
+    async (poemId: string) => {
+      if (!isDatabaseReady) {
+        return false;
+      }
+
+      const nextSaved = !savedPoemIds.has(poemId);
+      if (nextSaved) {
+        saveLocalPoem(poemId);
+      } else {
+        unsaveLocalPoem(poemId);
+      }
+
+      setSavedPoemIds((previous) => {
+        const next = new Set(previous);
+        if (nextSaved) {
+          next.add(poemId);
+        } else {
+          next.delete(poemId);
+        }
+        return next;
+      });
+
+      return nextSaved;
+    },
+    [isDatabaseReady, savedPoemIds]
+  );
+
   return {
     slots,
     currentIndex,
@@ -226,11 +281,15 @@ export function usePoemFeed(): UsePoemFeedResult {
     isOnline,
     totalPoemsCount,
     language,
+    savedPoemIds,
     handlePageSelected,
     cyclePoemSource,
     setPoemSource,
     toggleLanguage,
     setLanguage,
     refreshVisibleWindow,
+    refreshSavedPoemIds,
+    isPoemSaved,
+    toggleSavedPoem,
   };
 }

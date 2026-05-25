@@ -958,7 +958,7 @@
       "form": "lyric poem",
       "era": "18th century",
       "length": "medium"
-      }
+    }
   },
   {
     "id": "william-shakespeare-spring-and-winter-i-en-bfbaed25",
@@ -1436,6 +1436,1176 @@
       ],
       "form": "riddle poem",
       "era": "19th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-blue-squills-en-a08d2822",
+    "title": "Blue Squills",
+    "author": "Sara Teasdale",
+    "content": "How many million Aprils came\n Before I ever knew\nHow white a cherry bough could be,\n A bed of squills, how blue!\n\nAnd many a dancing April\n When life is done with me,\nWill lift the blue flame of the flower\n And the white flame of the tree.\n\nOh burn me with your beauty, then,\n Oh hurt me, tree and flower,\nLest in the end death try to take\n Even this glistening hour.\n\nO shaken flowers, O shimmering trees,\n O sunlit white and blue,\nWound me, that I, through endless sleep,\n May bear the scar of you.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-stars-en-5ff5f47e",
+    "title": "Stars",
+    "author": "Sara Teasdale",
+    "content": "Alone in the night\n On a dark hill\nWith pines around me\n Spicy and still,\n\nAnd a heaven full of stars\n Over my head,\nWhite and topaz\n And misty red;\n\nMyriads with beating\n Hearts of fire\nThat aeons\n Cannot vex or tire;\n\nUp the dome of heaven\n Like a great hill,\nI watch them marching\n Stately and still,\n\nAnd I know that I\n Am honored to be\nWitness\n Of so much majesty.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-what-do-i-care-en-ed236092",
+    "title": "\"What Do I Care?\"",
+    "author": "Sara Teasdale",
+    "content": "What do I care, in the dreams and the languor of spring,\n That my songs do not show me at all?\nFor they are a fragrance, and I am a flint and a fire,\n I am an answer, they are only a call.\n\nBut what do I care, for love will be over so soon,\n Let my heart have its say and my mind stand idly by,\nFor my mind is proud and strong enough to be silent,\n It is my heart that makes my songs, not I.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-meadowlarks-en-c98bc407",
+    "title": "Meadowlarks",
+    "author": "Sara Teasdale",
+    "content": "In the silver light after a storm,\n Under dripping boughs of bright new green,\nI take the low path to hear the meadowlarks\n Alone and high-hearted as if I were a queen.\n\nWhat have I to fear in life or death\n Who have known three things:  the kiss in the night,\nThe white flying joy when a song is born,\n And meadowlarks whistling in silver light.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-driftwood-en-dad400ab",
+    "title": "Driftwood",
+    "author": "Sara Teasdale",
+    "content": "My forefathers gave me\n My spirit's shaken flame,\nThe shape of hands, the beat of heart,\n The letters of my name.\n\nBut it was my lovers,\n And not my sleeping sires,\nWho gave the flame its changeful\n And iridescent fires;\n\nAs the driftwood burning\n Learned its jewelled blaze\nFrom the sea's blue splendor\n Of colored nights and days.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-i-have-loved-hours-at-sea-en-fc6d2c1d",
+    "title": "\"I Have Loved Hours at Sea\"",
+    "author": "Sara Teasdale",
+    "content": "I have loved hours at sea, gray cities,\n The fragile secret of a flower,\nMusic, the making of a poem\n That gave me heaven for an hour;\n\nFirst stars above a snowy hill,\n Voices of people kindly and wise,\nAnd the great look of love, long hidden,\n Found at last in meeting eyes.\n\nI have loved much and been loved deeply--\n Oh when my spirit's fire burns low,\nLeave me the darkness and the stillness,\n I shall be tired and glad to go.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-august-moonrise-en-231b2428",
+    "title": "August Moonrise",
+    "author": "Sara Teasdale",
+    "content": "The sun was gone, and the moon was coming\nOver the blue Connecticut hills;\nThe west was rosy, the east was flushed,\nAnd over my head the swallows rushed\nThis way and that, with changeful wills.\nI heard them twitter and watched them dart\nNow together and now apart\nLike dark petals blown from a tree;\nThe maples stamped against the west\nWere black and stately and full of rest,\nAnd the hazy orange moon grew up\nAnd slowly changed to yellow gold\nWhile the hills were darkened, fold on fold\nTo a deeper blue than a flower could hold.\nDown the hill I went, and then\nI forgot the ways of men,\nFor night-scents, heady, and damp and cool\nWakened ecstasy in me\nOn the brink of a shining pool.\n\nO Beauty, out of many a cup\nYou have made me drunk and wild\nEver since I was a child,\nBut when have I been sure as now\nThat no bitterness can bend\nAnd no sorrow wholly bow\nOne who loves you to the end?\nAnd though I must give my breath\nAnd my laughter all to death,\nAnd my eyes through which joy came,\nAnd my heart, a wavering flame;\nIf all must leave me and go back\nAlong a blind and fearful track\nSo that you can make anew,\nFusing with intenser fire,\nSomething nearer your desire;\nIf my soul must go alone\nThrough a cold infinity,\nOr even if it vanish, too,\nBeauty, I have worshipped you.\n\nLet this single hour atone\nFor the theft of all of me.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-places-en-0d4ee15f",
+    "title": "Places",
+    "author": "Sara Teasdale",
+    "content": "Places I love come back to me like music,\n Hush me and heal me when I am very tired;\nI see the oak woods at Saxton's flaming\n In a flare of crimson by the frost newly fired;\nAnd I am thirsty for the spring in the valley\n As for a kiss ungiven and long desired.\n\nI know a bright world of snowy hills at Boonton,\n A blue and white dazzling light on everything one sees,\nThe ice-covered branches of the hemlocks sparkle\n Bending low and tinkling in the sharp thin breeze,\nAnd iridescent crystals fall and crackle on the snow-crust\n With the winter sun drawing cold blue shadows from the trees.\n\nViolet now, in veil on veil of evening\n The hills across from Cromwell grow dreamy and far;\nA wood-thrush is singing soft as a viol\n In the heart of the hollow where the dark pools are;\nThe primrose has opened her pale yellow flowers\n And heaven is lighting star after star.\n\nPlaces I love come back to me like music--\n Mid-ocean, midnight, the waves buzz drowsily;\nIn the ship's deep churning the eerie phosphorescence\n Is like the souls of people who were drowned at sea,\nAnd I can hear a man's voice, speaking, hushed, insistent,\n At midnight, in mid-ocean, hour on hour to me.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-old-tunes-en-f0a9d7fe",
+    "title": "Old Tunes",
+    "author": "Sara Teasdale",
+    "content": "As the waves of perfume, heliotrope, rose,\nFloat in the garden when no wind blows,\nCome to us, go from us, whence no one knows;\n\nSo the old tunes float in my mind,\nAnd go from me leaving no trace behind,\nLike fragrance borne on the hush of the wind.\n\nBut in the instant the airs remain\nI know the laughter and the pain\nOf times that will not come again.\n\nI try to catch at many a tune\nLike petals of light fallen from the moon,\nBroken and bright on a dark lagoon,\n\nBut they float away--for who can hold\nYouth, or perfume or the moon's gold?",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-only-in-sleep-en-310d3c6d",
+    "title": "\"Only in Sleep\"",
+    "author": "Sara Teasdale",
+    "content": "Only in sleep I see their faces,\n Children I played with when I was a child,\nLouise comes back with her brown hair braided,\n Annie with ringlets warm and wild.\n\nOnly in sleep Time is forgotten--\n What may have come to them, who can know?\n Yet we played last night as long ago,\nAnd the doll-house stood at the turn of the stair.\n\nThe years had not sharpened their smooth round faces,\n I met their eyes and found them mild--\nDo they, too, dream of me, I wonder,\n And for them am I too a child?",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-redbirds-en-078844c7",
+    "title": "Redbirds",
+    "author": "Sara Teasdale",
+    "content": "Redbirds, redbirds,\n Long and long ago,\nWhat a honey-call you had\n In hills I used to know;\n\nRedbud, buckberry,\n Wild plum-tree\nAnd proud river sweeping\n Southward to the sea,\n\nBrown and gold in the sun\n Sparkling far below,\nTrailing stately round her bluffs\n Where the poplars grow--\n\nRedbirds, redbirds,\n Are you singing still\nAs you sang one May day\n On Saxton's Hill?",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-sunset-st-louis-en-0de0cb85",
+    "title": "Sunset:  St. Louis",
+    "author": "Sara Teasdale",
+    "content": "Hushed in the smoky haze of summer sunset,\nWhen I came home again from far-off places,\nHow many times I saw my western city\n Dream by her river.\n\nThen for an hour the water wore a mantle\nOf tawny gold and mauve and misted turquoise\nUnder the tall and darkened arches bearing\n Gray, high-flung bridges.\n\nAgainst the sunset, water-towers and steeples\nFlickered with fire up the slope to westward,\nAnd old warehouses poured their purple shadows\n Across the levee.\n\nHigh over them the black train swept with thunder,\nCleaving the city, leaving far beneath it\nWharf-boats moored beside the old side-wheelers\n Resting in twilight.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-the-coin-en-3c40bfbe",
+    "title": "The Coin",
+    "author": "Sara Teasdale",
+    "content": "Into my heart's treasury\n I slipped a coin\nThat time cannot take\n Nor a thief purloin,--\nOh better than the minting\n Of a gold-crowned king\nIs the safe-kept memory\n Of a lovely thing.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-the-voice-en-76e05db2",
+    "title": "The Voice",
+    "author": "Sara Teasdale",
+    "content": "Atoms as old as stars,\nMutation on mutation,\nMillions and millions of cells\nDividing yet still the same,\nFrom air and changing earth,\nFrom ancient Eastern rivers,\nFrom turquoise tropic seas,\nUnto myself I came.\n\nMy spirit like my flesh\nSprang from a thousand sources,\nFrom cave-man, hunter and shepherd,\nFrom Karnak, Cyprus, Rome;\nThe living thoughts in me\nSpring from dead men and women,\nForgotten time out of mind\nAnd many as bubbles of foam.\n\nHere for a moment's space\nInto the light out of darkness,\nI come and they come with me\nFinding words with my breath;\nFrom the wisdom of many life-times\nI hear them cry:  \"Forever\nSeek for Beauty, she only\nFights with man against Death!\"\n\n    III",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-day-and-night-en-ab2af369",
+    "title": "Day and Night",
+    "author": "Sara Teasdale",
+    "content": "In Warsaw in Poland\n Half the world away,\nThe one I love best of all\n Thought of me to-day;\n\nI know, for I went\n Winged as a bird,\nIn the wide flowing wind\n His own voice I heard;\n\nHis arms were round me\n In a ferny place,\nI looked in the pool\n And there was his face--\n\nBut now it is night\n And the cold stars say:\n\"Warsaw in Poland\n Is half the world away.\"",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-compensation-en-feca8a4f",
+    "title": "Compensation",
+    "author": "Sara Teasdale",
+    "content": "I should be glad of loneliness\n And hours that go on broken wings,\nA thirsty body, a tired heart\n And the unchanging ache of things,\nIf I could make a single song\n As lovely and as full of light,\nAs hushed and brief as a falling star\n On a winter night.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-i-remembered-en-8ab78d6b",
+    "title": "I Remembered",
+    "author": "Sara Teasdale",
+    "content": "There never was a mood of mine,\n Gay or heart-broken, luminous or dull,\nBut you could ease me of its fever\n And give it back to me more beautiful.\n\nIn many another soul I broke the bread,\n And drank the wine and played the happy guest,\nBut I was lonely, I remembered you;\n The heart belongs to him who knew it best.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-oh-you-are-coming-en-99288f65",
+    "title": "\"Oh You Are Coming\"",
+    "author": "Sara Teasdale",
+    "content": "Oh you are coming, coming, coming,\n How will hungry Time put by the hours till then?--\nBut why does it anger my heart to long so\n For one man out of the world of men?\n\nOh I would live in myself only\n And build my life lightly and still as a dream--\nAre not my thoughts clearer than your thoughts\n And colored like stones in a running stream?\n\nNow the slow moon brightens in heaven,\n The stars are ready, the night is here--\nOh why must I lose myself to love you,\n My dear?",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-the-return-en-5ea3e752",
+    "title": "The Return",
+    "author": "Sara Teasdale",
+    "content": "He has come, he is here,\nMy love has come home,\nThe minutes are lighter\nThan flying foam,\nThe hours are like dancers\nOn gold-slippered feet,\nThe days are young runners\nNaked and fleet--\nFor my love has returned,\nHe is home, he is here,\nIn the whole world no other\nIs dear as my dear!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-gray-eyes-en-e591f74e",
+    "title": "Gray Eyes",
+    "author": "Sara Teasdale",
+    "content": "It was April when you came\n The first time to me,\nAnd my first look in your eyes\n Was like my first look at the sea.\n\nWe have been together\n Four Aprils now\nWatching for the green\n On the swaying willow bough;\n\nYet whenever I turn\n To your gray eyes over me,\nIt is as though I looked\n For the first time at the sea.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-the-net-en-4cc88e40",
+    "title": "The Net",
+    "author": "Sara Teasdale",
+    "content": "I made you many and many a song,\n Yet never one told all you are--\nIt was as though a net of words\n Were flung to catch a star;\n\nIt was as though I curved my hand\n And dipped sea-water eagerly,\nOnly to find it lost the blue\n Dark splendor of the sea.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-the-mystery-en-2958dd18",
+    "title": "The Mystery",
+    "author": "Sara Teasdale",
+    "content": "Your eyes drink of me,\n Love makes them shine,\nYour eyes that lean\n So close to mine.\n\nWe have long been lovers,\n We know the range\nOf each other's moods\n And how they change;\n\nBut when we look\n At each other so\nThen we feel\n How little we know;\n\nThe spirit eludes us,\n Timid and free--\nCan I ever know you\n Or you know me?",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-open-windows-en-d40274dc",
+    "title": "Open Windows",
+    "author": "Sara Teasdale",
+    "content": "Out of the window a sea of green trees\n Lift their soft boughs like the arms of a dancer,\nThey beckon and call me, \"Come out in the sun!\"\n But I cannot answer.\n\nI am alone with Weakness and Pain,\n Sick abed and June is going,\nI cannot keep her, she hurries by\n With the silver-green of her garments blowing.\n\nMen and women pass in the street\n Glad of the shining sapphire weather,\nBut we know more of it than they,\n Pain and I together.\n\nThey are the runners in the sun,\n Breathless and blinded by the race,\nBut we are watchers in the shade\n Who speak with Wonder face to face.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "sara-teasdale-the-new-moon-en-8b0432e1",
+    "title": "The New Moon",
+    "author": "Sara Teasdale",
+    "content": "Day, you have bruised and beaten me,\nAs rain beats down the bright, proud sea,\nBeaten my body, bruised my soul,\nLeft me nothing lovely or whole--\nYet I have wrested a gift from you,\nDay that dies in dusky blue:\n\nFor suddenly over the factories\nI saw a moon in the cloudy seas--\nA wisp of beauty all alone\nIn a world as hard and gray as stone--\nOh who could be bitter and want to die\nWhen a maiden moon wakes up in the sky?",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-eight-o-clock-en-84cb2b2b",
+    "title": "Eight O'Clock",
+    "author": "Sara Teasdale",
+    "content": "Supper comes at five o'clock,\n At six, the evening star,\nMy lover comes at eight o'clock--\n But eight o'clock is far.\n\nHow could I bear my pain all day\n Unless I watched to see\nThe clock-hands laboring to bring\n Eight o'clock to me.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-lost-things-en-c0812a18",
+    "title": "Lost Things",
+    "author": "Sara Teasdale",
+    "content": "Oh, I could let the world go by,\n Its loud new wonders and its wars,\nBut how will I give up the sky\n When winter dusk is set with stars?\n\nAnd I could let the cities go,\n Their changing customs and their creeds,--\nBut oh, the summer rains that blow\n In silver on the jewel-weeds!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-pain-en-15c3e237",
+    "title": "Pain",
+    "author": "Sara Teasdale",
+    "content": "Waves are the sea's white daughters,\n And raindrops the children of rain,\nBut why for my shimmering body\n Have I a mother like Pain?\n\nNight is the mother of stars,\n And wind the mother of foam--\nThe world is brimming with beauty,\n But I must stay at home.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-the-broken-field-en-05ffbcaa",
+    "title": "The Broken Field",
+    "author": "Sara Teasdale",
+    "content": "My soul is a dark ploughed field\n In the cold rain;\nMy soul is a broken field\n Ploughed by pain.\n\nWhere grass and bending flowers\n Were growing,\nThe field lies broken now\n For another sowing.\n\nGreat Sower when you tread\n My field again,\nScatter the furrows there\n With better grain.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-the-unseen-en-dd27dbba",
+    "title": "The Unseen",
+    "author": "Sara Teasdale",
+    "content": "Death went up the hall\n Unseen by every one,\nTrailing twilight robes\n Past the nurse and the nun.\n\nHe paused at every door\n And listened to the breath\nOf those who did not know\n How near they were to Death.\n\nDeath went up the hall\n Unseen by nurse and nun;\nHe passed by many a door--\n But he entered one.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "sara-teasdale-a-prayer-en-b30cff8d",
+    "title": "A Prayer",
+    "author": "Sara Teasdale",
+    "content": "When I am dying, let me know\nThat I loved the blowing snow\n Although it stung like whips;\nThat I loved all lovely things\nAnd I tried to take their stings\n With gay unembittered lips;\nThat I loved with all my strength,\nTo my soul's full depth and length,\n Careless if my heart must break,\nThat I sang as children sing\nFitting tunes to everything,\n Loving life for its own sake.\n\n    V",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "nature",
+        "memory",
+        "love"
+      ],
+      "moods": [
+        "reflective",
+        "tender"
+      ],
+      "form": "lyric poem",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-first-fig-en-dafa2eca",
+    "title": "First Fig",
+    "author": "Edna St. Vincent Millay",
+    "content": "My candle burns at both ends;\n  It will not last the night;\nBut ah, my foes, and oh, my friends--\n  It gives a lovely light!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-second-fig-en-f8780b4f",
+    "title": "Second Fig",
+    "author": "Edna St. Vincent Millay",
+    "content": "Safe upon the solid rock the ugly houses stand:\nCome and see my shining palace built upon the sand!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-recuerdo-en-516a7c95",
+    "title": "Recuerdo",
+    "author": "Edna St. Vincent Millay",
+    "content": "We were very tired, we were very merry--\nWe had gone back and forth all night on the ferry.\nIt was bare and bright, and smelled like a stable--\nBut we looked into a fire, we leaned across a table,\nWe lay on a hill-top underneath the moon;\nAnd the whistles kept blowing, and the dawn came soon.\n\nWe were very tired, we were very merry--\nWe had gone back and forth all night on the ferry;\nAnd you ate an apple, and I ate a pear,\nFrom a dozen of each we had bought somewhere;\nAnd the sky went wan, and the wind came cold,\nAnd the sun rose dripping, a bucketful of gold.\n\nWe were very tired, we were very merry,\nWe had gone back and forth all night on the ferry.\nWe hailed, \"Good morrow, mother!\" to a shawl-covered head,\nAnd bought a morning paper, which neither of us read;\nAnd she wept, \"God bless you!\" for the apples and pears,\nAnd we gave her all our money but our subway fares.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "narrative lyric",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-thursday-en-5e13aabb",
+    "title": "Thursday",
+    "author": "Edna St. Vincent Millay",
+    "content": "And if I loved you Wednesday,\n  Well, what is that to you?\nI do not love you Thursday--\n  So much is true.\n\nAnd why you come complaining\n  Is more than I can see.\nI loved you Wednesday,--yes--but what\n  Is that to me?",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-to-the-not-impossible-him-en-e7c0e45b",
+    "title": "To the Not Impossible Him",
+    "author": "Edna St. Vincent Millay",
+    "content": "How shall I know, unless I go\n  To Cairo and Cathay,\nWhether or not this blessed spot\n  Is blest in every way?\n\nNow it may be, the flower for me\n  Is this beneath my nose;\nHow shall I tell, unless I smell\n  The Carthaginian rose?\n\nThe fabric of my faithful love\n  No power shall dim or ravel\nWhilst I stay here,--but oh, my dear,\n  If I should ever travel!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-the-prisoner-en-fe540095",
+    "title": "The Prisoner",
+    "author": "Edna St. Vincent Millay",
+    "content": "All right,\nGo ahead!\nWhat's in a name?\nI guess I'll be locked into\nAs much as I'm locked out of!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-the-unexplorer-en-2e3ef63c",
+    "title": "The Unexplorer",
+    "author": "Edna St. Vincent Millay",
+    "content": "There was a road ran past our house\nToo lovely to explore.\nI asked my mother once--she said\nThat if you followed where it led\nIt brought you to the milk-man's door.\n(That's why I have not traveled more.)",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-grown-up-en-2fdd0a98",
+    "title": "Grown-up",
+    "author": "Edna St. Vincent Millay",
+    "content": "Was it for this I uttered prayers,\nAnd sobbed and cursed and kicked the stairs,\nThat now, domestic as a plate,\nI should retire at half-past eight?",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-the-penitent-en-f8d06e38",
+    "title": "The Penitent",
+    "author": "Edna St. Vincent Millay",
+    "content": "I had a little Sorrow,\n  Born of a little Sin,\nI found a room all damp with gloom\n  And shut us all within;\nAnd, \"Little Sorrow, weep,\" said I,\n  \"And, Little Sin, pray God to die,\nAnd I upon the floor will lie\n  And think how bad I've been!\"\n\nAlas for pious planning--\n  It mattered not a whit!\nAs far as gloom went in that room,\n  The lamp might have been lit!\nMy little Sorrow would not weep,\n  My little Sin would go to sleep--\nTo save my soul I could not keep\n  My graceless mind on it!\n\nSo up I got in anger,\n  And took a book I had,\nAnd put a ribbon on my hair\n  To please a passing lad,\nAnd, \"One thing there's no getting by--\nI've been a wicked girl,\" said I;\n\"But if I can't be sorry, why,\n  I might as well be glad!\"",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-daphne-en-9d10151f",
+    "title": "Daphne",
+    "author": "Edna St. Vincent Millay",
+    "content": "Why do you follow me?--\nAny moment I can be\nNothing but a laurel-tree.\n\nAny moment of the chase\nI can leave you in my place\nA pink bough for your embrace.\n\nYet if over hill and hollow\nStill it is your will to follow,\nI am off;--to heel, Apollo!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-portrait-by-a-neighbor-en-87f87036",
+    "title": "Portrait by a Neighbor",
+    "author": "Edna St. Vincent Millay",
+    "content": "Before she has her floor swept\n  Or her dishes done,\nAny day you'll find her\n  A-sunning in the sun!\n\nIt's long after midnight\n  Her key's in the lock,\nAnd you never see her chimney smoke\n  Till past ten o'clock!\n\nShe digs in her garden\n  With a shovel and a spoon,\nShe weeds her lazy lettuce\n  By the light of the moon,\n\nShe walks up the walk\n  Like a woman in a dream,\nShe forgets she borrowed butter\n  And pays you back cream!\n\nHer lawn looks like a meadow,\n  And if she mows the place\nShe leaves the clover standing\n  And the Queen Anne's lace!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-midnight-oil-en-743f5b1d",
+    "title": "Midnight Oil",
+    "author": "Edna St. Vincent Millay",
+    "content": "Cut if you will, with Sleep's dull knife,\n  Each day to half its length, my friend,--\nThe years that Time takes off _my_ life,\n  He'll take from off the other end!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-the-merry-maid-en-ae161cc8",
+    "title": "The Merry Maid",
+    "author": "Edna St. Vincent Millay",
+    "content": "Oh, I am grown so free from care\n  Since my heart broke!\nI set my throat against the air,\n  I laugh at simple folk!\n\nThere's little kind and little fair\n  Is worth its weight in smoke\nTo me, that's grown so free from care\n  Since my heart broke!\n\nLass, if to sleep you would repair\n  As peaceful as you woke,\nBest not besiege your lover there\n  For just the words he spoke\nTo me, that's grown so free from care\n  Since my heart broke!",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "medium"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-to-kathleen-en-0bbcf7e9",
+    "title": "To Kathleen",
+    "author": "Edna St. Vincent Millay",
+    "content": "Still must the poet as of old,\nIn barren attic bleak and cold,\nStarve, freeze, and fashion verses to\nSuch things as flowers and song and you;\n\nStill as of old his being give\nIn Beauty's name, while she may live,\nBeauty that may not die as long\nAs there are flowers and you and song.",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
+      "length": "short"
+    }
+  },
+  {
+    "id": "edna-st-vincent-millay-the-philosopher-en-50dcdae9",
+    "title": "The Philosopher",
+    "author": "Edna St. Vincent Millay",
+    "content": "And what are you that, wanting you\n  I should be kept awake\nAs many nights as there are days\n  With weeping for your sake?\n\nAnd what are you that, missing you,\n  As many days as crawl\nI should be listening to the wind\n  And looking at the wall?\n\nI know a man that's a braver man\n  And twenty men as kind,\nAnd what are you, that you should be\n  The one man in my mind?\n\nYet women's ways are witless ways,\n  As any sage will tell,--\nAnd what am I, that I should love\n  So wisely and so well?",
+    "language": "en",
+    "metadata": {
+      "tags": [
+        "public domain",
+        "american poetry",
+        "lyric"
+      ],
+      "themes": [
+        "independence",
+        "love",
+        "youth"
+      ],
+      "moods": [
+        "witty",
+        "reflective"
+      ],
+      "form": "short lyric",
+      "era": "early 20th century",
       "length": "medium"
     }
   }

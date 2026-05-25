@@ -10,7 +10,8 @@ as PM:
 - keep the main thread high level. one decision at a time.
 - decompose work into task files. delegate to subagents.
 - do not pull large diffs into the main thread unless deciding a blocker.
-- use verification agents for independent checks before accepting a fix.
+- use verification agents for focused checks when useful, but do not treat per-task verification as sufficient for a multi-task batch.
+- before accepting or closing a batch of related tasks, run one final end-state review over the combined worktree.
 - make the next move obvious.
 
 ## startup context
@@ -100,6 +101,8 @@ avoid:
 ## verification and commits
 
 verification commands live in `PRODUCT-CONTEXT.md`. run them before moving a task to `review/`.
+
+for multi-task batches, prefer a final aggregate end-state review after implementation tasks are complete. that review should inspect the combined diff and integration behavior across task boundaries: data migrations, generated files, lockfiles, schema/RLS, sync flows, UI integration, runtime assumptions, and unresolved manual/runtime checks. per-task reviews are useful for catching scoped mistakes, but they are not the final acceptance gate for the batch.
 
 workers should not commit unless explicitly instructed. when a commit happens, record the hash in the task file's work log.
 

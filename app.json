@@ -10,6 +10,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.raza.poems",
       "buildNumber": "1",
+      "deploymentTarget": "16.4",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -40,6 +41,14 @@
           "image": "./assets/splash-icon.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "buildReactNativeFromSource": true
+          }
         }
       ]
     ],

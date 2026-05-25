@@ -7,10 +7,37 @@ import {
   getPoemsByAuthor,
   searchPoems,
   insertPoem,
+  createLocalUserPoem,
+  getLocalUserPoems,
+  listDirtyUserPoems,
+  markUserPoemSynced,
+  applyRemoteUserPoem,
+  updateLocalUserPoem,
+  deleteLocalUserPoem,
+  getUserPoemsSyncCheckpoint,
+  setUserPoemsSyncCheckpoint,
   insertPoemsInBatch,
   getPoemByTitleAndAuthor as repoGetPoemByTitleAndAuthor,
   getDistinctAuthors,
+  savePoem,
+  unsavePoem,
+  isPoemSaved,
+  getSavedPoemIds,
+  getSavedPoems,
+  listDirtySavedPoems,
+  markSavedPoemSynced,
+  applyRemoteSavedPoem,
+  getSavedPoemsSyncCheckpoint,
+  setSavedPoemsSyncCheckpoint,
   type CreatePoemInput,
+  type CreateLocalUserPoemInput,
+  type RemoteSavedPoemRow,
+  type RemoteUserPoemRow,
+  type SavedPoemScope,
+  type SavedPoemSyncRow,
+  type SavedPoemSyncStatus,
+  type UserPoemSyncRow,
+  type UserPoemSyncStatus,
 } from './storage/poemRepository';
 import { STARTER_POEMS } from './data/starterPoems';
 import type { Poem } from './types';
@@ -45,6 +72,28 @@ export function searchLocalPoems(
 }
 
 export { getDistinctAuthors as getLocalAuthors };
+
+export {
+  createLocalUserPoem,
+  getLocalUserPoems,
+  listDirtyUserPoems as listDirtyLocalUserPoems,
+  markUserPoemSynced as markLocalUserPoemSynced,
+  applyRemoteUserPoem as applyRemoteUserPoemLocally,
+  updateLocalUserPoem,
+  deleteLocalUserPoem,
+  getUserPoemsSyncCheckpoint as getLocalUserPoemsSyncCheckpoint,
+  setUserPoemsSyncCheckpoint as setLocalUserPoemsSyncCheckpoint,
+  savePoem as saveLocalPoem,
+  unsavePoem as unsaveLocalPoem,
+  isPoemSaved as isLocalPoemSaved,
+  getSavedPoemIds as getLocalSavedPoemIds,
+  getSavedPoems as getLocalSavedPoems,
+  listDirtySavedPoems as listDirtyLocalSavedPoems,
+  markSavedPoemSynced as markLocalSavedPoemSynced,
+  applyRemoteSavedPoem as applyRemoteSavedPoemLocally,
+  getSavedPoemsSyncCheckpoint as getLocalSavedPoemsSyncCheckpoint,
+  setSavedPoemsSyncCheckpoint as setLocalSavedPoemsSyncCheckpoint,
+};
 
 export function addPoem(
   title: string,
@@ -93,3 +142,13 @@ export async function seedPoems(): Promise<void> {
 }
 
 export type { Poem };
+export type {
+  CreateLocalUserPoemInput,
+  RemoteSavedPoemRow,
+  RemoteUserPoemRow,
+  SavedPoemScope,
+  SavedPoemSyncRow,
+  SavedPoemSyncStatus,
+  UserPoemSyncRow,
+  UserPoemSyncStatus,
+};

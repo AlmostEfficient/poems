@@ -4,8 +4,10 @@ import { Asset } from 'expo-asset';
 import { createPoemId, ensureUniquePoemId } from '../utils/poemId';
 
 const DB_NAME = 'poems.db';
-const DB_VERSION = 4;
+const DB_VERSION = 7;
 const SQLITE_DIRECTORY = new Directory(Paths.document, 'SQLite');
+const BUNDLED_IMPORT_DB_NAME = 'bundled-poems-import.db';
+const BUNDLED_IMPORT_DIRECTORY = new Directory(Paths.cache, 'SQLite');
 
 let dbInstance: SQLite.SQLiteDatabase | null = null;
 let initializationPromise: Promise<SQLite.SQLiteDatabase> | null = null;
@@ -20,7 +22,13 @@ function ensureDirectoryExists(): void {
   }
 }
 
-async function copyBundledDatabase(): Promise<void> {
+function ensureBundledImportDirectoryExists(): void {
+  if (!BUNDLED_IMPORT_DIRECTORY.exists) {
+    BUNDLED_IMPORT_DIRECTORY.create({ intermediates: true, idempotent: true });
+  }
+}
+
+async function getBundledDatabaseAssetFile(): Promise<File> {
   const asset = Asset.fromModule(require('../../assets/poems.db'));
   if (!asset.downloaded) {
     await asset.downloadAsync();
@@ -30,14 +38,18 @@ async function copyBundledDatabase(): Promise<void> {
     throw new Error('Unable to locate bundled poems.db asset');
   }
 
+  return new File(asset.localUri);
+}
+
+async function copyBundledDatabase(): Promise<void> {
   ensureDirectoryExists();
 
-  const sourceFile = new File(asset.localUri);
+  const sourceFile = await getBundledDatabaseAssetFile();
   const destFile = getDatabaseFile();
   if (destFile.exists) {
-    destFile.delete();
+    return;
   }
-  sourceFile.copy(destFile);
+  await sourceFile.copy(destFile);
 }
 
 function closeDatabase(db: SQLite.SQLiteDatabase) {
@@ -58,46 +70,10 @@ function closeDatabase(db: SQLite.SQLiteDatabase) {
   }
 }
 
-function shouldReplaceExistingDatabase(): boolean {
+function shouldCopyBundledDatabase(): boolean {
   ensureDirectoryExists();
   const dbFile = getDatabaseFile();
-
-  if (!dbFile.exists) {
-    return true;
-  }
-
-  try {
-    const existingDb = SQLite.openDatabaseSync(DB_NAME);
-    existingDb.execSync(
-      `CREATE TABLE IF NOT EXISTS metadata (
-        key TEXT PRIMARY KEY,
-        value TEXT NOT NULL
-      );`
-    );
-
-    const row = existingDb.getFirstSync(
-      'SELECT value FROM metadata WHERE key = ?;',
-      ['db_version']
-    ) as { value: string } | undefined;
-
-    const currentVersion = row ? Number(row.value) : 0;
-    closeDatabase(existingDb);
-
-    if (Number.isNaN(currentVersion) || currentVersion < DB_VERSION) {
-      dbFile.delete();
-      return true;
-    }
-
-    return false;
-  } catch (error) {
-    console.warn('Failed to inspect existing database, copying bundled version', error);
-    try {
-      dbFile.delete();
-    } catch (deleteError) {
-      // Ignore delete errors
-    }
-    return true;
-  }
+  return !dbFile.exists;
 }
 
 function tableHasColumn(database: SQLite.SQLiteDatabase, tableName: string, columnName: string): boolean {
@@ -167,11 +143,100 @@ function applyMigrations(database: SQLite.SQLiteDatabase): void {
 
   database.runSync(`UPDATE poems SET metadata = '{}' WHERE metadata IS NULL OR metadata = '';`);
 
+  if (!tableHasColumn(database, 'poems', 'created_at')) {
+    database.execSync(`ALTER TABLE poems ADD COLUMN created_at TEXT;`);
+  }
+
+  if (!tableHasColumn(database, 'poems', 'updated_at')) {
+    database.execSync(`ALTER TABLE poems ADD COLUMN updated_at TEXT;`);
+  }
+
+  if (!tableHasColumn(database, 'poems', 'sync_status')) {
+    database.execSync(`ALTER TABLE poems ADD COLUMN sync_status TEXT NOT NULL DEFAULT 'synced';`);
+  }
+
+  if (!tableHasColumn(database, 'poems', 'remote_id')) {
+    database.execSync(`ALTER TABLE poems ADD COLUMN remote_id TEXT;`);
+  }
+
+  if (!tableHasColumn(database, 'poems', 'deleted_at')) {
+    database.execSync(`ALTER TABLE poems ADD COLUMN deleted_at TEXT;`);
+  }
+
+  const migrationTimestamp = new Date().toISOString();
+  database.runSync(
+    `UPDATE poems
+     SET created_at = COALESCE(created_at, ?),
+       updated_at = COALESCE(updated_at, created_at, ?)
+     WHERE source = 'user';`,
+    [migrationTimestamp, migrationTimestamp]
+  );
+
+  database.runSync(
+    `UPDATE poems
+     SET sync_status = 'dirty'
+     WHERE source = 'user'
+       AND (
+         sync_status IS NULL
+         OR sync_status = ''
+         OR sync_status = 'local'
+         OR (sync_status = 'synced' AND remote_id IS NULL)
+       );`
+  );
+
+  database.execSync(
+    'CREATE INDEX IF NOT EXISTS idx_poems_user_sync_status ON poems (source, sync_status, updated_at);'
+  );
+
+  database.execSync(
+    'CREATE INDEX IF NOT EXISTS idx_poems_user_updated_at ON poems (source, updated_at);'
+  );
+
   if (!tableHasColumn(database, 'poems', 'poem_id')) {
     database.execSync('ALTER TABLE poems ADD COLUMN poem_id TEXT;');
   }
 
   populateMissingPoemIds(database);
+
+  database.execSync(
+    `CREATE TABLE IF NOT EXISTS saved_poems (
+      poem_id TEXT PRIMARY KEY,
+      poem_scope TEXT NOT NULL DEFAULT 'catalogue',
+      saved_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL,
+      sync_status TEXT NOT NULL DEFAULT 'dirty',
+      remote_id TEXT,
+      deleted_at TEXT
+    );`
+  );
+
+  if (!tableHasColumn(database, 'saved_poems', 'poem_scope')) {
+    database.execSync(`ALTER TABLE saved_poems ADD COLUMN poem_scope TEXT NOT NULL DEFAULT 'catalogue';`);
+  }
+
+  database.runSync(
+    `UPDATE saved_poems
+     SET poem_scope = 'catalogue'
+     WHERE poem_scope IS NULL OR poem_scope = '';`
+  );
+
+  database.runSync(
+    `UPDATE saved_poems
+     SET sync_status = 'dirty'
+     WHERE sync_status IS NULL OR sync_status = '' OR sync_status = 'local';`
+  );
+
+  database.execSync(
+    'CREATE INDEX IF NOT EXISTS idx_saved_poems_saved_at ON saved_poems (saved_at DESC);'
+  );
+
+  database.execSync(
+    'CREATE UNIQUE INDEX IF NOT EXISTS idx_saved_poems_scope_poem_id ON saved_poems (poem_scope, poem_id);'
+  );
+
+  database.execSync(
+    'CREATE INDEX IF NOT EXISTS idx_saved_poems_sync_status ON saved_poems (sync_status, updated_at);'
+  );
 
   database.execSync(
     `CREATE TABLE IF NOT EXISTS metadata (
@@ -186,6 +251,94 @@ function applyMigrations(database: SQLite.SQLiteDatabase): void {
   );
 }
 
+async function copyBundledDatabaseForImport(): Promise<File> {
+  ensureBundledImportDirectoryExists();
+
+  const sourceFile = await getBundledDatabaseAssetFile();
+  const importFile = new File(BUNDLED_IMPORT_DIRECTORY, BUNDLED_IMPORT_DB_NAME);
+  if (importFile.exists) {
+    importFile.delete();
+  }
+
+  await sourceFile.copy(importFile);
+  return importFile;
+}
+
+function readBundledPoems(database: SQLite.SQLiteDatabase) {
+  return database.getAllSync(
+    `SELECT poem_id, title, author, content, language, metadata
+     FROM poems
+     WHERE source = 'bundled' AND poem_id IS NOT NULL AND poem_id != '';`
+  ) as Array<{
+    poem_id: string;
+    title: string;
+    author: string;
+    content: string;
+    language: 'en' | 'ur';
+    metadata: string | null;
+  }>;
+}
+
+async function refreshBundledCatalogue(database: SQLite.SQLiteDatabase): Promise<void> {
+  let bundledDb: SQLite.SQLiteDatabase | null = null;
+  let importFile: File | null = null;
+
+  try {
+    importFile = await copyBundledDatabaseForImport();
+    bundledDb = SQLite.openDatabaseSync(
+      BUNDLED_IMPORT_DB_NAME,
+      { useNewConnection: true },
+      BUNDLED_IMPORT_DIRECTORY.uri
+    );
+
+    const bundledPoems = readBundledPoems(bundledDb);
+    if (bundledPoems.length === 0) {
+      return;
+    }
+
+    database.execSync('BEGIN');
+    try {
+      bundledPoems.forEach((poem) => {
+        database.runSync(
+          `INSERT INTO poems (poem_id, title, author, content, language, source, metadata)
+           VALUES (?, ?, ?, ?, ?, 'bundled', ?)
+           ON CONFLICT(poem_id) DO UPDATE SET
+             title = excluded.title,
+             author = excluded.author,
+             content = excluded.content,
+             language = excluded.language,
+             metadata = excluded.metadata
+           WHERE poems.source = 'bundled';`,
+          [
+            poem.poem_id,
+            poem.title,
+            poem.author,
+            poem.content,
+            poem.language,
+            poem.metadata ?? '{}',
+          ]
+        );
+      });
+      database.execSync('COMMIT');
+    } catch (error) {
+      database.execSync('ROLLBACK');
+      throw error;
+    }
+  } finally {
+    if (bundledDb) {
+      closeDatabase(bundledDb);
+    }
+
+    try {
+      if (importFile?.exists) {
+        importFile.delete();
+      }
+    } catch (error) {
+      console.warn('Failed to remove temporary bundled poems import database', error);
+    }
+  }
+}
+
 export async function initializeDatabase(): Promise<SQLite.SQLiteDatabase> {
   if (dbInstance) {
     return dbInstance;
@@ -194,13 +347,16 @@ export async function initializeDatabase(): Promise<SQLite.SQLiteDatabase> {
   if (!initializationPromise) {
     initializationPromise = (async () => {
       ensureDirectoryExists();
-      const needsReplacement = shouldReplaceExistingDatabase();
-      if (needsReplacement) {
+      const shouldCopyBundled = shouldCopyBundledDatabase();
+      if (shouldCopyBundled) {
         await copyBundledDatabase();
       }
 
       const database = SQLite.openDatabaseSync(DB_NAME);
       applyMigrations(database);
+      if (!shouldCopyBundled) {
+        await refreshBundledCatalogue(database);
+      }
       dbInstance = database;
       return database;
     })().catch((error) => {

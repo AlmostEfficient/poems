@@ -35,7 +35,7 @@ interface PoemMetadata {
   length?: PoemLengthBucket | null;
 }
 
-const DB_VERSION = 4;
+const DB_VERSION = 7;
 
 function parseArgs() {
   const args = process.argv.slice(2);

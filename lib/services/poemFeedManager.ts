@@ -54,6 +54,8 @@ export class PoemFeedManager {
 
   private isLoading = false;
 
+  private pendingLoadIndices = new Set<number>();
+
   private poemSource: PoemFeedSource = 'local';
 
   private fetchers: PoemFetchers;
@@ -172,67 +174,27 @@ export class PoemFeedManager {
       this.initialiseWithStarterPoems();
     }
 
-    if (!this.isDatabaseReady || this.isLoading) {
+    const uniqueIndices = this.normalizeLoadIndices(indices);
+
+    if (uniqueIndices.length === 0 || !this.isDatabaseReady) {
       return this.virtualSlots;
     }
 
-    const uniqueIndices = Array.from(new Set(indices)).filter((index) =>
-      index >= 0 && index < this.virtualSlots.length
-    );
-
-    if (uniqueIndices.length === 0) {
-      return this.virtualSlots;
-    }
-
-    const targetIndices = uniqueIndices.filter((index) => {
-      const slot = this.virtualSlots[index];
-      return !slot.poem && !slot.isLoading;
-    });
-
-    if (targetIndices.length === 0) {
+    if (this.isLoading) {
+      uniqueIndices.forEach((index) => this.pendingLoadIndices.add(index));
       return this.virtualSlots;
     }
 
     this.isLoading = true;
 
     try {
-      // Mark as loading
-      targetIndices.forEach((index) => {
-        this.virtualSlots[index] = { poem: null, isLoading: true };
-      });
+      let nextIndices = uniqueIndices;
 
-      const updates = new Map<number, VirtualSlot>();
-      const workingUsedIds = new Set(this.usedPoemIds);
-      const pendingIndices: number[] = [];
-
-      targetIndices.forEach((index) => {
-        const poem = this.takeNextPoem(workingUsedIds);
-        if (poem) {
-          updates.set(index, { poem, isLoading: false });
-        } else {
-          pendingIndices.push(index);
-        }
-      });
-
-      if (pendingIndices.length > 0) {
-        const fetched = await this.fetchAdditionalPoems(Math.max(20, pendingIndices.length * 2));
-        this.absorbPoems(fetched);
-
-        pendingIndices.forEach((index) => {
-          const poem = this.takeNextPoem(workingUsedIds);
-          if (poem) {
-            updates.set(index, { poem, isLoading: false });
-          } else {
-            updates.set(index, { poem: null, isLoading: false });
-          }
-        });
+      while (nextIndices.length > 0) {
+        await this.loadSlotBatch(nextIndices);
+        nextIndices = this.consumePendingLoadIndices();
       }
 
-      updates.forEach((slot, index) => {
-        this.virtualSlots[index] = slot;
-      });
-
-      this.usedPoemIds = workingUsedIds;
       return this.virtualSlots;
     } finally {
       this.isLoading = false;
@@ -258,6 +220,64 @@ export class PoemFeedManager {
       this.availablePoemIds.add(poemId);
       this.availablePoems.push({ ...normalized });
     });
+  }
+
+  private normalizeLoadIndices(indices: number[]): number[] {
+    return Array.from(new Set(indices)).filter((index) => index >= 0 && index < this.virtualSlots.length);
+  }
+
+  private consumePendingLoadIndices(): number[] {
+    const indices = this.normalizeLoadIndices(Array.from(this.pendingLoadIndices));
+    this.pendingLoadIndices.clear();
+    return indices;
+  }
+
+  private async loadSlotBatch(indices: number[]): Promise<void> {
+    const targetIndices = indices.filter((index) => {
+      const slot = this.virtualSlots[index];
+      return !slot.poem && !slot.isLoading;
+    });
+
+    if (targetIndices.length === 0) {
+      return;
+    }
+
+    targetIndices.forEach((index) => {
+      this.virtualSlots[index] = { poem: null, isLoading: true };
+    });
+
+    const updates = new Map<number, VirtualSlot>();
+    const workingUsedIds = new Set(this.usedPoemIds);
+    const pendingIndices: number[] = [];
+
+    targetIndices.forEach((index) => {
+      const poem = this.takeNextPoem(workingUsedIds);
+      if (poem) {
+        updates.set(index, { poem, isLoading: false });
+      } else {
+        pendingIndices.push(index);
+      }
+    });
+
+    if (pendingIndices.length > 0) {
+      const fetched = await this.fetchAdditionalPoems(Math.max(20, pendingIndices.length * 2));
+      this.absorbPoems(fetched);
+
+      pendingIndices.forEach((index) => {
+        const poem = this.takeNextPoem(workingUsedIds);
+        if (poem) {
+          updates.set(index, { poem, isLoading: false });
+        } else {
+          updates.set(index, { poem: null, isLoading: false });
+        }
+      });
+    }
+
+    updates.forEach((slot, index) => {
+      this.virtualSlots[index] = slot;
+    });
+
+    this.usedPoemIds = workingUsedIds;
   }
 
   private async fetchAdditionalPoems(limit: number): Promise<Poem[]> {

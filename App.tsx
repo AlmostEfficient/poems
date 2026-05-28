@@ -12,6 +12,7 @@ import { useAuthSession } from './hooks/useAuthSession';
 import { usePoemFeed } from './hooks/usePoemFeed';
 import { useSavedPoemsSync } from './hooks/useSavedPoemsSync';
 import { useUserPoemsSync } from './hooks/useUserPoemsSync';
+import type { SavedPoemScope } from './lib/poems';
 import { styles } from './styles/styles';
 
 export default function App() {
@@ -90,9 +91,9 @@ export default function App() {
   }, [language, toggleLanguage]);
 
   const handleToggleSavedPoem = useCallback(
-    async (poemId: string) => {
+    async (poemId: string, poemScope: SavedPoemScope = 'catalogue') => {
       try {
-        const saved = await toggleSavedPoem(poemId);
+        const saved = await toggleSavedPoem(poemId, poemScope);
         Toast.show({
           type: 'success',
           text1: saved ? 'Saved' : 'Removed from saved',
@@ -150,7 +151,7 @@ export default function App() {
               <PoemReaderView
                 poem={slot.poem}
                 onSecretTap={handleSecretTap}
-                isSaved={isPoemSaved(slot.poem.id)}
+                isSaved={isPoemSaved(slot.poem.id, slot.poem.source === 'user' ? 'user' : 'catalogue')}
                 onToggleSaved={handleToggleSavedPoem}
                 canSave={isDatabaseReady && ['local', 'bundled', 'user'].includes(slot.poem.source ?? 'local')}
                 onOpenLibrary={openLibrary}

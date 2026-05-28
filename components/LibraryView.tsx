@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { FlatList, Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
 import { createLocalUserPoem, getLocalSavedPoems, getLocalUserPoems } from '../lib/poems';
+import type { SavedPoemScope } from '../lib/poems';
 import type { Poem } from '../lib/types';
 import { styles } from '../styles/styles';
 import { PoemReaderView } from './PoemReaderView';
@@ -10,9 +11,9 @@ type LibraryTab = 'saved' | 'your-poems';
 
 interface LibraryViewProps {
   isDatabaseReady: boolean;
-  isPoemSaved: (poemId: string) => boolean;
+  isPoemSaved: (poemId: string, poemScope?: SavedPoemScope) => boolean;
   onClose: () => void;
-  onToggleSaved: (poemId: string) => Promise<void> | void;
+  onToggleSaved: (poemId: string, poemScope?: SavedPoemScope) => Promise<void> | void;
   onUserPoemCreated?: (poem: Poem) => void;
   refreshKey: number;
 }
@@ -44,7 +45,10 @@ export function LibraryView({
       setSavedPoems([]);
       return;
     }
-    setSavedPoems(getLocalSavedPoems({ limit: 200 }));
+    setSavedPoems([
+      ...getLocalSavedPoems({ limit: 200, poemScope: 'catalogue' }),
+      ...getLocalSavedPoems({ limit: 200, poemScope: 'user' }),
+    ]);
   }, [isDatabaseReady]);
 
   const loadUserPoems = useCallback(() => {
@@ -61,13 +65,13 @@ export function LibraryView({
   }, [loadSavedPoems, loadUserPoems, refreshKey]);
 
   const selectedPoemSaved = useMemo(
-    () => (selectedPoem ? isPoemSaved(selectedPoem.id) : false),
+    () => (selectedPoem ? isPoemSaved(selectedPoem.id, selectedPoem.source === 'user' ? 'user' : 'catalogue') : false),
     [isPoemSaved, selectedPoem]
   );
 
   const handleToggleSelectedSaved = useCallback(
-    async (poemId: string) => {
-      await onToggleSaved(poemId);
+    async (poemId: string, poemScope?: SavedPoemScope) => {
+      await onToggleSaved(poemId, poemScope);
       loadSavedPoems();
       if (selectedPoem?.id === poemId && selectedPoemSaved) {
         setSelectedPoem(null);
@@ -142,7 +146,7 @@ export function LibraryView({
           poem={selectedPoem}
           isSaved={selectedPoemSaved}
           onToggleSaved={handleToggleSelectedSaved}
-          canSave={isDatabaseReady && selectedPoem.source !== 'user'}
+          canSave={isDatabaseReady}
         />
       </View>
     );

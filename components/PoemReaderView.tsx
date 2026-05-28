@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Dimensions, Pressable, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 
 import type { Poem } from '../lib/types';
+import type { SavedPoemScope } from '../lib/poems';
 import { styles } from '../styles/styles';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
@@ -10,7 +11,7 @@ interface PoemReaderViewProps {
   poem: Poem;
   onSecretTap?: () => void;
   isSaved?: boolean;
-  onToggleSaved?: (poemId: string) => void;
+  onToggleSaved?: (poemId: string, poemScope?: SavedPoemScope) => void;
   canSave?: boolean;
   onOpenLibrary?: () => void;
   showLibraryButton?: boolean;
@@ -33,6 +34,7 @@ export function PoemReaderView({
   const authorStyle = isUrdu ? styles.authorUrdu : styles.author;
   const lineStyle = isUrdu ? styles.lineUrdu : styles.line;
   const authorLabel = isUrdu ? poem.author : `by ${poem.author}`;
+  const poemScope: SavedPoemScope = poem.source === 'user' ? 'user' : 'catalogue';
 
   const headerHeight = 120;
   const paginationHeight = 40;
@@ -124,7 +126,7 @@ export function PoemReaderView({
 
       {canSave && onToggleSaved && (
         <Pressable
-          onPress={() => onToggleSaved(poem.id)}
+          onPress={() => onToggleSaved(poem.id, poemScope)}
           style={({ pressed }) => [
             styles.saveButton,
             isSaved && styles.saveButtonActive,

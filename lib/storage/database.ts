@@ -81,6 +81,67 @@ function tableHasColumn(database: SQLite.SQLiteDatabase, tableName: string, colu
   return columns.some((column) => column.name === columnName);
 }
 
+function tableExists(database: SQLite.SQLiteDatabase, tableName: string): boolean {
+  const row = database.getFirstSync(
+    "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ? LIMIT 1;",
+    [tableName]
+  );
+  return Boolean(row);
+}
+
+function getPrimaryKeyColumns(database: SQLite.SQLiteDatabase, tableName: string): string[] {
+  const columns = database.getAllSync(`PRAGMA table_info(${tableName});`) as Array<{ name: string; pk: number }>;
+  return columns
+    .filter((column) => column.pk > 0)
+    .sort((left, right) => left.pk - right.pk)
+    .map((column) => column.name);
+}
+
+function savedPoemsNeedsRebuild(database: SQLite.SQLiteDatabase): boolean {
+  if (!tableExists(database, 'saved_poems')) {
+    return false;
+  }
+
+  const primaryKeyColumns = getPrimaryKeyColumns(database, 'saved_poems');
+  return primaryKeyColumns.length === 1 && primaryKeyColumns[0] === 'poem_id';
+}
+
+function rebuildSavedPoemsTable(database: SQLite.SQLiteDatabase): void {
+  database.execSync('ALTER TABLE saved_poems RENAME TO saved_poems_legacy;');
+  createSavedPoemsTable(database);
+
+  database.execSync(
+    `INSERT OR IGNORE INTO saved_poems
+       (poem_id, poem_scope, saved_at, updated_at, sync_status, remote_id, deleted_at)
+     SELECT poem_id,
+       COALESCE(NULLIF(poem_scope, ''), 'catalogue'),
+       saved_at,
+       updated_at,
+       COALESCE(NULLIF(sync_status, ''), 'dirty'),
+       remote_id,
+       deleted_at
+     FROM saved_poems_legacy;`
+  );
+
+  database.execSync('DROP TABLE saved_poems_legacy;');
+}
+
+function createSavedPoemsTable(database: SQLite.SQLiteDatabase): void {
+  database.execSync(
+    `CREATE TABLE IF NOT EXISTS saved_poems (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      poem_id TEXT NOT NULL,
+      poem_scope TEXT NOT NULL DEFAULT 'catalogue',
+      saved_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL,
+      sync_status TEXT NOT NULL DEFAULT 'dirty',
+      remote_id TEXT,
+      deleted_at TEXT,
+      UNIQUE(poem_scope, poem_id)
+    );`
+  );
+}
+
 function populateMissingPoemIds(database: SQLite.SQLiteDatabase) {
   const existingIds = new Set<string>();
   const rows = database.getAllSync('SELECT id, poem_id, title, author, content, language FROM poems;') as Array<{
@@ -198,17 +259,11 @@ function applyMigrations(database: SQLite.SQLiteDatabase): void {
 
   populateMissingPoemIds(database);
 
-  database.execSync(
-    `CREATE TABLE IF NOT EXISTS saved_poems (
-      poem_id TEXT PRIMARY KEY,
-      poem_scope TEXT NOT NULL DEFAULT 'catalogue',
-      saved_at TEXT NOT NULL,
-      updated_at TEXT NOT NULL,
-      sync_status TEXT NOT NULL DEFAULT 'dirty',
-      remote_id TEXT,
-      deleted_at TEXT
-    );`
-  );
+  createSavedPoemsTable(database);
+
+  if (savedPoemsNeedsRebuild(database)) {
+    rebuildSavedPoemsTable(database);
+  }
 
   if (!tableHasColumn(database, 'saved_poems', 'poem_scope')) {
     database.execSync(`ALTER TABLE saved_poems ADD COLUMN poem_scope TEXT NOT NULL DEFAULT 'catalogue';`);

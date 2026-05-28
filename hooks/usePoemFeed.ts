@@ -10,6 +10,7 @@ import {
 } from '../lib/poems';
 import { poetryAPI } from '../lib/poetry-api';
 import type { Poem, VirtualSlot } from '../lib/types';
+import type { SavedPoemScope } from '../lib/poems';
 import { PoemFeedManager, type PoemFeedSource } from '../lib/services/poemFeedManager';
 
 const VIRTUAL_SIZE = 2000;
@@ -33,8 +34,8 @@ interface UsePoemFeedResult {
   setLanguage: (language: 'en' | 'ur') => void;
   refreshVisibleWindow: () => void;
   refreshSavedPoemIds: () => void;
-  isPoemSaved: (poemId: string) => boolean;
-  toggleSavedPoem: (poemId: string) => Promise<boolean>;
+  isPoemSaved: (poemId: string, poemScope?: SavedPoemScope) => boolean;
+  toggleSavedPoem: (poemId: string, poemScope?: SavedPoemScope) => Promise<boolean>;
 }
 
 const POEM_SOURCES: PoemFeedSource[] = ['local', 'hybrid', 'api'];
@@ -49,6 +50,10 @@ function asLocalPoems(
     source,
     language: poem.language ?? 'en',
   }));
+}
+
+function savedPoemKey(poemId: string, poemScope: SavedPoemScope): string {
+  return `${poemScope}:${poemId}`;
 }
 
 export function usePoemFeed(): UsePoemFeedResult {
@@ -144,7 +149,10 @@ export function usePoemFeed(): UsePoemFeedResult {
     if (!isDatabaseReady) {
       return;
     }
-    setSavedPoemIds(new Set(getLocalSavedPoemIds()));
+    const nextIds = new Set<string>();
+    getLocalSavedPoemIds('catalogue').forEach((poemId) => nextIds.add(savedPoemKey(poemId, 'catalogue')));
+    getLocalSavedPoemIds('user').forEach((poemId) => nextIds.add(savedPoemKey(poemId, 'user')));
+    setSavedPoemIds(nextIds);
   }, [isDatabaseReady]);
 
   useEffect(() => {
@@ -159,13 +167,15 @@ export function usePoemFeed(): UsePoemFeedResult {
         await initDB();
         await seedPoems();
         const count = getTotalPoemsCount();
-        const savedIds = getLocalSavedPoemIds();
+        const savedIds = new Set<string>();
+        getLocalSavedPoemIds('catalogue').forEach((poemId) => savedIds.add(savedPoemKey(poemId, 'catalogue')));
+        getLocalSavedPoemIds('user').forEach((poemId) => savedIds.add(savedPoemKey(poemId, 'user')));
         if (cancelled) {
           return;
         }
 
         setTotalPoemsCount(count);
-        setSavedPoemIds(new Set(savedIds));
+        setSavedPoemIds(savedIds);
         setIsDatabaseReady(true);
         manager.setDatabaseReady(true);
         loadAroundIndex(0);
@@ -241,29 +251,30 @@ export function usePoemFeed(): UsePoemFeedResult {
   }, []);
 
   const isPoemSaved = useCallback(
-    (poemId: string) => savedPoemIds.has(poemId),
+    (poemId: string, poemScope: SavedPoemScope = 'catalogue') => savedPoemIds.has(savedPoemKey(poemId, poemScope)),
     [savedPoemIds]
   );
 
   const toggleSavedPoem = useCallback(
-    async (poemId: string) => {
+    async (poemId: string, poemScope: SavedPoemScope = 'catalogue') => {
       if (!isDatabaseReady) {
         return false;
       }
 
-      const nextSaved = !savedPoemIds.has(poemId);
+      const key = savedPoemKey(poemId, poemScope);
+      const nextSaved = !savedPoemIds.has(key);
       if (nextSaved) {
-        saveLocalPoem(poemId);
+        saveLocalPoem(poemId, poemScope);
       } else {
-        unsaveLocalPoem(poemId);
+        unsaveLocalPoem(poemId, poemScope);
       }
 
       setSavedPoemIds((previous) => {
         const next = new Set(previous);
         if (nextSaved) {
-          next.add(poemId);
+          next.add(key);
         } else {
-          next.delete(poemId);
+          next.delete(key);
         }
         return next;
       });

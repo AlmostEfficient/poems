@@ -225,18 +225,27 @@ export function getRandomPoems(options?: { limit?: number; language?: 'en' | 'ur
   const db = getDatabase();
   const limit = options?.limit ?? 20;
   const language = options?.language;
+  const where = language ? "source != 'user' AND language = ?" : "source != 'user'";
+  const whereParams = language ? [language] : [];
 
-  if (language) {
-    const rows = db.getAllSync(
-      "SELECT poem_id, title, author, content, language, source, metadata FROM poems WHERE source != 'user' AND language = ? ORDER BY RANDOM() LIMIT ?;",
-      [language, limit]
-    );
-    return rows.map((row) => mapRowToPoem(row));
+  const countRow = db.getFirstSync(
+    `SELECT COUNT(*) as count FROM poems WHERE ${where};`,
+    whereParams
+  ) as { count: number } | undefined;
+  const count = countRow?.count ?? 0;
+  if (count === 0) {
+    return [];
   }
 
+  const normalizedLimit = Math.max(1, Math.min(limit, count));
+  const offset = count > normalizedLimit ? Math.floor(Math.random() * (count - normalizedLimit + 1)) : 0;
   const rows = db.getAllSync(
-    "SELECT poem_id, title, author, content, language, source, metadata FROM poems WHERE source != 'user' ORDER BY RANDOM() LIMIT ?;",
-    [limit]
+    `SELECT poem_id, title, author, content, language, source, metadata
+     FROM poems
+     WHERE ${where}
+     ORDER BY id
+     LIMIT ? OFFSET ?;`,
+    [...whereParams, normalizedLimit, offset]
   );
   return rows.map((row) => mapRowToPoem(row));
 }
@@ -670,8 +679,7 @@ export function savePoem(poemId: string, poemScope: SavedPoemScope = 'catalogue'
   db.runSync(
     `INSERT INTO saved_poems (poem_id, poem_scope, saved_at, updated_at, sync_status, remote_id, deleted_at)
      VALUES (?, ?, ?, ?, 'dirty', NULL, NULL)
-     ON CONFLICT(poem_id) DO UPDATE SET
-       poem_scope = excluded.poem_scope,
+     ON CONFLICT(poem_scope, poem_id) DO UPDATE SET
        saved_at = excluded.saved_at,
        updated_at = excluded.updated_at,
        sync_status = 'dirty',
@@ -688,8 +696,7 @@ export function unsavePoem(poemId: string, poemScope: SavedPoemScope = 'catalogu
   db.runSync(
     `INSERT INTO saved_poems (poem_id, poem_scope, saved_at, updated_at, sync_status, remote_id, deleted_at)
      VALUES (?, ?, ?, ?, 'dirty', NULL, ?)
-     ON CONFLICT(poem_id) DO UPDATE SET
-       poem_scope = excluded.poem_scope,
+     ON CONFLICT(poem_scope, poem_id) DO UPDATE SET
        updated_at = excluded.updated_at,
        sync_status = 'dirty',
        remote_id = saved_poems.remote_id,
@@ -803,8 +810,7 @@ export function applyRemoteSavedPoem(input: RemoteSavedPoemRow): boolean {
   db.runSync(
     `INSERT INTO saved_poems (poem_id, poem_scope, saved_at, updated_at, sync_status, remote_id, deleted_at)
      VALUES (?, ?, ?, ?, 'synced', ?, ?)
-     ON CONFLICT(poem_id) DO UPDATE SET
-       poem_scope = excluded.poem_scope,
+     ON CONFLICT(poem_scope, poem_id) DO UPDATE SET
        saved_at = excluded.saved_at,
        updated_at = excluded.updated_at,
        sync_status = 'synced',

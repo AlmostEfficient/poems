@@ -6,6 +6,7 @@ import type { SavedPoemScope } from '../lib/poems';
 import type { Poem } from '../lib/types';
 import { styles } from '../styles/styles';
 import { PoemReaderView } from './PoemReaderView';
+import { PoemScannerView } from './PoemScannerView';
 
 type LibraryTab = 'saved' | 'your-poems';
 
@@ -37,9 +38,11 @@ export function LibraryView({
   const [userPoems, setUserPoems] = useState<Poem[]>([]);
   const [selectedPoem, setSelectedPoem] = useState<Poem | null>(null);
   const [isCreatingPoem, setIsCreatingPoem] = useState(false);
+  const [isScanningPoem, setIsScanningPoem] = useState(false);
   const [draftTitle, setDraftTitle] = useState('');
   const [draftAuthor, setDraftAuthor] = useState('');
   const [draftContent, setDraftContent] = useState('');
+  const [draftLanguage, setDraftLanguage] = useState<'en' | 'ur'>('en');
   const [draftError, setDraftError] = useState<string | null>(null);
 
   const loadSavedPoems = useCallback(() => {
@@ -86,6 +89,7 @@ export function LibraryView({
     setDraftTitle('');
     setDraftAuthor('');
     setDraftContent('');
+    setDraftLanguage('en');
     setDraftError(null);
   }, []);
 
@@ -99,6 +103,11 @@ export function LibraryView({
     setIsCreatingPoem(false);
   }, [resetPoemForm]);
 
+  const handleStartScanningPoem = useCallback(() => {
+    resetPoemForm();
+    setIsScanningPoem(true);
+  }, [resetPoemForm]);
+
   const handleSaveCreatedPoem = useCallback(() => {
     if (!draftContent.trim()) {
       setDraftError('Add poem text before saving.');
@@ -109,6 +118,7 @@ export function LibraryView({
       title: draftTitle,
       author: draftAuthor,
       content: draftContent,
+      language: draftLanguage,
     });
 
     resetPoemForm();
@@ -117,7 +127,24 @@ export function LibraryView({
     loadUserPoems();
     setSelectedPoem(poem);
     onUserPoemCreated?.(poem);
-  }, [draftAuthor, draftContent, draftTitle, loadUserPoems, onUserPoemCreated, resetPoemForm]);
+  }, [draftAuthor, draftContent, draftLanguage, draftTitle, loadUserPoems, onUserPoemCreated, resetPoemForm]);
+
+  if (isScanningPoem) {
+    return (
+      <PoemScannerView
+        onCancel={() => setIsScanningPoem(false)}
+        onScanned={(poem) => {
+          setDraftTitle(poem.title ?? '');
+          setDraftAuthor(poem.author ?? '');
+          setDraftContent(poem.content);
+          setDraftLanguage(poem.language ?? 'en');
+          setDraftError(null);
+          setIsScanningPoem(false);
+          setIsCreatingPoem(true);
+        }}
+      />
+    );
+  }
 
   if (selectedPoem) {
     return (
@@ -275,7 +302,10 @@ export function LibraryView({
             showsVerticalScrollIndicator={false}
           >
             <View style={styles.libraryFormHeader}>
-              <Text style={styles.librarySectionTitle}>Add poem</Text>
+              <View style={styles.libraryFormTitleGroup}>
+                <Text style={styles.librarySectionTitle}>Review poem</Text>
+                <Text style={styles.libraryFormSubtitle}>Edit anything before adding it to your library.</Text>
+              </View>
               <Pressable
                 onPress={handleCancelCreatingPoem}
                 style={({ pressed }) => [styles.librarySmallButton, pressed && styles.saveButtonPressed]}
@@ -354,15 +384,26 @@ export function LibraryView({
           <>
             <View style={styles.libraryListHeader}>
               <Text style={styles.librarySectionTitle}>Your Poems</Text>
-              <Pressable
-                onPress={handleStartCreatingPoem}
-                style={({ pressed }) => [styles.librarySmallButton, pressed && styles.saveButtonPressed]}
-                accessibilityRole="button"
-                accessibilityLabel="Add poem"
-                accessibilityHint="Opens a local form for writing a poem."
-              >
-                <Text style={styles.librarySmallButtonText}>Add</Text>
-              </Pressable>
+              <View style={styles.libraryHeaderActions}>
+                <Pressable
+                  onPress={handleStartScanningPoem}
+                  style={({ pressed }) => [styles.librarySmallButton, pressed && styles.saveButtonPressed]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Scan poem"
+                  accessibilityHint="Opens the camera to extract a poem from an image."
+                >
+                  <Text style={styles.librarySmallButtonText}>Scan</Text>
+                </Pressable>
+                <Pressable
+                  onPress={handleStartCreatingPoem}
+                  style={({ pressed }) => [styles.librarySmallButton, pressed && styles.saveButtonPressed]}
+                  accessibilityRole="button"
+                  accessibilityLabel="Add poem manually"
+                  accessibilityHint="Opens a local form for writing or pasting a poem."
+                >
+                  <Text style={styles.librarySmallButtonText}>Add</Text>
+                </Pressable>
+              </View>
             </View>
             <FlatList
               data={userPoems}

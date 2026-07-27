@@ -55,7 +55,20 @@
       ],
       "expo-secure-store",
       "expo-apple-authentication",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Poems to photograph poems you want to add to your library.",
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Poems to choose poem images from your photo library."
+        }
+      ]
     ],
     "extra": {
       "eas": {

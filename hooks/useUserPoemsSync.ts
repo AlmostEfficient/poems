@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef } from 'react';
+import * as Network from 'expo-network';
 import { AppState } from 'react-native';
-import type { Session, User } from '@supabase/supabase-js';
 
-import { syncUserPoems, type UserPoemsSyncResult } from '../lib/supabase/userPoemsSync';
+import type { PoemsAuthSession, PoemsAuthUser } from './useAuthSession';
+import { syncUserPoems, type UserPoemsSyncResult } from '../lib/nexus/userPoemsSync';
 
 interface UseUserPoemsSyncOptions {
-  session: Session | null;
-  user: User | null;
+  session: PoemsAuthSession | null;
+  user: PoemsAuthUser | null;
   isConfigured: boolean;
   isDatabaseReady: boolean;
   onSynced?: () => void;
@@ -42,7 +43,6 @@ export function useUserPoemsSync({
 
     inFlightRef.current = syncUserPoems({
       session: context.session,
-      user: context.user,
     })
       .then((result) => {
         if (result.applied > 0 || result.pushed > 0) {
@@ -63,11 +63,21 @@ export function useUserPoemsSync({
 
   useEffect(() => {
     void syncNow();
-  }, [syncNow, isDatabaseReady, session?.access_token]);
+  }, [syncNow, isDatabaseReady, session?.session.id]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (state) => {
       if (state === 'active') {
+        void syncNow();
+      }
+    });
+
+    return () => subscription.remove();
+  }, [syncNow]);
+
+  useEffect(() => {
+    const subscription = Network.addNetworkStateListener((state) => {
+      if (state.isConnected && state.isInternetReachable !== false) {
         void syncNow();
       }
     });

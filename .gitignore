@@ -45,3 +45,4 @@ ios/*
 android/*
 
 .env
+supabase/.temp/

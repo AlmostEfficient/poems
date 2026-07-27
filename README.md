@@ -11,7 +11,7 @@ An offline-first React Native experience for exploring poetry instantly, with op
 - **Domain types & starter set (`lib/types.ts`, `lib/data/starterPoems.ts`)** keep all layers in sync on the poem model and ensure instant first paint.
 - **API client (`lib/poetry-api.ts`)** provides optional online or hybrid sources without affecting baseline offline behaviour.
 
-This structure leaves clear seams for future Supabase integration (user favourites, uploads) by adding parallel repositories and syncing modules without touching the presentation layer.
+Optional accounts use Better Auth through Nexus. Saved poems and personal poems remain local-first, then sync to the isolated Poems D1 database when a session is available.
 
 ## Common Commands
 
@@ -80,5 +80,6 @@ If the on-device database is ever empty, `seedPoems()` backfills a small `STARTE
 ## Further Development Notes
 
 - The bundled database uses a `metadata` table with `db_version`. Bump `DB_VERSION` in `lib/storage/database.ts` when you ship a new asset so existing installs receive it.
-- Future Supabase features can plug into the existing feed via additional repositories and a sync layer without touching `App.tsx`.
+- Better Auth cookies are stored in SecureStore; Nexus sync sends that cookie without exposing user IDs in data requests.
+- The first account merges local guest data. A different account clears only user-owned local rows before pulling its library; the bundled catalogue is never cleared.
 - Keep new scripts under `scripts/` and register them in `package.json` for CI visibility.

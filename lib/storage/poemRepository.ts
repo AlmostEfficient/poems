@@ -186,6 +186,8 @@ function metadataKeyForUserPoemsCheckpoint(userId: string): string {
   return `user_poems_sync_checkpoint:${userId}`;
 }
 
+const LAST_NEXUS_USER_ID_KEY = 'last_nexus_user_id';
+
 export function getAllPoems(options?: { language?: 'en' | 'ur' }): Poem[] {
   const db = getDatabase();
   const language = options?.language;
@@ -493,8 +495,8 @@ export function applyRemoteUserPoem(input: RemoteUserPoemRow): boolean {
       return false;
     }
 
-    const remoteIsDeletedTie = currentUpdatedAt === input.updatedAt && !current.deleted_at && deletedAt;
-    if (remoteIsDeletedTie) {
+    const localDeletionWinsTie = currentUpdatedAt === input.updatedAt && current.deleted_at && !deletedAt;
+    if (localDeletionWinsTie) {
       return false;
     }
   }
@@ -801,8 +803,8 @@ export function applyRemoteSavedPoem(input: RemoteSavedPoemRow): boolean {
       return false;
     }
 
-    const remoteIsDeletedTie = current.updated_at === input.updatedAt && !current.deleted_at && deletedAt;
-    if (remoteIsDeletedTie) {
+    const localDeletionWinsTie = current.updated_at === input.updatedAt && current.deleted_at && !deletedAt;
+    if (localDeletionWinsTie) {
       return false;
     }
   }
@@ -854,4 +856,63 @@ export function setUserPoemsSyncCheckpoint(userId: string, checkpoint: string): 
     'INSERT OR REPLACE INTO metadata (key, value) VALUES (?, ?);',
     [metadataKeyForUserPoemsCheckpoint(userId), checkpoint]
   );
+}
+
+export function getLastNexusUserId(): string | null {
+  const db = getDatabase();
+  const row = db.getFirstSync(
+    'SELECT value FROM metadata WHERE key = ? LIMIT 1;',
+    [LAST_NEXUS_USER_ID_KEY]
+  ) as { value: string } | undefined;
+  return row?.value ?? null;
+}
+
+export function prepareLocalDataForNexusUser(userId: string): 'merge' | 'resume' | 'switch' {
+  const db = getDatabase();
+  const previousUserId = getLastNexusUserId();
+
+  if (previousUserId === userId) return 'resume';
+
+  db.execSync('BEGIN');
+  try {
+    if (previousUserId) {
+      db.runSync('DELETE FROM saved_poems;');
+      db.runSync(`DELETE FROM poems WHERE source = 'user';`);
+      db.runSync(
+        `DELETE FROM metadata
+         WHERE key LIKE 'saved_poems_sync_checkpoint:%'
+            OR key LIKE 'user_poems_sync_checkpoint:%';`
+      );
+    }
+    db.runSync(
+      'INSERT OR REPLACE INTO metadata (key, value) VALUES (?, ?);',
+      [LAST_NEXUS_USER_ID_KEY, userId]
+    );
+    db.execSync('COMMIT');
+  } catch (error) {
+    db.execSync('ROLLBACK');
+    throw error;
+  }
+
+  return previousUserId ? 'switch' : 'merge';
+}
+
+export function clearLocalAccountData(): void {
+  const db = getDatabase();
+  db.execSync('BEGIN');
+  try {
+    db.runSync('DELETE FROM saved_poems;');
+    db.runSync(`DELETE FROM poems WHERE source = 'user';`);
+    db.runSync(
+      `DELETE FROM metadata
+       WHERE key = ?
+          OR key LIKE 'saved_poems_sync_checkpoint:%'
+          OR key LIKE 'user_poems_sync_checkpoint:%';`,
+      [LAST_NEXUS_USER_ID_KEY]
+    );
+    db.execSync('COMMIT');
+  } catch (error) {
+    db.execSync('ROLLBACK');
+    throw error;
+  }
 }

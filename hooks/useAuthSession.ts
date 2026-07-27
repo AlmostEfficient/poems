@@ -1,80 +1,69 @@
-import { useEffect, useMemo, useState } from 'react';
-import type { Session, User } from '@supabase/supabase-js';
+import { useMemo } from 'react';
 
 import {
-  getCurrentAuthSession,
-  signInWithEmail,
+  authClient,
+  deleteAccount,
+  requestEmailSignInCode,
+  signInWithApple,
+  signInWithEmailCode,
   signOut,
-  signUpWithEmail,
-  subscribeToAuthSession,
-} from '../lib/supabase/auth';
-import { isSupabaseConfigured, registerSupabaseAppStateListener } from '../lib/supabase/client';
+} from '../lib/auth/client';
 
-interface UseAuthSessionResult {
-  session: Session | null;
-  user: User | null;
+export interface PoemsAuthUser {
+  id: string;
+  email: string;
+  name: string;
+  image?: string | null;
+}
+
+export interface PoemsAuthSession {
+  user: PoemsAuthUser;
+  session: {
+    id: string;
+    userId: string;
+    expiresAt: Date;
+  };
+}
+
+export interface UseAuthSessionResult {
+  session: PoemsAuthSession | null;
+  user: PoemsAuthUser | null;
   isReady: boolean;
-  isConfigured: boolean;
+  isConfigured: true;
   isGuest: boolean;
   error: Error | null;
-  signInWithEmail: typeof signInWithEmail;
-  signUpWithEmail: typeof signUpWithEmail;
+  requestEmailSignInCode: typeof requestEmailSignInCode;
+  signInWithEmailCode: typeof signInWithEmailCode;
+  signInWithApple: typeof signInWithApple;
   signOut: typeof signOut;
+  deleteAccount: typeof deleteAccount;
+  refresh: () => Promise<void>;
 }
 
 export function useAuthSession(): UseAuthSessionResult {
-  const [session, setSession] = useState<Session | null>(null);
-  const [error, setError] = useState<Error | null>(null);
-  const [isReady, setIsReady] = useState(!isSupabaseConfigured);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const cleanupAppState = registerSupabaseAppStateListener();
-    const cleanupAuth = subscribeToAuthSession((nextSession) => {
-      setSession(nextSession);
-      setError(null);
-      setIsReady(true);
-    });
-
-    getCurrentAuthSession()
-      .then((snapshot) => {
-        if (cancelled) {
-          return;
-        }
-        setSession(snapshot.session);
-        setError(snapshot.error);
-        setIsReady(snapshot.isReady);
-      })
-      .catch((nextError: unknown) => {
-        if (cancelled) {
-          return;
-        }
-        setError(nextError instanceof Error ? nextError : new Error('Failed to load auth session.'));
-        setIsReady(true);
-      });
-
-    return () => {
-      cancelled = true;
-      cleanupAuth();
-      cleanupAppState();
-    };
-  }, []);
-
-  const user = session?.user ?? null;
+  const sessionQuery = authClient.useSession();
+  const session = (sessionQuery.data as PoemsAuthSession | null) ?? null;
+  const error = sessionQuery.error
+    ? new Error(sessionQuery.error.message ?? 'Failed to load the account session.')
+    : null;
 
   return useMemo(
     () => ({
       session,
-      user,
-      isReady,
-      isConfigured: isSupabaseConfigured,
-      isGuest: isReady && !session,
+      user: session?.user ?? null,
+      isReady: !sessionQuery.isPending,
+      isConfigured: true as const,
+      isGuest: !sessionQuery.isPending && !session,
       error,
-      signInWithEmail,
-      signUpWithEmail,
+      requestEmailSignInCode,
+      signInWithEmailCode,
+      signInWithApple,
       signOut,
+      deleteAccount,
+      refresh: async () => {
+        await sessionQuery.refetch();
+      },
     }),
-    [error, isReady, session, user]
+    [error, session, sessionQuery.isPending, sessionQuery.refetch]
   );
 }

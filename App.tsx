@@ -6,6 +6,7 @@ import { useFonts, NotoNastaliqUrdu_400Regular } from '@expo-google-fonts/noto-n
 import Toast from 'react-native-toast-message';
 
 import { LibraryView } from './components/LibraryView';
+import { AccountScreen } from './components/AccountScreen';
 import { LoadingPoemReaderView, PoemReaderView } from './components/PoemReaderView';
 import { toastConfig } from './components/Toast';
 import { useAuthSession } from './hooks/useAuthSession';
@@ -13,12 +14,15 @@ import { usePoemFeed } from './hooks/usePoemFeed';
 import { useSavedPoemsSync } from './hooks/useSavedPoemsSync';
 import { useUserPoemsSync } from './hooks/useUserPoemsSync';
 import type { SavedPoemScope } from './lib/poems';
+import { clearLocalAccountData, prepareLocalDataForNexusUser } from './lib/poems';
 import { styles } from './styles/styles';
 
 export default function App() {
   const auth = useAuthSession();
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [libraryRefreshKey, setLibraryRefreshKey] = useState(0);
+  const [preparedUserId, setPreparedUserId] = useState<string | null>(null);
 
   const [fontsLoaded] = useFonts({
     NotoNastaliqUrdu_400Regular,
@@ -43,8 +47,10 @@ export default function App() {
     setLibraryRefreshKey((key) => key + 1);
   }, [refreshSavedPoemIds]);
 
+  const syncSession = auth.user?.id === preparedUserId ? auth.session : null;
+
   const { syncNow: syncSavedPoemsNow } = useSavedPoemsSync({
-    session: auth.session,
+    session: syncSession,
     user: auth.user,
     isConfigured: auth.isConfigured,
     isDatabaseReady,
@@ -56,7 +62,7 @@ export default function App() {
   }, []);
 
   const { syncNow: syncUserPoemsNow } = useUserPoemsSync({
-    session: auth.session,
+    session: syncSession,
     user: auth.user,
     isConfigured: auth.isConfigured,
     isDatabaseReady,
@@ -131,6 +137,27 @@ export default function App() {
     }
   }, [poemSource]);
 
+  useEffect(() => {
+    if (!isDatabaseReady || !auth.user) return;
+
+    try {
+      prepareLocalDataForNexusUser(auth.user.id);
+      setPreparedUserId(auth.user.id);
+      refreshSavedState();
+      refreshUserPoemsState();
+    } catch (error) {
+      console.warn('Failed to prepare local account data', error);
+    }
+  }, [auth.user?.id, isDatabaseReady, refreshSavedState, refreshUserPoemsState]);
+
+  const handleAccountDeleted = useCallback(() => {
+    clearLocalAccountData();
+    setPreparedUserId(null);
+    setLibraryRefreshKey((key) => key + 1);
+    refreshSavedPoemIds();
+    void auth.refresh();
+  }, [auth, refreshSavedPoemIds]);
+
   if (!fontsLoaded) {
     return null;
   }
@@ -170,7 +197,15 @@ export default function App() {
           onClose={() => setIsLibraryOpen(false)}
           onToggleSaved={handleToggleSavedPoem}
           onUserPoemCreated={handleUserPoemCreated}
+          onOpenAccount={() => setIsAccountOpen(true)}
           refreshKey={libraryRefreshKey}
+        />
+      )}
+      {isAccountOpen && (
+        <AccountScreen
+          auth={auth}
+          onClose={() => setIsAccountOpen(false)}
+          onAccountDeleted={handleAccountDeleted}
         />
       )}
       <StatusBar hidden />

@@ -15,6 +15,7 @@ interface LibraryViewProps {
   onClose: () => void;
   onToggleSaved: (poemId: string, poemScope?: SavedPoemScope) => Promise<void> | void;
   onUserPoemCreated?: (poem: Poem) => void;
+  onOpenAccount: () => void;
   refreshKey: number;
 }
 
@@ -28,6 +29,7 @@ export function LibraryView({
   onClose,
   onToggleSaved,
   onUserPoemCreated,
+  onOpenAccount,
   refreshKey,
 }: LibraryViewProps) {
   const [activeTab, setActiveTab] = useState<LibraryTab>('saved');
@@ -131,16 +133,28 @@ export function LibraryView({
           >
             <Text style={styles.libraryHeaderButtonText}>Back</Text>
           </Pressable>
-          <Pressable
-            onPress={onClose}
-            style={({ pressed }) => [styles.libraryHeaderButton, pressed && styles.saveButtonPressed]}
-            accessibilityRole="button"
-            accessibilityLabel="Close My Library"
-            accessibilityHint="Returns to the poem reader."
-            hitSlop={8}
-          >
-            <Text style={styles.libraryHeaderButtonText}>Close</Text>
-          </Pressable>
+          <View style={styles.libraryHeaderActions}>
+            <Pressable
+              onPress={onOpenAccount}
+              style={({ pressed }) => [styles.libraryHeaderButton, pressed && styles.saveButtonPressed]}
+              accessibilityRole="button"
+              accessibilityLabel="Open account"
+              accessibilityHint="Shows sign-in, sync, and account controls."
+              hitSlop={8}
+            >
+              <Text style={styles.libraryHeaderButtonText}>Account</Text>
+            </Pressable>
+            <Pressable
+              onPress={onClose}
+              style={({ pressed }) => [styles.libraryHeaderButton, pressed && styles.saveButtonPressed]}
+              accessibilityRole="button"
+              accessibilityLabel="Close My Library"
+              accessibilityHint="Returns to the poem reader."
+              hitSlop={8}
+            >
+              <Text style={styles.libraryHeaderButtonText}>Close</Text>
+            </Pressable>
+          </View>
         </View>
         <PoemReaderView
           poem={selectedPoem}
@@ -176,20 +190,32 @@ export function LibraryView({
     <View style={styles.libraryContainer}>
       <View style={styles.libraryContent}>
         <View style={styles.libraryHeader}>
-          <View style={styles.libraryTitleGroup}>
+          <View style={styles.libraryHeaderTop}>
             <Text style={styles.libraryTitle}>My Library</Text>
-            <Text style={styles.librarySubtitle}>Saved poems and personal work</Text>
+            <View style={styles.libraryHeaderActions}>
+              <Pressable
+                onPress={onOpenAccount}
+                style={({ pressed }) => [styles.libraryHeaderButton, pressed && styles.saveButtonPressed]}
+                accessibilityRole="button"
+                accessibilityLabel="Open account"
+                accessibilityHint="Shows sign-in, sync, and account controls."
+                hitSlop={8}
+              >
+                <Text style={styles.libraryHeaderButtonText}>Account</Text>
+              </Pressable>
+              <Pressable
+                onPress={onClose}
+                style={({ pressed }) => [styles.libraryHeaderButton, pressed && styles.saveButtonPressed]}
+                accessibilityRole="button"
+                accessibilityLabel="Close My Library"
+                accessibilityHint="Returns to the poem reader."
+                hitSlop={8}
+              >
+                <Text style={styles.libraryHeaderButtonText}>Close</Text>
+              </Pressable>
+            </View>
           </View>
-          <Pressable
-            onPress={onClose}
-            style={({ pressed }) => [styles.libraryHeaderButton, pressed && styles.saveButtonPressed]}
-            accessibilityRole="button"
-            accessibilityLabel="Close My Library"
-            accessibilityHint="Returns to the poem reader."
-            hitSlop={8}
-          >
-            <Text style={styles.libraryHeaderButtonText}>Close</Text>
-          </Pressable>
+          <Text style={styles.librarySubtitle}>Saved poems and personal work</Text>
         </View>
 
         <View style={styles.librarySegmentedControl} accessibilityRole="tablist">

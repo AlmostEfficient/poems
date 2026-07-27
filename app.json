@@ -2,6 +2,7 @@
   "expo": {
     "name": "Poems",
     "slug": "Poems",
+    "scheme": "poems",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,6 +10,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.raza.poems",
+      "usesAppleSignIn": true,
       "buildNumber": "1",
       "deploymentTarget": "16.4",
       "infoPlist": {
@@ -50,7 +52,10 @@
             "buildReactNativeFromSource": true
           }
         }
-      ]
+      ],
+      "expo-secure-store",
+      "expo-apple-authentication",
+      "expo-web-browser"
     ],
     "extra": {
       "eas": {

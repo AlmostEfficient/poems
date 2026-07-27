@@ -29,6 +29,8 @@ import {
   applyRemoteSavedPoem,
   getSavedPoemsSyncCheckpoint,
   setSavedPoemsSyncCheckpoint,
+  prepareLocalDataForNexusUser,
+  clearLocalAccountData,
   type CreatePoemInput,
   type CreateLocalUserPoemInput,
   type RemoteSavedPoemRow,
@@ -93,6 +95,8 @@ export {
   applyRemoteSavedPoem as applyRemoteSavedPoemLocally,
   getSavedPoemsSyncCheckpoint as getLocalSavedPoemsSyncCheckpoint,
   setSavedPoemsSyncCheckpoint as setLocalSavedPoemsSyncCheckpoint,
+  prepareLocalDataForNexusUser,
+  clearLocalAccountData,
 };
 
 export function addPoem(

@@ -15,20 +15,16 @@ The long-term shape is:
 - A larger bundled poem catalogue available offline on first launch.
 - User-saved poems that survive app restarts and eventually sync across devices.
 - User uploads and scanner imports that become first-class poems in the user's library.
-- Supabase for auth, cloud sync, entitlements, and remote catalogue/user data.
-- Nexus for trusted backend work, LLM scanning/proxying, observability, support, and privileged database operations.
+- Nexus for app-isolated Better Auth, D1 cloud sync, LLM scanning/proxying, observability, and support.
 - SQLite as the local source of truth for reader performance and offline availability.
 
-Do not treat Supabase as a replacement for local storage. Remote systems should sync into local storage; the reading experience should primarily consume local data.
+Do not treat Nexus/D1 as a replacement for local storage. Remote systems should sync into local storage; the reading experience should primarily consume local data.
 
 ## Backend Boundaries
 
-Poems uses two backend paths:
+The mobile app calls Nexus for optional authentication and user-data sync. Nexus lives at `/Users/raza/Projects/nexus` and owns Better Auth, the isolated Poems D1 database, Apple credentials, email delivery, scanner work, Eyeball observability, and Hotline support.
 
-- The mobile app may call Supabase directly for client-safe work: auth, public catalogue reads, user saved poems, user-created poems, and sync under Row Level Security.
-- Nexus lives at `/Users/raza/Projects/nexus` and is the backend for trusted work: LLM scanning, service-role Supabase writes, catalogue/admin updates, Eyeball observability, Hotline support, and other backend-only workflows.
-
-Do not put Supabase service-role credentials in this repo. Client-safe Supabase config is acceptable here when needed. For backend schema changes, privileged database updates, LLM/scanner endpoints, or observability integration, work in Nexus.
+Do not put backend or Apple credentials in this repo. SQLite remains the local source of truth for reading and offline writes.
 
 ## Architecture Map
 
@@ -42,7 +38,9 @@ Do not put Supabase service-role credentials in this repo. Client-safe Supabase 
 - `lib/types.ts` contains shared domain types.
 - `lib/utils/poemId.ts` creates stable poem IDs.
 - `lib/data/starterPoems.ts` is the small instant/fallback starter set, not the main catalogue.
-- `lib/poetry-api.ts` is legacy/optional PoetryDB integration. Do not use it as the pattern for future Supabase or scanner clients.
+- `lib/auth/` owns the Better Auth Expo client and SecureStore cookie.
+- `lib/nexus/` owns authenticated Nexus sync clients.
+- `lib/poetry-api.ts` is legacy/optional PoetryDB integration. Do not use it as the pattern for future Nexus or scanner clients.
 - `components/` contains reusable UI components.
 - `styles/styles.ts` contains current app styles.
 - `poems.json` is the editable bundled catalogue source.
@@ -84,7 +82,7 @@ Before adding major save/upload/sync features, harden the SQLite migration path 
 - Keep `poems.json` as the source for bundled poems and regenerate `assets/poems.db` after catalogue changes.
 - Treat `assets/poems.db` as generated output.
 - Keep new durable architecture notes here high level. Do not use this file as a progress log.
-- Prefer small, typed modules for Supabase, Nexus, scanner, entitlement, and sync clients.
+- Prefer small, typed modules for Nexus, scanner, entitlement, and sync clients.
 - Avoid coupling network fetches directly to the reader UI. Sync remote data into local storage, then render from local repositories.
 
 ## Current Technical Baseline

@@ -375,6 +375,18 @@ function getPoemByLocalRowId(id: number): Poem | null {
   return row ? mapRowToPoem(row) : null;
 }
 
+export function getPoemById(poemId: string): Poem | null {
+  const db = getDatabase();
+  const row = db.getFirstSync(
+    `SELECT poem_id, title, author, content, language, source, metadata
+     FROM poems
+     WHERE poem_id = ? AND deleted_at IS NULL
+     LIMIT 1;`,
+    [poemId]
+  );
+  return row ? mapRowToPoem(row) : null;
+}
+
 export function createLocalUserPoem(input: CreateLocalUserPoemInput): Poem {
   const title = input.title?.trim() || 'Untitled';
   const author = input.author?.trim() || 'Anonymous';

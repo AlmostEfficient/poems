@@ -28,8 +28,8 @@ Do not put backend or Apple credentials in this repo. SQLite remains the local s
 
 ## Architecture Map
 
-- `App.tsx` is the current top-level UI entry for the reader.
-- `index.ts` registers the Expo root component.
+- `app/` contains the Expo Router route tree, native tabs, stacks, and modal flows.
+- `providers/poems-app-provider.tsx` owns shared feed, authentication, sync, and draft state.
 - `hooks/usePoemFeed.ts` connects React state to the poem feed.
 - `lib/services/poemFeedManager.ts` manages virtual feed slots, preloading, cleanup, and source fallback behavior.
 - `lib/storage/database.ts` owns SQLite initialization, bundled DB copying, schema setup, and migrations.
@@ -41,8 +41,8 @@ Do not put backend or Apple credentials in this repo. SQLite remains the local s
 - `lib/auth/` owns the Better Auth Expo client and SecureStore cookie.
 - `lib/nexus/` owns authenticated Nexus sync clients.
 - `lib/poetry-api.ts` is legacy/optional PoetryDB integration. Do not use it as the pattern for future Nexus or scanner clients.
-- `components/` contains reusable UI components.
-- `styles/styles.ts` contains current app styles.
+- `components/` contains reusable reader, scanner, list, and UI components.
+- `styles/theme.ts` contains the shared visual palette and typography choices.
 - `poems.json` is the editable bundled catalogue source.
 - `assets/poems.db` is generated from `poems.json` and shipped with the app.
 - `scripts/` contains catalogue, build, version, and ingestion tooling.

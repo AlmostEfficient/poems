@@ -18,6 +18,7 @@ import {
   setUserPoemsSyncCheckpoint,
   insertPoemsInBatch,
   getPoemByTitleAndAuthor as repoGetPoemByTitleAndAuthor,
+  getPoemById,
   getDistinctAuthors,
   savePoem,
   unsavePoem,
@@ -62,7 +63,7 @@ export function getRandomPoems(options?: { limit?: number; language?: 'en' | 'ur
   return repoGetRandomPoems(options);
 }
 
-export { getTotalPoemsCount, getPoemsByAuthor };
+export { getTotalPoemsCount, getPoemsByAuthor, getPoemById };
 
 export function searchLocalPoems(
   query: string,

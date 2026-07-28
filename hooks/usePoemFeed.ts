@@ -18,7 +18,7 @@ const LOAD_AHEAD = 5;
 const LOAD_BEHIND = 3;
 const CLEANUP_DISTANCE = 20;
 
-interface UsePoemFeedResult {
+export interface UsePoemFeedResult {
   slots: VirtualSlot[];
   currentIndex: number;
   poemSource: PoemFeedSource;
